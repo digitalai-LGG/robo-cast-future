@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, ImageOff, Layers3 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
@@ -21,6 +21,12 @@ export const Route = createFileRoute("/machines")({
     division:
       search.division === "casting" || search.division === "robotics" ? search.division : undefined,
   }),
+  beforeLoad: ({ location, search }) => {
+    const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
+    if (normalizedPath === "/machines" && !search.division) {
+      throw redirect({ to: "/divisions", replace: true });
+    }
+  },
   head: () => ({
     meta: [
       { title: "Machines & Cells — Modtech Machine" },

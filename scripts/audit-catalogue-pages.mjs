@@ -9,7 +9,8 @@ function decode(value) {
     .replaceAll("&gt;", ">");
 }
 
-const listingResponse = await fetch(new URL("/machines", base));
+const listingPath = "/machines?division=casting";
+const listingResponse = await fetch(new URL(listingPath, base));
 if (!listingResponse.ok) throw new Error(`Machine listing returned ${listingResponse.status}.`);
 const listingHtml = await listingResponse.text();
 const discovered = [...listingHtml.matchAll(/data-machine-slug="([^"]+)"/g)].map(
@@ -35,7 +36,7 @@ if (
   divisionCounts.robotics !== 0
 ) {
   issues.push({
-    path: "/machines",
+    path: listingPath,
     expectedDivisions: { casting: 29, robotics: 0 },
     divisionCounts,
     classifiedCards: listingDivisions.length,
@@ -43,6 +44,21 @@ if (
 }
 const checkedImages = new Map();
 const uniqueImages = new Set();
+
+const redirectResponse = await fetch(new URL("/machines", base), { redirect: "manual" });
+const redirectLocation = redirectResponse.headers.get("location");
+const redirectsToDivisions =
+  [301, 302, 303, 307, 308].includes(redirectResponse.status) &&
+  redirectLocation !== null &&
+  new URL(redirectLocation, base).pathname === "/divisions";
+if (!redirectsToDivisions) {
+  issues.push({
+    path: "/machines",
+    expected: "redirect to /divisions",
+    status: redirectResponse.status,
+    location: redirectLocation,
+  });
+}
 
 const divisionNavigation = {};
 for (const page of ["/", "/divisions"]) {
@@ -206,6 +222,11 @@ console.log(
       machines: paths.length,
       listingLinks: discovered.length,
       repeatedListingLinks: duplicateLinks,
+      machinesRedirect: {
+        valid: redirectsToDivisions,
+        status: redirectResponse.status,
+        location: redirectLocation,
+      },
       divisionCounts,
       divisionNavigation,
       filteredCatalogues: filteredCatalogueChecks,

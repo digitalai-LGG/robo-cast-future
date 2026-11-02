@@ -9,7 +9,6 @@ const NAV_ITEMS = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
   { to: "/divisions", label: "Divisions" },
-  { to: "/machines", label: "Machines" },
   { to: "/blog", label: "Blogs" },
   { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
@@ -18,8 +17,15 @@ const NAV_ITEMS = [
 export function SiteHeader({ announcement }: { announcement: Announcement | null }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const isNavItemActive = (to: (typeof NAV_ITEMS)[number]["to"]) =>
-    to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
+  const isNavItemActive = (to: (typeof NAV_ITEMS)[number]["to"]) => {
+    if (to === "/") return location.pathname === "/";
+    if (to === "/divisions") {
+      return (
+        location.pathname.startsWith("/divisions") || location.pathname.startsWith("/machines")
+      );
+    }
+    return location.pathname.startsWith(to);
+  };
 
   useEffect(() => {
     setOpen(false);
