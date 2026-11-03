@@ -673,6 +673,24 @@
   .story-step:hover .story-step-card::after {
     transform: translateX(115%);
   }
+  .certificate-preview::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 38%,
+      color-mix(in oklab, white 50%, transparent) 49%,
+      transparent 60%
+    );
+    transform: translateX(-75%) rotate(4deg);
+    transition: transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .certificate-preview:hover::before {
+    transform: translateX(75%) rotate(4deg);
+  }
 
   @media (min-width: 40rem) {
     .story-timeline::before {
@@ -1275,7 +1293,9 @@
     }
     .story-step-marker,
     .story-step-card,
-    .story-step-card::after {
+    .story-step-card::after,
+    .certificate-preview::before,
+    .certificate-preview-image {
       animation: none !important;
       transition: none !important;
     }

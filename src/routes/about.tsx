@@ -144,6 +144,7 @@ const certification = {
   certificateNumber: "IN260718008",
   validThrough: "17 July 2029",
   document: "/certifications/modtech-iso-9001-2015.pdf",
+  preview: "/certifications/modtech-iso-9001-2015-preview.webp",
 } as const;
 
 function IndustryCard({
@@ -209,20 +210,21 @@ function AboutPage() {
   return (
     <PageShell>
       <section className="home-hero on-dark relative isolate overflow-hidden border-b border-border bg-carbon lg:min-h-[680px]">
-        <div className="relative isolate aspect-video w-full overflow-hidden lg:absolute lg:inset-0 lg:-z-20 lg:aspect-auto">
+        <div className="relative isolate aspect-video w-full overflow-hidden lg:absolute lg:inset-0 lg:aspect-auto">
           <HeroVideoBackground
             videoSrc="/modtech-about-automation.mp4"
             posterSrc="/modtech-about-video-poster.webp"
             preload="auto"
             showPlaybackControl
+            playbackControlClassName="lg:bottom-auto lg:top-6"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-carbon/70 via-transparent to-transparent lg:hidden" />
         </div>
-        <div className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-carbon via-carbon/90 to-carbon/20 lg:block" />
-        <div className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-t from-carbon via-transparent to-carbon/55 lg:block" />
-        <div className="pointer-events-none absolute inset-0 -z-10 hidden bg-grid opacity-15 lg:block" />
+        <div className="pointer-events-none absolute inset-0 z-10 hidden bg-gradient-to-r from-carbon via-carbon/90 to-carbon/20 lg:block" />
+        <div className="pointer-events-none absolute inset-0 z-10 hidden bg-gradient-to-t from-carbon via-transparent to-carbon/55 lg:block" />
+        <div className="pointer-events-none absolute inset-0 z-10 hidden bg-grid opacity-15 lg:block" />
 
-        <div className="mx-auto flex max-w-7xl flex-col justify-between px-5 pb-8 pt-8 sm:px-8 sm:pb-10 lg:min-h-[680px] lg:pt-16">
+        <div className="relative z-20 mx-auto flex max-w-7xl flex-col justify-between px-5 pb-8 pt-8 sm:px-8 sm:pb-10 lg:min-h-[680px] lg:pt-16">
           <div className="max-w-4xl">
             <p
               className="reveal font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand"
@@ -364,23 +366,41 @@ function AboutPage() {
             </ol>
           </div>
 
-          <ul className="reveal-on-scroll mt-10 grid overflow-hidden rounded-2xl border border-border bg-card md:grid-cols-3">
-            {commitments.map(({ title, description, Icon }, index) => (
-              <li
-                key={title}
-                className="border-b border-border p-5 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 sm:p-6"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <Icon className="h-5 w-5 text-brand" aria-hidden="true" />
-                  <span className="font-mono text-[9px] tracking-[0.18em] text-muted-foreground">
-                    0{index + 1}
-                  </span>
-                </div>
-                <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
-              </li>
-            ))}
-          </ul>
+          <div className="reveal-on-scroll mt-12 overflow-hidden rounded-3xl border border-foreground/10 bg-carbon text-foreground shadow-deep sm:mt-16">
+            <div className="grid gap-4 border-b border-foreground/10 px-5 py-6 sm:px-7 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:items-end lg:px-9">
+              <div>
+                <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-brand">
+                  What stays constant
+                </p>
+                <h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">
+                  One accountable engineering team.
+                </h3>
+              </div>
+              <p className="max-w-2xl text-sm leading-relaxed text-foreground/60 lg:justify-self-end">
+                The capabilities grew. The ownership, engineering discipline and long-term support
+                stayed connected.
+              </p>
+            </div>
+            <ul className="grid md:grid-cols-3">
+              {commitments.map(({ title, description, Icon }, index) => (
+                <li
+                  key={title}
+                  className="group border-b border-foreground/10 p-5 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 sm:p-7"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl border border-brand/20 bg-brand/10 text-brand transition duration-300 group-hover:bg-brand group-hover:text-brand-foreground">
+                      <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+                    </span>
+                    <span className="font-mono text-[9px] tracking-[0.18em] text-foreground/35">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground/55">{description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -530,37 +550,85 @@ function AboutPage() {
 
       <section
         id="certifications"
-        className="border-b border-border bg-carbon-2 px-5 py-10 sm:px-8 sm:py-14"
+        className="relative isolate overflow-hidden border-b border-border bg-carbon-2 px-5 py-12 sm:px-8 sm:py-20"
       >
-        <div className="mx-auto max-w-7xl">
-          <article className="reveal-on-scroll grid gap-6 rounded-3xl border border-border bg-card p-6 shadow-card sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:p-10">
-            <div>
-              <div className="grid h-12 w-12 place-items-center rounded-xl border border-brand/25 bg-brand/10 text-brand">
-                <BadgeCheck className="h-6 w-6" aria-hidden="true" />
-              </div>
-              <p className="mt-6 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand">
-                Certified quality
-              </p>
-              <h2 className="mt-3 max-w-xl font-display text-3xl font-bold leading-tight sm:text-4xl">
-                Quality you can verify.
-              </h2>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-                Our quality management system supports consistent engineering, documentation and
-                delivery across both Modtech divisions.
-              </p>
-            </div>
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-[0.045]" />
+        <div className="pointer-events-none absolute -right-32 top-0 -z-10 h-96 w-96 rounded-full bg-brand/[0.08] blur-3xl" />
 
-            <div className="border-t border-border pt-6 lg:min-w-[22rem]">
-              <h3 className="font-display text-2xl font-bold">{certification.standard}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{certification.system}</p>
-              <p className="mt-3 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
-                Certificate {certification.certificateNumber} · Valid through{" "}
-                {certification.validThrough}
+        <div className="mx-auto max-w-7xl">
+          <article className="grid gap-8 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)] lg:items-center lg:gap-16">
+            <a
+              href={certification.document}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="certificate-preview reveal-on-scroll group relative mx-auto block w-full max-w-[31rem] overflow-hidden rounded-3xl border border-border bg-[#f4f2ec] p-2.5 shadow-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:p-4 lg:mx-0"
+              aria-label="Open the Modtech ISO 9001:2015 certificate PDF"
+            >
+              <img
+                src={certification.preview}
+                alt="Official ISO 9001:2015 quality management certificate issued to Modtech Machines Pvt Ltd"
+                loading="lazy"
+                decoding="async"
+                width="1102"
+                height="1426"
+                className="certificate-preview-image h-auto w-full rounded-2xl border border-black/10 bg-white transition duration-700 ease-out group-hover:scale-[1.015]"
+              />
+              <span className="absolute left-5 top-5 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-carbon/80 px-3 py-2 font-mono text-[8px] font-semibold uppercase tracking-[0.15em] text-white shadow-lg backdrop-blur-md sm:left-7 sm:top-7">
+                <BadgeCheck className="h-3.5 w-3.5 text-brand" aria-hidden="true" /> Official
+                document
+              </span>
+              <span className="absolute bottom-5 right-5 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-carbon/80 text-white shadow-lg backdrop-blur-md transition group-hover:bg-brand group-hover:text-brand-foreground sm:bottom-7 sm:right-7">
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </span>
+            </a>
+
+            <div className="reveal-on-scroll" data-reveal-delay="120">
+              <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/[0.08] px-3.5 py-2 text-brand">
+                <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+                <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em]">
+                  Certified quality
+                </span>
+              </div>
+              <h2 className="mt-5 max-w-2xl font-display text-[clamp(2.25rem,5vw,4.75rem)] font-bold leading-[0.98] tracking-[-0.035em]">
+                Quality you can
+                <span className="block text-gradient-brand">see and verify.</span>
+              </h2>
+              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-7">
+                Modtech&apos;s quality management system covers the design, engineering,
+                fabrication, assembly, testing, supply, installation and servicing of machinery and
+                automation systems.
               </p>
-              <div className="mt-5">
-                <Button asChild variant="outline" className="w-full sm:w-auto">
+
+              <dl className="mt-7 grid grid-cols-2 overflow-hidden rounded-2xl border border-border bg-card/75 shadow-card backdrop-blur-sm">
+                {[
+                  ["Standard", certification.standard],
+                  ["Certificate", certification.certificateNumber],
+                  ["System", certification.system],
+                  ["Valid through", certification.validThrough],
+                ].map(([label, value], index) => (
+                  <div
+                    key={label}
+                    className={`p-4 sm:p-5 ${index < 2 ? "border-b border-border" : ""} ${index % 2 === 0 ? "border-r border-border" : ""}`}
+                  >
+                    <dt className="font-mono text-[8px] uppercase tracking-[0.14em] text-muted-foreground">
+                      {label}
+                    </dt>
+                    <dd className="mt-1.5 text-xs font-semibold leading-snug text-foreground sm:text-sm">
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-7 flex flex-wrap gap-3 max-[420px]:flex-col">
+                <Button asChild size="lg" className="max-[420px]:w-full">
                   <a href={certification.document} target="_blank" rel="noopener noreferrer">
-                    View certificate <ArrowUpRight />
+                    View full certificate <ArrowUpRight />
+                  </a>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="max-[420px]:w-full">
+                  <a href={certification.document} download>
+                    Download PDF
                   </a>
                 </Button>
               </div>

@@ -6,6 +6,7 @@ type HeroVideoBackgroundProps = {
   posterSrc: string;
   preload?: "none" | "metadata" | "auto";
   showPlaybackControl?: boolean;
+  playbackControlClassName?: string;
 };
 
 export function HeroVideoBackground({
@@ -13,6 +14,7 @@ export function HeroVideoBackground({
   posterSrc,
   preload = "metadata",
   showPlaybackControl = false,
+  playbackControlClassName = "",
 }: HeroVideoBackgroundProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [allowPlayback, setAllowPlayback] = useState(false);
@@ -113,7 +115,7 @@ export function HeroVideoBackground({
         <button
           type="button"
           onClick={togglePlayback}
-          className="pointer-events-auto absolute bottom-3 right-3 z-10 inline-flex h-10 items-center gap-2 rounded-full border border-white/20 bg-carbon/75 px-4 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-white shadow-lg backdrop-blur-md transition hover:border-brand/70 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:bottom-5 sm:right-5"
+          className={`pointer-events-auto absolute bottom-3 right-3 z-30 inline-flex h-10 items-center gap-2 rounded-full border border-white/20 bg-carbon/75 px-4 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-white shadow-lg backdrop-blur-md transition hover:border-brand/70 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:bottom-5 sm:right-5 ${playbackControlClassName}`}
           aria-label={isPlaying ? "Pause About Modtech video" : "Play About Modtech video"}
         >
           {isPlaying ? (
