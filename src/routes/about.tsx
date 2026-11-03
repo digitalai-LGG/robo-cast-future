@@ -213,6 +213,8 @@ function AboutPage() {
           <HeroVideoBackground
             videoSrc="/modtech-about-automation.mp4"
             posterSrc="/modtech-about-video-poster.webp"
+            preload="auto"
+            showPlaybackControl
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-carbon/70 via-transparent to-transparent lg:hidden" />
         </div>
@@ -280,43 +282,83 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-background px-5 py-12 sm:px-8 sm:py-16">
+      <section className="relative isolate overflow-hidden border-b border-border bg-background px-5 py-12 sm:px-8 sm:py-20">
+        <div className="pointer-events-none absolute -left-32 top-16 -z-10 h-80 w-80 rounded-full bg-brand/[0.07] blur-3xl" />
+        <div className="pointer-events-none absolute inset-0 -z-20 bg-grid opacity-[0.035]" />
+
         <div className="mx-auto max-w-7xl">
-          <div className="reveal-on-scroll grid gap-8 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)] lg:gap-16">
-            <div>
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand">
-                Our story
-              </p>
-              <h2 className="mt-3 max-w-lg font-display text-3xl font-bold leading-tight sm:text-5xl">
-                Built around real production since 1990.
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-20">
+            <div className="reveal-on-scroll lg:sticky lg:top-28 lg:self-start">
+              <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/[0.07] px-3.5 py-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand shadow-[0_0_12px_rgba(49,208,165,0.8)]" />
+                <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-brand">
+                  Our story
+                </p>
+              </div>
+              <h2 className="mt-5 max-w-xl font-display text-[clamp(2.25rem,5vw,4.75rem)] font-bold leading-[0.98] tracking-[-0.035em]">
+                Built around real production
+                <span className="block text-gradient-brand">since 1990.</span>
               </h2>
-              <p className="mt-5 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">
+              <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-7">
                 We started with investment casting machinery and grew into an integrated engineering
                 company for robotic automation. The principle stayed the same: make production
                 dependable, maintainable and easier to improve.
               </p>
+
+              <dl className="mt-7 grid grid-cols-3 overflow-hidden rounded-2xl border border-border bg-card/80 shadow-card backdrop-blur sm:max-w-xl">
+                {[
+                  ["35+", "Years"],
+                  ["02", "Divisions"],
+                  ["01", "Team"],
+                ].map(([value, label]) => (
+                  <div key={label} className="border-r border-border p-3.5 last:border-r-0 sm:p-5">
+                    <dd className="font-display text-xl font-bold text-brand sm:text-2xl">
+                      {value}
+                    </dd>
+                    <dt className="mt-1 font-mono text-[8px] uppercase tracking-[0.12em] text-muted-foreground sm:text-[9px]">
+                      {label}
+                    </dt>
+                  </div>
+                ))}
+              </dl>
             </div>
 
-            <ol className="border-t border-border" aria-label="Modtech company story">
-              {story.map((item) => (
+            <ol
+              className="story-timeline reveal-on-scroll relative"
+              aria-label="Modtech company story"
+            >
+              {story.map((item, index) => (
                 <li
                   key={item.code}
-                  className="group grid gap-3 border-b border-border py-5 sm:grid-cols-[4rem_7rem_minmax(0,1fr)] sm:items-start sm:gap-5"
+                  className="story-step reveal-on-scroll group relative pb-5 pl-9 last:pb-0 sm:pb-7 sm:pl-14"
+                  data-reveal-delay={index * 140 + 80}
                 >
-                  <span className="font-mono text-[10px] font-semibold tracking-[0.18em] text-brand">
-                    {item.code}
+                  <span className="story-step-marker absolute left-0 top-7 z-10 grid h-6 w-6 place-items-center rounded-full border border-brand/40 bg-background sm:top-8 sm:h-8 sm:w-8">
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand sm:h-2 sm:w-2" />
                   </span>
-                  <span className="font-display text-sm font-semibold text-foreground">
-                    {item.year}
-                  </span>
-                  <div>
-                    <h3 className="font-display text-lg font-semibold transition-colors group-hover:text-brand sm:text-xl">
+                  <article className="story-step-card relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-card transition duration-500 group-hover:-translate-y-1 group-hover:border-brand/45 group-hover:shadow-deep sm:rounded-3xl sm:p-7">
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand/60 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="rounded-full border border-brand/20 bg-brand/[0.07] px-3 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-brand">
+                        {item.year}
+                      </span>
+                      <span className="font-mono text-[10px] font-semibold tracking-[0.2em] text-muted-foreground/70">
+                        {item.code}
+                      </span>
+                    </div>
+                    <h3 className="mt-5 font-display text-xl font-bold leading-tight transition-colors group-hover:text-brand sm:text-2xl">
                       {item.title}
                     </h3>
-                    <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                    <p className="mt-2.5 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
                       {item.body}
                     </p>
-                  </div>
+                    <div className="mt-5 flex items-center gap-3" aria-hidden="true">
+                      <span className="h-px w-8 bg-brand/60 transition-all duration-500 group-hover:w-14" />
+                      <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-muted-foreground">
+                        {index === story.length - 1 ? "Future ready" : "Built to progress"}
+                      </span>
+                    </div>
+                  </article>
                 </li>
               ))}
             </ol>
