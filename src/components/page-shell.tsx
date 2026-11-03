@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpRight,
   Bot,
+  ChevronDown,
   Facebook,
   Factory,
   Instagram,
@@ -84,12 +86,28 @@ export function PageHero({
 }
 
 function FloatingActions() {
+  const [footerVisible, setFooterVisible] = useState(false);
   const whatsappNumber = companyContact.phone.replace(/\D/g, "");
   const whatsappMessage = encodeURIComponent(
     "Hello Modtech, I would like to discuss a project requirement.",
   );
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(([entry]) => setFooterVisible(entry.isIntersecting), {
+      threshold: 0,
+    });
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="floating-actions fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 flex flex-col gap-3 transition-opacity duration-300 sm:bottom-7 sm:right-7">
+    <div
+      className={`floating-actions fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 flex flex-col gap-3 transition-opacity duration-300 sm:bottom-7 sm:right-7 ${footerVisible ? "pointer-events-none invisible opacity-0" : ""}`}
+      aria-hidden={footerVisible}
+    >
       <a
         href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
         target="_blank"
@@ -179,8 +197,8 @@ function SiteFooter() {
     },
   ];
   return (
-    <footer className="relative border-t border-border bg-carbon-2 px-5 py-8 sm:px-8 sm:py-10">
-      <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-8 lg:grid-cols-[1.1fr_0.7fr_1.5fr] lg:gap-12">
+    <footer className="relative border-t border-border bg-carbon-2 px-5 py-6 sm:px-8 sm:py-9">
+      <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-7 lg:grid-cols-[1.1fr_0.7fr_1.5fr] lg:gap-12">
         <section className="min-w-0" aria-label="Modtech Machine">
           <Link to="/" className="inline-flex flex-col gap-2" aria-label="Modtech Machine — home">
             <BrandLogo className="h-9 text-foreground" />
@@ -188,13 +206,10 @@ function SiteFooter() {
               Investment Casting · Robotics &amp; Automation
             </span>
           </Link>
-          <p className="mt-3 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
+          <p className="mt-2 max-w-md text-xs leading-relaxed text-muted-foreground sm:mt-3 sm:text-[13px]">
             {content.company_tagline}
           </p>
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <span className="mr-1 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
-              Follow
-            </span>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             {socials.map((s) => (
               <a
                 key={s.label}
@@ -212,10 +227,7 @@ function SiteFooter() {
         </section>
 
         <nav className="min-w-0" aria-label="Footer navigation">
-          <h2 className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-            Explore
-          </h2>
-          <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 font-display text-xs text-muted-foreground sm:grid-cols-1 sm:text-sm">
+          <div className="flex flex-wrap gap-x-5 gap-y-2 font-display text-xs text-muted-foreground sm:flex-col sm:gap-2 sm:text-sm">
             {links.map((l) => (
               <Link
                 key={l.to}
@@ -236,12 +248,9 @@ function SiteFooter() {
             >
               Project enquiries
             </h2>
-            <p className="mt-1 text-[11px] text-muted-foreground">
-              Contact the team for your project.
-            </p>
           </div>
 
-          <ul className="mt-3 grid gap-2 min-[480px]:grid-cols-2">
+          <ul className="mt-2 grid gap-2 min-[480px]:grid-cols-2">
             {enquiryContacts.map((contact) => (
               <li key={contact.label}>
                 <a
@@ -256,7 +265,7 @@ function SiteFooter() {
                     <span className="block font-display text-xs font-semibold leading-snug text-foreground">
                       {contact.label}
                     </span>
-                    <span className="mt-1 block break-all text-[10px] leading-snug text-brand sm:text-[11px]">
+                    <span className="mt-1 block break-all text-[9px] leading-snug tracking-[-0.02em] text-brand sm:text-[11px] sm:tracking-normal">
                       {contact.email}
                     </span>
                   </span>
@@ -266,18 +275,24 @@ function SiteFooter() {
             ))}
           </ul>
 
-          <address className="mt-3 flex items-start gap-2 text-[11px] not-italic leading-relaxed text-muted-foreground">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
-            <span>{content.address}</span>
-          </address>
+          <details className="group mt-3">
+            <summary className="flex w-fit cursor-pointer list-none items-center gap-2 text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand [&::-webkit-details-marker]:hidden">
+              <MapPin className="h-4 w-4 shrink-0 text-brand" />
+              <span>Office address</span>
+              <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" />
+            </summary>
+            <address className="mt-2 pl-6 text-[11px] not-italic leading-relaxed text-muted-foreground">
+              {content.address}
+            </address>
+          </details>
         </section>
       </div>
 
-      <div className="mx-auto mt-7 flex max-w-7xl flex-col items-center justify-between gap-2 border-t border-border/60 pt-4 text-center sm:flex-row sm:text-left">
-        <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground sm:text-[10px]">
+      <div className="mx-auto mt-5 flex max-w-7xl flex-col items-center justify-between gap-2 border-t border-border/60 pt-4 text-center sm:flex-row sm:text-left">
+        <p className="max-w-full break-words font-mono text-[9px] leading-relaxed text-muted-foreground sm:text-[10px]">
           © {new Date().getFullYear()} Modtech Machine · All rights reserved
         </p>
-        <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground sm:text-right sm:text-[10px]">
+        <p className="max-w-full break-words font-mono text-[9px] leading-relaxed text-muted-foreground sm:text-right sm:text-[10px]">
           {content.footer_line}
         </p>
       </div>
