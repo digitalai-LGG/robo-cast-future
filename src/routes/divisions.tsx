@@ -131,6 +131,16 @@ function DivisionsPage() {
                     title={backgroundVideo.title}
                     className="division-choice-media -z-20"
                     fallbackImageSrc={division.image}
+                    fallbackClassName={
+                      mode === "casting"
+                        ? "bg-[#edf2ee] bg-[radial-gradient(circle_at_50%_35%,rgba(49,208,165,0.22),transparent_55%)]"
+                        : ""
+                    }
+                    fallbackImageClassName={
+                      mode === "casting"
+                        ? "object-contain p-5 drop-shadow-[0_24px_28px_rgba(10,35,27,0.24)] sm:p-9"
+                        : "object-cover"
+                    }
                     startAt={backgroundVideo.startAt}
                   />
                   <div className="absolute inset-0 -z-10 bg-gradient-to-b from-carbon/15 via-carbon/50 to-carbon" />

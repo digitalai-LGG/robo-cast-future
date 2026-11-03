@@ -71,6 +71,8 @@ type YouTubeBackgroundProps = {
   title: string;
   className?: string;
   fallbackImageSrc?: string;
+  fallbackClassName?: string;
+  fallbackImageClassName?: string;
   fallbackVideoSrc?: string;
   priority?: boolean;
   startAt?: number;
@@ -81,6 +83,8 @@ export function YouTubeBackground({
   title,
   className = "",
   fallbackImageSrc,
+  fallbackClassName = "",
+  fallbackImageClassName = "object-cover",
   fallbackVideoSrc,
   priority = false,
   startAt = 0,
@@ -205,7 +209,7 @@ export function YouTubeBackground({
       <div
         className={`absolute inset-0 z-10 transition-opacity duration-1000 motion-reduce:transition-none ${
           showFallback ? "opacity-100" : "opacity-0"
-        }`}
+        } ${fallbackClassName}`}
       >
         <img
           src={fallbackImage}
@@ -221,7 +225,7 @@ export function YouTubeBackground({
                   event.currentTarget.src = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
                 }
           }
-          className="absolute inset-0 h-full w-full object-cover"
+          className={`absolute inset-0 h-full w-full ${fallbackImageClassName}`}
         />
         {fallbackVideoSrc && canPlayVideo && (
           <video

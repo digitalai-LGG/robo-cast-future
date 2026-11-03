@@ -136,7 +136,7 @@ export const divisions: Array<{
     code: "DIV.01",
     title: "Investment Casting",
     tag: "Precision foundry machinery",
-    image: castingImg,
+    image: automationImages.castingMachine,
     category: "casting",
     description:
       "End-to-end casting line equipment — wax injectors, conditioning tanks, slurry machines, rain sanders, and ceramic injectors built for industrial reliability.",
