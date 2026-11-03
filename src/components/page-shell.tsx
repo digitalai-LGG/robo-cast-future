@@ -197,7 +197,7 @@ function SiteFooter() {
     },
   ];
   return (
-    <footer className="relative border-t border-border bg-carbon-2 px-5 py-6 sm:px-8 sm:py-9">
+    <footer className="on-dark relative border-t border-border bg-carbon-2 px-5 py-6 sm:px-8 sm:py-9">
       <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-7 lg:grid-cols-[1.1fr_0.7fr_1.5fr] lg:gap-12">
         <section className="min-w-0" aria-label="Modtech Machine">
           <Link to="/" className="inline-flex flex-col gap-2" aria-label="Modtech Machine — home">
