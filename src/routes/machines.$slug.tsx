@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/page-shell";
+import { MachineMediaFallback } from "@/components/machine-media-fallback";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import type { MachineSpecificationTable } from "@/content/official-machine-specifications";
 import {
@@ -246,6 +247,9 @@ function MachineDetail() {
               src={m.image}
               alt=""
               aria-hidden
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
               className="absolute inset-0 h-full w-full object-cover opacity-25 blur-2xl"
             />
           )}
@@ -342,7 +346,7 @@ function MachineDetail() {
               key={target}
               href={`#${target}`}
               aria-current={activeSection === target ? "location" : undefined}
-              className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 transition duration-300 sm:px-4 ${
+              className={`inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full border px-3 py-2 transition duration-300 sm:min-h-0 sm:px-4 ${
                 activeSection === target
                   ? "border-brand/40 bg-brand/10 text-brand shadow-[0_0_24px_-12px_var(--brand)]"
                   : "border-transparent hover:border-border hover:bg-card/60 hover:text-foreground"
@@ -819,21 +823,25 @@ function MachineDetail() {
                     className={`relative aspect-[16/10] overflow-hidden border-b border-border/70 ${isCatalogueCutout(r) ? "bg-[#f6f7e5]" : "bg-secondary"}`}
                   >
                     {r.image ? (
-                      <img
-                        src={r.image}
-                        alt={r.title}
-                        loading="lazy"
-                        className={`h-full w-full transition duration-700 group-hover:scale-105 ${isCatalogueCutout(r) ? `object-contain drop-shadow-[0_14px_14px_rgba(10,30,24,0.14)] ${r.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-5 ${usesLightBackdropBlend(r.image) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
-                      />
+                      <>
+                        <MachineMediaFallback
+                          title={r.title}
+                          code={r.code}
+                          compact
+                          className="absolute inset-0"
+                        />
+                        <img
+                          src={r.image}
+                          alt={r.title}
+                          loading="lazy"
+                          onError={(event) => {
+                            event.currentTarget.style.display = "none";
+                          }}
+                          className={`relative z-10 h-full w-full transition duration-700 group-hover:scale-105 ${isCatalogueCutout(r) ? `object-contain drop-shadow-[0_14px_14px_rgba(10,30,24,0.14)] ${r.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-5 ${usesLightBackdropBlend(r.image) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
+                        />
+                      </>
                     ) : (
-                      <div className="grid h-full w-full place-items-center bg-gradient-to-br from-secondary via-background to-secondary p-5 text-center">
-                        <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                          <ImageOff className="h-7 w-7 text-brand/70" aria-hidden />
-                          <span className="font-mono text-[8px] uppercase tracking-[0.16em]">
-                            Official image unavailable
-                          </span>
-                        </div>
-                      </div>
+                      <MachineMediaFallback title={r.title} code={r.code} compact />
                     )}
                   </div>
                   <div className="p-5">
@@ -1050,21 +1058,10 @@ function MachineGallery({ machine }: { machine: Machine }) {
   if (mediaCount === 0) {
     return (
       <div
-        className="machine-gallery-orbit reveal-on-scroll grid aspect-[4/3] place-items-center overflow-hidden rounded-3xl border border-brand/20 bg-gradient-to-br from-card via-background to-secondary p-8 text-center shadow-deep"
+        className="machine-gallery-orbit reveal-on-scroll aspect-[4/3] overflow-hidden rounded-3xl border border-brand/20 shadow-deep"
         data-reveal-delay="120"
       >
-        <div className="flex max-w-xs flex-col items-center gap-4 text-muted-foreground">
-          <ImageOff className="h-12 w-12 text-brand/70" aria-hidden />
-          <div>
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground">
-              Official image unavailable
-            </p>
-            <p className="mt-2 text-sm leading-relaxed">
-              No genuine machine photograph or video was supplied in the source documents or
-              published on the legacy website.
-            </p>
-          </div>
-        </div>
+        <MachineMediaFallback title={machine.title} code={machine.code} />
       </div>
     );
   }
@@ -1085,6 +1082,13 @@ function MachineGallery({ machine }: { machine: Machine }) {
       <div
         className={`relative aspect-[4/3] overflow-hidden ${isCastingImage ? "bg-[#f6f7e5]" : "bg-secondary"}`}
       >
+        {activeImage && (
+          <MachineMediaFallback
+            title={machine.title}
+            code={machine.code}
+            className="absolute inset-0"
+          />
+        )}
         {activeVideo ? (
           <iframe
             key={activeVideo.youtubeId}
@@ -1102,9 +1106,12 @@ function MachineGallery({ machine }: { machine: Machine }) {
               key={activeImage}
               src={activeImage}
               alt={activeCaption ?? machine.title}
-              className={`machine-image-enter h-full w-full ${isCastingImage ? `object-contain drop-shadow-[0_20px_20px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-6 sm:p-10 ${usesLightBackdropBlend(activeImage) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+              className={`machine-image-enter relative z-10 h-full w-full ${isCastingImage ? `object-contain drop-shadow-[0_20px_20px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-6 sm:p-10 ${usesLightBackdropBlend(activeImage) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
             />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-carbon/35 via-transparent to-transparent" />
+            <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-carbon/35 via-transparent to-transparent" />
           </>
         ) : null}
         <span className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/25 bg-carbon/75 px-3 py-1.5 font-mono text-[8px] uppercase tracking-[0.15em] text-carbon-foreground backdrop-blur-md">
@@ -1123,7 +1130,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
               type="button"
               onClick={() => setActiveIndex((activeIndex - 1 + mediaCount) % mediaCount)}
               aria-label="Show previous product media"
-              className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-carbon/80 text-carbon-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-carbon/80 text-carbon-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground sm:h-9 sm:w-9"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
             </button>
@@ -1134,7 +1141,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
               type="button"
               onClick={() => setActiveIndex((activeIndex + 1) % mediaCount)}
               aria-label="Show next product media"
-              className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-carbon/80 text-carbon-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-carbon/80 text-carbon-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground sm:h-9 sm:w-9"
             >
               <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -1173,6 +1180,9 @@ function MachineGallery({ machine }: { machine: Machine }) {
                   src={image}
                   alt=""
                   loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                  }}
                   className={`h-full w-full object-contain p-1 ${usesLightBackdropBlend(image) ? "mix-blend-darken" : ""}`}
                 />
               </button>

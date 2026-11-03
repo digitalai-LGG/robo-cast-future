@@ -1,7 +1,8 @@
 import { createFileRoute, Link, Outlet, redirect, useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, ImageOff, Layers3 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Layers3 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { MachineMediaFallback } from "@/components/machine-media-fallback";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import {
   functionalities,
@@ -255,27 +256,27 @@ function MachineCard({
           isCatalogueCutout(machine) ? "bg-[#f6f7e5]" : "bg-secondary"
         }`}
       >
+        <MachineMediaFallback
+          title={machine.title}
+          code={machine.code}
+          compact
+          className="absolute inset-0"
+        />
         {machine.image ? (
           <img
             src={machine.image}
             alt={machine.title}
             loading="lazy"
-            className={`h-full w-full transition duration-700 group-hover:scale-[1.035] ${
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
+            className={`relative z-10 h-full w-full transition duration-700 group-hover:scale-[1.035] ${
               isCatalogueCutout(machine)
                 ? `object-contain drop-shadow-[0_18px_18px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-5 sm:p-7 ${usesLightBackdropBlend(machine.image) ? "mix-blend-darken" : ""}`}`
                 : "object-cover"
             }`}
           />
-        ) : (
-          <div className="grid h-full w-full place-items-center bg-gradient-to-br from-secondary via-background to-secondary p-6 text-center">
-            <div className="flex flex-col items-center gap-3 text-muted-foreground">
-              <ImageOff className="h-9 w-9 text-brand/70" aria-hidden />
-              <span className="font-mono text-[10px] uppercase tracking-[0.18em]">
-                Official image unavailable
-              </span>
-            </div>
-          </div>
-        )}
+        ) : null}
         <div className="absolute left-4 top-4 flex items-center gap-2">
           <span className="rounded-full border border-white/70 bg-carbon/85 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-brand shadow-sm backdrop-blur">
             {machine.code}
