@@ -23,7 +23,7 @@ export function HeroVideoBackground({ videoSrc, posterSrc }: HeroVideoBackground
 
   return (
     <div
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-carbon"
+      className="pointer-events-none absolute inset-0 overflow-hidden bg-carbon"
       aria-hidden="true"
     >
       <img

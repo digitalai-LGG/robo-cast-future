@@ -1551,31 +1551,31 @@ export const processSteps = [
   {
     code: "01",
     name: "Consult",
-    desc: "Map your line, throughput and constraints with our engineering team.",
+    desc: "Understand your requirements",
     Icon: MessagesSquare,
   },
   {
     code: "02",
     name: "Engineer",
-    desc: "Custom mechanical, electrical and control design tailored to your part.",
+    desc: "Design your solution",
     Icon: PencilRuler,
   },
   {
     code: "03",
     name: "Build",
-    desc: "Precision fabrication and assembly inside our integrated workshop.",
+    desc: "Fabricate and assemble",
     Icon: Hammer,
   },
   {
     code: "04",
     name: "Automate",
-    desc: "Robot cells, PLC logic and HMIs deployed and validated on-site.",
+    desc: "Integrate, test and commission",
     Icon: Bot,
   },
   {
     code: "05",
     name: "Support",
-    desc: "Lifecycle service, spares and continuous optimisation of output.",
+    desc: "Maintain and optimise",
     Icon: Headphones,
   },
 ];

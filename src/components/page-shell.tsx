@@ -150,7 +150,7 @@ function SiteFooter() {
     label: string;
   }> = [
     { to: "/about", label: "About Us" },
-    { to: "/divisions", label: "Divisions / Machines" },
+    { to: "/divisions", label: "Divisions" },
     { to: "/blog", label: "Blogs" },
     { to: "/careers", label: "Careers" },
     { to: "/contact", label: "Contact Us" },
@@ -182,19 +182,23 @@ function SiteFooter() {
     },
   ];
   return (
-    <footer className="relative border-t border-border bg-carbon-2 px-5 py-10 sm:px-8 sm:py-14">
-      <div className="mx-auto grid max-w-7xl gap-8 sm:gap-10 lg:grid-cols-[1.05fr_0.72fr_1.3fr] lg:gap-12">
+    <footer className="relative border-t border-border bg-carbon-2 px-5 py-8 sm:px-8 sm:py-14">
+      <div className="mx-auto grid max-w-7xl gap-5 sm:gap-10 lg:grid-cols-[1.05fr_0.72fr_1.3fr] lg:gap-12">
         <div>
-          <Link to="/" className="inline-flex flex-col gap-3" aria-label="Modtech Machine — home">
-            <BrandLogo className="h-11 text-foreground" />
+          <Link
+            to="/"
+            className="inline-flex flex-col gap-2 sm:gap-3"
+            aria-label="Modtech Machine — home"
+          >
+            <BrandLogo className="h-9 text-foreground sm:h-11" />
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">
               Investment Casting · Robotics &amp; Automation
             </span>
           </Link>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
+          <p className="mt-3 max-w-sm text-xs leading-relaxed text-muted-foreground max-[420px]:line-clamp-2 sm:mt-5 sm:text-sm">
             {content.company_tagline}
           </p>
-          <p className="mt-6 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground sm:mt-6">
             Follow Modtech
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -206,7 +210,7 @@ function SiteFooter() {
                 rel="noopener noreferrer"
                 aria-label={s.label}
                 title={s.label}
-                className={`grid h-10 w-10 place-items-center rounded-full border border-border bg-card/60 text-muted-foreground transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${s.hoverClass}`}
+                className={`grid h-9 w-9 place-items-center rounded-full border border-border bg-card/60 text-muted-foreground transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:h-10 sm:w-10 ${s.hoverClass}`}
               >
                 <s.Icon className="h-4 w-4" />
               </a>
@@ -215,7 +219,7 @@ function SiteFooter() {
         </div>
 
         <div>
-          <nav className="grid grid-cols-2 gap-y-2 font-display text-sm text-muted-foreground">
+          <nav className="grid grid-cols-3 gap-x-3 gap-y-2 font-display text-sm text-muted-foreground sm:grid-cols-2">
             {links.map((l) => (
               <Link key={l.to} to={l.to} className="transition hover:text-brand">
                 {l.label}
@@ -234,27 +238,27 @@ function SiteFooter() {
             </span>
           </div>
 
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+          <ul className="mt-3 grid gap-2 min-[430px]:grid-cols-2 sm:mt-4 sm:gap-3 lg:grid-cols-1 xl:grid-cols-2">
             {enquiryContacts.map((contact) => (
               <li key={contact.label}>
                 <a
                   href={`mailto:${contact.email}?subject=${encodeURIComponent(`${contact.label} enquiry`)}`}
-                  className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card/65 p-4 transition duration-300 hover:-translate-y-1 hover:border-brand/50 hover:bg-card hover:shadow-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                  className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card/65 p-3 transition duration-300 hover:-translate-y-1 hover:border-brand/50 hover:bg-card hover:shadow-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:rounded-2xl sm:p-4"
                   aria-label={`Email Modtech for ${contact.label}`}
                 >
-                  <span className="flex items-start justify-between gap-4">
-                    <span className="grid h-9 w-9 place-items-center rounded-xl border border-brand/25 bg-brand/10 text-brand transition duration-300 group-hover:scale-105 group-hover:bg-brand group-hover:text-brand-foreground">
+                  <span className="flex items-start justify-between gap-4 max-[420px]:hidden">
+                    <span className="grid h-8 w-8 place-items-center rounded-lg border border-brand/25 bg-brand/10 text-brand transition duration-300 group-hover:scale-105 group-hover:bg-brand group-hover:text-brand-foreground sm:h-9 sm:w-9 sm:rounded-xl">
                       <contact.Icon className="h-4 w-4" />
                     </span>
                     <ArrowUpRight className="h-4 w-4 text-muted-foreground transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand" />
                   </span>
-                  <span className="mt-4 font-display text-sm font-semibold leading-snug text-foreground">
+                  <span className="mt-3 font-display text-sm font-semibold leading-snug text-foreground max-[420px]:mt-0 sm:mt-4">
                     {contact.label}
                   </span>
-                  <span className="mt-1 font-mono text-[8px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <span className="mt-1 font-mono text-[8px] uppercase tracking-[0.14em] text-muted-foreground max-[420px]:hidden">
                     {contact.description}
                   </span>
-                  <span className="mt-3 inline-flex min-w-0 items-center gap-1.5 break-all text-[11px] font-medium tracking-[-0.015em] text-brand xl:text-[10px] 2xl:text-[11px]">
+                  <span className="mt-2 inline-flex min-w-0 items-center gap-1.5 break-all text-[10px] font-medium tracking-[-0.015em] text-brand sm:mt-3 sm:text-[11px] xl:text-[10px] 2xl:text-[11px]">
                     <Mail className="h-3.5 w-3.5 shrink-0" /> {contact.email}
                   </span>
                 </a>
@@ -262,14 +266,14 @@ function SiteFooter() {
             ))}
           </ul>
 
-          <div className="mt-5 flex items-start gap-2 text-sm leading-relaxed text-muted-foreground">
+          <div className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground sm:mt-5 sm:text-sm">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
             <span>{content.address}</span>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto mt-8 flex max-w-7xl flex-col items-center justify-between gap-3 border-t border-border/60 pt-5 text-center sm:mt-10 sm:flex-row sm:pt-6 sm:text-left">
+      <div className="mx-auto mt-6 flex max-w-7xl flex-col items-center justify-between gap-2 border-t border-border/60 pt-4 text-center sm:mt-10 sm:flex-row sm:gap-3 sm:pt-6 sm:text-left">
         <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
           © {new Date().getFullYear()} Modtech Machine · All rights reserved
         </p>

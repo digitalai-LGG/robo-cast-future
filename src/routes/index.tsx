@@ -63,17 +63,17 @@ function HomePage() {
   return (
     <PageShell>
       <section className="home-hero on-dark relative isolate overflow-hidden bg-carbon lg:-mt-[4.5rem] lg:min-h-svh lg:pt-[4.5rem]">
-        <div className="relative isolate aspect-video w-full overflow-hidden lg:absolute lg:inset-0 lg:-z-20 lg:aspect-auto">
+        <div className="absolute inset-0 -z-20 overflow-hidden">
           <HeroVideoBackground
             videoSrc="/modtech-home-hero.mp4"
             posterSrc="/modtech-home-poster.webp"
           />
         </div>
-        <div className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-r from-carbon via-carbon/80 to-carbon/20 lg:block" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-carbon via-carbon/80 to-carbon/35 lg:bg-gradient-to-r lg:from-carbon lg:via-carbon/80 lg:to-carbon/20" />
         <div className="pointer-events-none absolute inset-0 -z-10 hidden bg-gradient-to-t from-carbon via-transparent to-carbon/40 lg:block" />
-        <div className="pointer-events-none absolute inset-0 -z-10 hidden bg-grid opacity-20 lg:block" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-10 lg:opacity-20" />
 
-        <div className="mx-auto grid max-w-7xl gap-8 px-5 pb-10 pt-8 sm:gap-10 sm:px-8 lg:min-h-[calc(100svh-4.5rem)] lg:content-center lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-end lg:pb-16 lg:pt-10 xl:grid-cols-[minmax(0,1fr)_18rem]">
+        <div className="mx-auto grid min-h-[34rem] max-w-7xl content-end gap-8 px-5 pb-8 pt-10 sm:min-h-[36rem] sm:gap-10 sm:px-8 sm:pb-10 sm:pt-12 lg:min-h-[calc(100svh-4.5rem)] lg:content-center lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-end lg:pb-16 lg:pt-10 xl:grid-cols-[minmax(0,1fr)_18rem]">
           <div className="min-w-0 max-w-4xl">
             <h1
               className="reveal max-w-4xl font-display text-[clamp(2.2rem,7vw,6rem)] font-bold leading-[1.02] sm:leading-[0.98]"
@@ -135,18 +135,18 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="bg-background px-5 py-16 sm:px-8 sm:py-24">
+      <section className="bg-background px-5 py-12 sm:px-8 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl">
-          <header className="reveal-on-scroll border-b border-border pb-7 sm:pb-9">
+          <header className="reveal-on-scroll border-b border-border pb-5 sm:pb-9">
             <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-brand">
               Our divisions
             </p>
-            <h2 className="mt-3 max-w-3xl font-display text-3xl font-bold tracking-tight sm:text-5xl">
+            <h2 className="mt-3 max-w-3xl font-display text-[1.75rem] font-bold tracking-tight sm:text-5xl">
               Precision foundry machinery. Factory automation.
             </h2>
           </header>
 
-          <div className="mt-9 space-y-16 sm:mt-12 sm:space-y-24">
+          <div className="mt-7 space-y-12 sm:mt-12 sm:space-y-20 lg:space-y-24">
             <DivisionChapter
               title="Investment Casting Machinery"
               description="Equipment for wax preparation and injection, ceramic shell building and foundry processing, engineered for repeatable production and dependable uptime."
@@ -179,11 +179,11 @@ function HomePage() {
           </div>
         </div>
       </section>
-      <section className="bg-background px-5 py-9 sm:px-8 sm:py-12">
+      <section className="bg-background px-5 py-8 sm:px-8 sm:py-12">
         <div className="mx-auto max-w-7xl">
-          <div className="reveal-on-scroll grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:gap-14">
+          <div className="reveal-on-scroll grid gap-5 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start lg:gap-14">
             <div>
-              <h2 className="max-w-lg font-display text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">
+              <h2 className="max-w-lg font-display text-[1.75rem] font-bold leading-tight sm:text-4xl lg:text-5xl">
                 Engineering that stays accountable.
               </h2>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">
@@ -195,14 +195,14 @@ function HomePage() {
               {advantages.map(({ Icon, title, text }) => (
                 <li
                   key={title}
-                  className="grid grid-cols-[2rem_minmax(0,1fr)] gap-3 border-b border-border py-4 sm:gap-4 sm:py-5"
+                  className="grid grid-cols-[1.75rem_minmax(0,1fr)] gap-2.5 border-b border-border py-3.5 sm:grid-cols-[2rem_minmax(0,1fr)] sm:gap-4 sm:py-5"
                 >
                   <div className="pt-0.5">
                     <Icon className="h-5 w-5 text-brand" aria-hidden="true" />
                   </div>
                   <div>
-                    <h3 className="font-display text-lg font-bold sm:text-xl">{title}</h3>
-                    <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                    <h3 className="font-display text-base font-bold sm:text-xl">{title}</h3>
+                    <p className="mt-1 max-w-xl text-xs leading-relaxed text-muted-foreground sm:text-sm">
                       {text}
                     </p>
                   </div>
@@ -213,19 +213,19 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-carbon-2 px-5 py-14 sm:px-8 sm:py-20">
+      <section className="border-y border-border bg-carbon-2 px-5 py-10 sm:px-8 sm:py-20">
         <div className="reveal-on-scroll mx-auto max-w-7xl">
-          <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
+          <div className="grid gap-6 lg:grid-cols-[0.7fr_1.3fr] lg:items-start lg:gap-10">
             <div>
-              <h2 className="font-display text-3xl font-bold sm:text-5xl">
+              <h2 className="font-display text-[1.75rem] font-bold sm:text-5xl">
                 Global production experience.
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 More than 1,000 projects delivered across 45+ countries, including work with 10+
                 Fortune 500 customers.
               </p>
             </div>
-            <div className="space-y-8">
+            <div className="space-y-5 sm:space-y-8">
               <ProofRow
                 label="Official integration partners"
                 items={automationPartners.map((partner) => partner.name)}
@@ -242,79 +242,65 @@ function HomePage() {
 
       <section
         id="process"
-        className="on-dark relative isolate overflow-hidden border-b border-border bg-carbon px-5 py-10 sm:px-8 sm:py-14"
+        className="on-dark relative isolate scroll-mt-24 overflow-hidden border-y border-foreground/10 bg-carbon px-5 py-7 sm:px-8 sm:py-10 lg:py-12"
       >
-        <div className="pointer-events-none absolute inset-0 -z-20 bg-grid opacity-15" />
-        <div className="pointer-events-none absolute -right-40 -top-40 -z-10 h-[34rem] w-[34rem] rounded-full bg-brand/15 blur-[150px]" />
-        <div className="pointer-events-none absolute -bottom-40 -left-40 -z-10 h-[30rem] w-[30rem] rounded-full bg-cyan/10 blur-[140px]" />
+        <div className="pointer-events-none absolute inset-0 -z-20 bg-grid opacity-[0.08]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-brand/[0.08] to-transparent" />
 
-        <div className="mx-auto max-w-7xl">
-          <header className="reveal-on-scroll grid gap-4 border-b border-foreground/15 pb-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.65fr)] lg:items-end lg:gap-12">
-            <div>
+        <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[minmax(17rem,0.7fr)_minmax(0,1.3fr)] lg:gap-0">
+          <header className="reveal-on-scroll flex min-w-0 flex-col lg:border-r lg:border-foreground/20 lg:pr-12 xl:pr-16">
+            <div className="max-w-xl">
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand">
                 {processContent.eyebrow.replace(/^\/\s*/, "")}
               </p>
-              <h2 className="mt-3 max-w-4xl font-display text-[clamp(2rem,4vw,3.8rem)] font-bold leading-[1] tracking-[-0.03em]">
+              <h2 className="mt-3 font-display text-[clamp(2rem,7.5vw,3.7rem)] font-bold leading-[0.98] tracking-[-0.035em]">
                 {processContent.title}
                 <span className="block text-gradient-brand">{processContent.accent}</span>
               </h2>
             </div>
-            <p className="max-w-xl text-sm leading-relaxed text-foreground/65 sm:text-base lg:justify-self-end">
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-foreground/65 sm:mt-4 sm:text-base">
               {processContent.description}
             </p>
-          </header>
-
-          <div className="relative mt-6 lg:mt-8">
-            <div
-              className="pointer-events-none absolute left-[10%] right-[10%] top-5 hidden h-px bg-gradient-to-r from-transparent via-brand/60 to-transparent lg:block"
-              aria-hidden="true"
-            />
-            <ol
-              className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0"
-              aria-label="Engineering delivery process"
+            <Button
+              asChild
+              className="mt-4 h-11 w-full justify-between px-5 sm:mt-5 sm:w-fit sm:justify-center lg:mt-auto lg:translate-y-1"
             >
-              {processSteps.map((step, index) => (
-                <li
-                  key={step.code}
-                  className="reveal-on-scroll group relative border border-foreground/10 bg-carbon-2/80 p-4 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-brand/45 lg:border-r-0 lg:last:border-r"
-                  data-reveal-delay={index * 110}
-                >
-                  <div className="relative z-10 flex items-center justify-between gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-full border border-brand/35 bg-carbon font-mono text-[10px] font-bold text-brand shadow-glow">
-                      {step.code}
-                    </span>
-                    <step.Icon
-                      className="h-4 w-4 text-foreground/35 transition-colors group-hover:text-brand"
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="mt-5">
-                    <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-foreground/35">
-                      Step {String(index + 1).padStart(2, "0")}
-                    </p>
-                    <h3 className="mt-1.5 font-display text-lg font-bold text-foreground">
-                      {step.name}
-                    </h3>
-                    <p className="mt-2 text-xs leading-relaxed text-foreground/55">{step.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          <div
-            className="reveal-on-scroll mt-6 flex flex-col gap-4 border-t border-foreground/15 pt-6 sm:flex-row sm:items-center sm:justify-between"
-            data-reveal-delay={processSteps.length * 110}
-          >
-            <p className="max-w-xl font-display text-lg font-semibold text-foreground sm:text-xl">
-              Ready to turn a production challenge into a working line?
-            </p>
-            <Button asChild className="w-fit shrink-0">
               <Link to="/contact" search={{ machine: undefined }}>
                 Start a project <ArrowUpRight />
               </Link>
             </Button>
-          </div>
+          </header>
+
+          <ol
+            className="relative border-t border-foreground/15 before:pointer-events-none before:absolute before:bottom-7 before:left-[0.4375rem] before:top-7 before:w-px before:bg-gradient-to-b before:from-brand/20 before:via-brand/80 before:to-brand/20 before:content-[''] lg:border-t-0 lg:pl-12 lg:before:left-[3.4375rem] xl:pl-16 xl:before:left-[4.4375rem]"
+            aria-label="Engineering delivery process"
+          >
+            {processSteps.map((step, index) => (
+              <li
+                key={step.code}
+                className="reveal-on-scroll group relative grid min-h-[4.25rem] grid-cols-[1.75rem_minmax(0,1fr)_2.25rem] items-center gap-3 border-b border-foreground/15 py-3 sm:min-h-[5.2rem] sm:grid-cols-[2.25rem_minmax(7.5rem,0.58fr)_minmax(0,1fr)_2.75rem] sm:gap-5 sm:py-4 lg:min-h-[5.35rem] lg:grid-cols-[2.25rem_minmax(7rem,0.55fr)_minmax(0,1fr)_2.75rem]"
+                data-reveal-delay={index * 70}
+              >
+                <span className="relative z-10 grid h-4 w-4 place-items-center rounded-full border border-brand/70 bg-carbon shadow-[0_0_0_4px_var(--color-carbon),0_0_18px_color-mix(in_oklab,var(--brand)_45%,transparent)] sm:h-5 sm:w-5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+                  <span className="sr-only">Step {step.code}</span>
+                </span>
+                <div className="min-w-0 sm:contents">
+                  <h3 className="font-display text-base font-bold text-foreground sm:text-xl">
+                    {step.name}
+                  </h3>
+                  <p className="mt-0.5 text-xs leading-snug text-foreground/60 sm:mt-0 sm:text-[15px] sm:leading-relaxed">
+                    {step.desc}
+                  </p>
+                </div>
+                <step.Icon
+                  className="h-5 w-5 justify-self-end text-brand/75 transition duration-300 group-hover:scale-110 group-hover:text-brand sm:h-7 sm:w-7"
+                  strokeWidth={1.7}
+                  aria-hidden="true"
+                />
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
     </PageShell>
@@ -341,9 +327,9 @@ function DivisionChapter({
   reverse?: boolean;
 }) {
   return (
-    <article className="reveal-on-scroll grid gap-8 lg:grid-cols-12 lg:items-center">
+    <article className="reveal-on-scroll grid gap-5 sm:gap-8 lg:grid-cols-12 lg:items-center">
       <div
-        className={`home-image-reveal relative min-h-[22rem] overflow-hidden sm:min-h-[32rem] lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}
+        className={`home-image-reveal relative aspect-[16/10] min-h-0 overflow-hidden md:aspect-auto md:min-h-[32rem] lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}
       >
         <img
           src={image}
@@ -353,12 +339,17 @@ function DivisionChapter({
         />
       </div>
       <div className={`lg:col-span-5 ${reverse ? "lg:order-1 lg:pr-10" : "lg:pl-10"}`}>
-        <h3 className="font-display text-3xl font-bold sm:text-5xl">{title}</h3>
-        <p className="mt-5 leading-relaxed text-muted-foreground">{description}</p>
-        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+        <h3 className="font-display text-2xl font-bold sm:text-4xl lg:text-5xl">{title}</h3>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:mt-5 sm:text-base">
+          {description}
+        </p>
+        <ul className="mt-4 grid grid-cols-2 gap-2.5 max-[360px]:grid-cols-1 sm:mt-6 sm:gap-3 lg:grid-cols-1">
           {points.map((point) => (
-            <li key={point} className="flex items-center gap-3 text-sm">
-              <Check className="h-4 w-4 shrink-0 text-brand" />
+            <li
+              key={point}
+              className="flex items-start gap-2 text-xs leading-snug sm:gap-3 sm:text-sm"
+            >
+              <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand sm:h-4 sm:w-4" />
               {point}
             </li>
           ))}
@@ -366,7 +357,7 @@ function DivisionChapter({
         <Button
           asChild
           variant="link"
-          className="mt-7 h-auto p-0 font-mono text-xs uppercase tracking-wider"
+          className="mt-5 h-auto p-0 font-mono text-[11px] uppercase tracking-wider sm:mt-7 sm:text-xs"
         >
           <Link to="/machines" search={{ division }}>
             {linkLabel} <ArrowRight />
@@ -383,7 +374,7 @@ function ProofRow({ label, items }: { label: string; items: string[] }) {
       <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">
         {label}
       </p>
-      <div className="mt-3 flex flex-wrap gap-x-6 gap-y-3">
+      <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-2 sm:mt-3 sm:gap-x-6 sm:gap-y-3">
         {items.map((item) => (
           <span
             key={item}
