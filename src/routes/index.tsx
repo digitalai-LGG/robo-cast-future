@@ -150,10 +150,11 @@ function HomePage() {
             <DivisionChapter
               title="Investment Casting Machinery"
               description="Equipment for wax preparation and injection, ceramic shell building and foundry processing, engineered for repeatable production and dependable uptime."
-              image={automationImages.casting}
-              alt="Investment casting machinery on the factory floor"
+              image={automationImages.castingMachine}
+              alt="Modtech automated IGT wax injection machine for investment casting"
               division="casting"
               linkLabel="View casting machines"
+              imageMode="product"
               points={[
                 "Wax injectors",
                 "Wax conditioning systems",
@@ -289,6 +290,7 @@ function DivisionChapter({
   linkLabel,
   points,
   reverse = false,
+  imageMode = "cover",
 }: {
   title: string;
   description: string;
@@ -298,17 +300,26 @@ function DivisionChapter({
   linkLabel: string;
   points: string[];
   reverse?: boolean;
+  imageMode?: "cover" | "product";
 }) {
+  const isProductImage = imageMode === "product";
+
   return (
     <article className="reveal-on-scroll grid gap-5 sm:gap-8 lg:grid-cols-12 lg:items-center">
       <div
-        className={`home-image-reveal relative aspect-[16/10] min-h-0 overflow-hidden md:aspect-auto md:min-h-[32rem] lg:col-span-7 ${reverse ? "lg:order-2" : ""}`}
+        className={`home-image-reveal relative aspect-[16/10] min-h-0 overflow-hidden md:aspect-auto md:min-h-[32rem] lg:col-span-7 ${isProductImage ? "border border-border bg-[#edf2ee]" : ""} ${reverse ? "lg:order-2" : ""}`}
       >
+        {isProductImage ? (
+          <>
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(49,208,165,0.15),transparent_58%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.08]" />
+          </>
+        ) : null}
         <img
           src={image}
           alt={alt}
           loading="lazy"
-          className="home-machine-image absolute inset-0 h-full w-full object-cover"
+          className={`home-machine-image absolute inset-0 h-full w-full ${isProductImage ? "object-contain p-3 drop-shadow-[0_22px_24px_rgba(13,46,36,0.2)] sm:p-7 md:p-10" : "object-cover"}`}
         />
       </div>
       <div className={`lg:col-span-5 ${reverse ? "lg:order-1 lg:pr-10" : "lg:pl-10"}`}>

@@ -9,6 +9,7 @@ const robotCobot = "/productsimg/robots/robot-cobot.png";
 const robotLinear = "/productsimg/robots/robot-linear.jpg";
 const robotPalletizer = "/productsimg/robots/robot-palletizer.jpg";
 const robotScara = "/productsimg/robots/robot-scara.jpg";
+const castingMachine = "/productsimg/casting/igt-wax-injector.png";
 import caseErectorFloor from "@/assets/automation/installations/case-erector-floor.png";
 import caseErectorOpen from "@/assets/automation/installations/case-erector-open.png";
 import casePackerFloor from "@/assets/automation/installations/case-packer-floor.png";
@@ -41,6 +42,7 @@ export const automationImages = {
   robotLinear,
   robotPalletizer,
   robotScara,
+  castingMachine,
   caseErectorFloor,
   caseErectorOpen,
   casePackerFloor,
