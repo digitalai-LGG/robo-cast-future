@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { processSteps, stats, type Mode } from "@/content/site-data";
 import { useSiteContent } from "@/lib/site-content";
-import { automationPartners, automationImages } from "@/content/automation-data";
+import { automationImages } from "@/content/automation-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -213,33 +213,6 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="border-y border-border bg-carbon-2 px-5 py-10 sm:px-8 sm:py-20">
-        <div className="reveal-on-scroll mx-auto max-w-7xl">
-          <div className="grid gap-6 lg:grid-cols-[0.7fr_1.3fr] lg:items-start lg:gap-10">
-            <div>
-              <h2 className="font-display text-[1.75rem] font-bold sm:text-5xl">
-                Global production experience.
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                More than 1,000 projects delivered across 45+ countries, including work with 10+
-                Fortune 500 customers.
-              </p>
-            </div>
-            <div className="space-y-5 sm:space-y-8">
-              <ProofRow
-                label="Official integration partners"
-                items={automationPartners.map((partner) => partner.name)}
-              />
-              <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
-                Every solution is engineered around your product, line layout, throughput and
-                operating environment—from first concept through commissioning and lifecycle
-                support.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section
         id="process"
         className="on-dark relative isolate scroll-mt-24 overflow-hidden border-y border-foreground/10 bg-carbon px-5 py-7 sm:px-8 sm:py-10 lg:py-12"
@@ -365,25 +338,5 @@ function DivisionChapter({
         </Button>
       </div>
     </article>
-  );
-}
-
-function ProofRow({ label, items }: { label: string; items: string[] }) {
-  return (
-    <div>
-      <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground">
-        {label}
-      </p>
-      <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-2 sm:mt-3 sm:gap-x-6 sm:gap-y-3">
-        {items.map((item) => (
-          <span
-            key={item}
-            className="font-display text-sm font-semibold text-foreground/80 sm:text-base"
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
   );
 }
