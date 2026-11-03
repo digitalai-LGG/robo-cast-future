@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Mail, Megaphone, Menu, X } from "lucide-react";
+import { Megaphone, Menu, X } from "lucide-react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { BrandLogo } from "@/components/brand-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -122,13 +122,6 @@ export function SiteHeader({ announcement }: { announcement: Announcement | null
                 {item.label}
               </Link>
             ))}
-            <a
-              href="mailto:sales.automation@modtechworld.com"
-              className="mt-2 flex min-h-11 min-w-0 items-center gap-2 break-all border-t border-border px-4 pt-3 text-xs text-muted-foreground"
-            >
-              <Mail className="h-4 w-4 shrink-0 text-brand" />
-              sales.automation@modtechworld.com
-            </a>
           </nav>
         </div>
       )}
