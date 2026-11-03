@@ -7,7 +7,6 @@ import {
   Factory,
   Instagram,
   Linkedin,
-  Mail,
   MapPin,
   Youtube,
 } from "lucide-react";
@@ -134,13 +133,11 @@ function SiteFooter() {
   const enquiryContacts = [
     {
       label: "Investment Casting Machines",
-      description: "New machine requirements",
       email: content.primary_email,
       Icon: Factory,
     },
     {
       label: "Robotics & Automation",
-      description: "Automation project enquiries",
       email: content.automation_email,
       Icon: Bot,
     },
@@ -182,26 +179,22 @@ function SiteFooter() {
     },
   ];
   return (
-    <footer className="relative border-t border-border bg-carbon-2 px-5 py-8 sm:px-8 sm:py-14">
-      <div className="mx-auto grid max-w-7xl gap-5 sm:gap-10 lg:grid-cols-[1.05fr_0.72fr_1.3fr] lg:gap-12">
-        <div>
-          <Link
-            to="/"
-            className="inline-flex flex-col gap-2 sm:gap-3"
-            aria-label="Modtech Machine — home"
-          >
-            <BrandLogo className="h-9 text-foreground sm:h-11" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">
+    <footer className="relative border-t border-border bg-carbon-2 px-5 py-8 sm:px-8 sm:py-10">
+      <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-8 lg:grid-cols-[1.1fr_0.7fr_1.5fr] lg:gap-12">
+        <section className="min-w-0" aria-label="Modtech Machine">
+          <Link to="/" className="inline-flex flex-col gap-2" aria-label="Modtech Machine — home">
+            <BrandLogo className="h-9 text-foreground" />
+            <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-brand">
               Investment Casting · Robotics &amp; Automation
             </span>
           </Link>
-          <p className="mt-3 max-w-sm text-xs leading-relaxed text-muted-foreground max-[420px]:line-clamp-2 sm:mt-5 sm:text-sm">
+          <p className="mt-3 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-[13px]">
             {content.company_tagline}
           </p>
-          <p className="mt-4 font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground sm:mt-6">
-            Follow Modtech
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="mr-1 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+              Follow
+            </span>
             {socials.map((s) => (
               <a
                 key={s.label}
@@ -210,74 +203,81 @@ function SiteFooter() {
                 rel="noopener noreferrer"
                 aria-label={s.label}
                 title={s.label}
-                className={`grid h-9 w-9 place-items-center rounded-full border border-border bg-card/60 text-muted-foreground transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:h-10 sm:w-10 ${s.hoverClass}`}
+                className={`grid h-8 w-8 place-items-center rounded-full border border-border bg-card/60 text-muted-foreground transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${s.hoverClass}`}
               >
-                <s.Icon className="h-4 w-4" />
+                <s.Icon className="h-3.5 w-3.5" />
               </a>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div>
-          <nav className="grid grid-cols-3 gap-x-3 gap-y-2 font-display text-sm text-muted-foreground sm:grid-cols-2">
+        <nav className="min-w-0" aria-label="Footer navigation">
+          <h2 className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            Explore
+          </h2>
+          <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 font-display text-xs text-muted-foreground sm:grid-cols-1 sm:text-sm">
             {links.map((l) => (
-              <Link key={l.to} to={l.to} className="transition hover:text-brand">
+              <Link
+                key={l.to}
+                to={l.to}
+                className="w-fit transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
                 {l.label}
               </Link>
             ))}
-          </nav>
-        </div>
+          </div>
+        </nav>
 
-        <div>
-          <div className="flex items-center justify-between gap-4 border-b border-border pb-3">
-            <h2 className="font-display text-sm font-semibold text-foreground">
+        <section className="min-w-0 sm:col-span-2 lg:col-span-1" aria-labelledby="footer-enquiries">
+          <div className="border-b border-border pb-2">
+            <h2
+              id="footer-enquiries"
+              className="font-display text-sm font-semibold text-foreground"
+            >
               Project enquiries
             </h2>
-            <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-brand">
-              Choose a division
-            </span>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Contact the team for your project.
+            </p>
           </div>
 
-          <ul className="mt-3 grid gap-2 min-[430px]:grid-cols-2 sm:mt-4 sm:gap-3 lg:grid-cols-1 xl:grid-cols-2">
+          <ul className="mt-3 grid gap-2 min-[480px]:grid-cols-2">
             {enquiryContacts.map((contact) => (
               <li key={contact.label}>
                 <a
                   href={`mailto:${contact.email}?subject=${encodeURIComponent(`${contact.label} enquiry`)}`}
-                  className="group relative flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card/65 p-3 transition duration-300 hover:-translate-y-1 hover:border-brand/50 hover:bg-card hover:shadow-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:rounded-2xl sm:p-4"
+                  className="group flex min-w-0 items-center gap-3 rounded-xl border border-border/70 bg-card/35 p-3 transition-colors hover:border-brand/50 hover:bg-card/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
                   aria-label={`Email Modtech for ${contact.label}`}
                 >
-                  <span className="flex items-start justify-between gap-4 max-[420px]:hidden">
-                    <span className="grid h-8 w-8 place-items-center rounded-lg border border-brand/25 bg-brand/10 text-brand transition duration-300 group-hover:scale-105 group-hover:bg-brand group-hover:text-brand-foreground sm:h-9 sm:w-9 sm:rounded-xl">
-                      <contact.Icon className="h-4 w-4" />
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-brand/25 bg-brand/10 text-brand transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
+                    <contact.Icon className="h-4 w-4" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display text-xs font-semibold leading-snug text-foreground">
+                      {contact.label}
                     </span>
-                    <ArrowUpRight className="h-4 w-4 text-muted-foreground transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand" />
+                    <span className="mt-1 block break-all text-[10px] leading-snug text-brand sm:text-[11px]">
+                      {contact.email}
+                    </span>
                   </span>
-                  <span className="mt-3 font-display text-sm font-semibold leading-snug text-foreground max-[420px]:mt-0 sm:mt-4">
-                    {contact.label}
-                  </span>
-                  <span className="mt-1 font-mono text-[8px] uppercase tracking-[0.14em] text-muted-foreground max-[420px]:hidden">
-                    {contact.description}
-                  </span>
-                  <span className="mt-2 inline-flex min-w-0 items-center gap-1.5 break-all text-[10px] font-medium tracking-[-0.015em] text-brand sm:mt-3 sm:text-[11px] xl:text-[10px] 2xl:text-[11px]">
-                    <Mail className="h-3.5 w-3.5 shrink-0" /> {contact.email}
-                  </span>
+                  <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-brand" />
                 </a>
               </li>
             ))}
           </ul>
 
-          <div className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground sm:mt-5 sm:text-sm">
+          <address className="mt-3 flex items-start gap-2 text-[11px] not-italic leading-relaxed text-muted-foreground">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" />
             <span>{content.address}</span>
-          </div>
-        </div>
+          </address>
+        </section>
       </div>
 
-      <div className="mx-auto mt-6 flex max-w-7xl flex-col items-center justify-between gap-2 border-t border-border/60 pt-4 text-center sm:mt-10 sm:flex-row sm:gap-3 sm:pt-6 sm:text-left">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+      <div className="mx-auto mt-7 flex max-w-7xl flex-col items-center justify-between gap-2 border-t border-border/60 pt-4 text-center sm:flex-row sm:text-left">
+        <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground sm:text-[10px]">
           © {new Date().getFullYear()} Modtech Machine · All rights reserved
         </p>
-        <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-muted-foreground sm:text-right sm:text-[10px]">
           {content.footer_line}
         </p>
       </div>
