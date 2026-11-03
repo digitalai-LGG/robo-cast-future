@@ -216,7 +216,7 @@ function HomePage() {
 
       <section
         id="process"
-        className="on-dark relative isolate scroll-mt-24 overflow-hidden border-y border-foreground/10 bg-carbon px-5 py-7 sm:px-8 sm:py-10 lg:py-12"
+        className="on-dark relative isolate mb-8 scroll-mt-24 overflow-hidden border-y border-foreground/10 bg-carbon px-5 py-7 sm:mb-10 sm:px-8 sm:py-10 lg:py-12"
       >
         <div className="pointer-events-none absolute inset-0 -z-20 bg-grid opacity-[0.08]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-brand/[0.08] to-transparent" />
