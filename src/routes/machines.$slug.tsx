@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import {
   Activity,
   ArrowLeft,
@@ -141,6 +141,18 @@ function rangeCopy(sectionId: ReturnType<typeof machineSection>, exactVariants: 
 
 export const Route = createFileRoute("/machines/$slug")({
   loader: async ({ params }) => {
+    const legacySlug = {
+      "rain-sander": "vertical-sander",
+      "slurry-tank": "slurry-preparation-tank",
+    }[params.slug];
+    if (legacySlug) {
+      throw redirect({
+        to: "/machines/$slug",
+        params: { slug: legacySlug },
+        replace: true,
+      });
+    }
+
     const catalogue = await fetchPublishedMachines();
     const machine = catalogue.find((item) => item.slug === params.slug);
     if (!machine) throw notFound();

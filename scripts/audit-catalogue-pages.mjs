@@ -32,12 +32,12 @@ const results = [];
 const issues = [];
 if (
   listingDivisions.length !== paths.length ||
-  divisionCounts.casting !== 29 ||
+  divisionCounts.casting !== 22 ||
   divisionCounts.robotics !== 0
 ) {
   issues.push({
     path: listingPath,
-    expectedDivisions: { casting: 29, robotics: 0 },
+    expectedDivisions: { casting: 22, robotics: 0 },
     divisionCounts,
     classifiedCards: listingDivisions.length,
   });
@@ -76,7 +76,7 @@ for (const page of ["/", "/divisions"]) {
 const filteredCatalogueChecks = {};
 const expectedFilteredCatalogues = {
   casting: {
-    products: 29,
+    products: 22,
     sections: [
       "wax-injection-machines",
       "wax-processing-conditioning",
