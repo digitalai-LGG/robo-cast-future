@@ -48,6 +48,30 @@ export function useRevealOnScroll() {
       applyDelay(el);
       observer.observe(el);
     });
-    return () => observer.disconnect();
+
+    // IntersectionObserver can miss elements that are already inside the
+    // viewport while a streamed route is hydrating. Reveal those immediately
+    // so primary content and product photography can never remain transparent.
+    const revealVisibleElements = () => {
+      els.forEach((el) => {
+        const bounds = el.getBoundingClientRect();
+        if (bounds.bottom >= 0 && bounds.top <= window.innerHeight * 1.08) {
+          el.classList.add("is-visible");
+          observer.unobserve(el);
+        }
+      });
+    };
+
+    const animationFrame = window.requestAnimationFrame(revealVisibleElements);
+    const visibilityFallback = window.setTimeout(() => {
+      els.forEach((el) => el.classList.add("is-visible"));
+      observer.disconnect();
+    }, 1_500);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.clearTimeout(visibilityFallback);
+      observer.disconnect();
+    };
   }, []);
 }

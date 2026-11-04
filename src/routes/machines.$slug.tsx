@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/page-shell";
+import { MachineImage } from "@/components/machine-image";
 import { MachineMediaFallback } from "@/components/machine-media-fallback";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import type { MachineSpecificationTable } from "@/content/official-machine-specifications";
@@ -861,19 +862,15 @@ function MachineDetail() {
                   >
                     {r.image ? (
                       <>
-                        <MachineMediaFallback
-                          title={r.title}
-                          code={r.code}
-                          compact
-                          className="absolute inset-0"
-                        />
-                        <img
+                        <MachineImage
                           src={r.image}
                           alt={r.title}
+                          fallbackTitle={r.title}
+                          fallbackCode={r.code}
+                          fallbackCompact
+                          fallbackClassName="absolute inset-0"
                           loading="lazy"
-                          onError={(event) => {
-                            event.currentTarget.style.display = "none";
-                          }}
+                          decoding="async"
                           className={`relative z-10 h-full w-full transition duration-700 group-hover:scale-105 ${isCatalogueCutout(r) ? `object-contain drop-shadow-[0_14px_14px_rgba(10,30,24,0.14)] ${r.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-5 ${usesLightBackdropBlend(r.image) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
                         />
                       </>
@@ -1119,13 +1116,6 @@ function MachineGallery({ machine }: { machine: Machine }) {
       <div
         className={`relative aspect-[4/3] overflow-hidden ${isCastingImage ? "bg-[#f6f7e5]" : "bg-secondary"}`}
       >
-        {activeImage && (
-          <MachineMediaFallback
-            title={machine.title}
-            code={machine.code}
-            className="absolute inset-0"
-          />
-        )}
         {activeVideo ? (
           <iframe
             key={activeVideo.youtubeId}
@@ -1139,13 +1129,14 @@ function MachineGallery({ machine }: { machine: Machine }) {
           />
         ) : activeImage ? (
           <>
-            <img
+            <MachineImage
               key={activeImage}
               src={activeImage}
               alt={activeCaption ?? machine.title}
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-              }}
+              fallbackTitle={machine.title}
+              fallbackCode={machine.code}
+              fallbackClassName="absolute inset-0"
+              decoding="async"
               className={`machine-image-enter relative z-10 h-full w-full ${isCastingImage ? `object-contain drop-shadow-[0_20px_20px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-6 sm:p-10 ${usesLightBackdropBlend(activeImage) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
             />
             <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-carbon/35 via-transparent to-transparent" />

@@ -32,6 +32,7 @@ const retiredMachinePaths = [
 const listingResponse = await fetch(new URL(listingPath, base));
 if (!listingResponse.ok) throw new Error(`Machine listing returned ${listingResponse.status}.`);
 const listingHtml = await listingResponse.text();
+const listingFallbackCount = (listingHtml.match(/Product media pending/g) ?? []).length;
 const discovered = [...listingHtml.matchAll(/data-machine-slug="([^"]+)"/g)].map(
   (match) => `/machines/${match[1]}`,
 );
@@ -72,6 +73,13 @@ if (!retainedMachinesListed || !retiredMachinesAbsent) {
     retainedMachinesListed,
     expectedRetiredMachinesAbsent: retiredMachinePaths,
     retiredMachinesAbsent,
+  });
+}
+if (listingFallbackCount > 0) {
+  issues.push({
+    path: listingPath,
+    expected: "verified product images without fallback artwork behind them",
+    listingFallbackCount,
   });
 }
 const checkedImages = new Map();
@@ -226,6 +234,7 @@ for (const path of paths) {
 
   const imageTags = [...html.matchAll(/<img\b[^>]*>/g)].map((match) => match[0]);
   const imagesMissingAlt = imageTags.filter((tag) => !/\balt=["'][^"']*["']/.test(tag)).length;
+  const fallbackCopyCount = (html.match(/Product media pending/g) ?? []).length;
   const retainedMachineCheck = retainedMachineChecks[path];
   const retainedMachineValid = retainedMachineCheck
     ? heading === retainedMachineCheck.title &&
@@ -245,6 +254,7 @@ for (const path of paths) {
     localImages: imageSources.length,
     brokenImages,
     imagesMissingAlt,
+    fallbackCopyCount,
     retainedMachineValid,
   };
   const valid =
@@ -257,6 +267,7 @@ for (const path of paths) {
     checks.hasSpecs &&
     checks.hasQuoteAction &&
     retainedMachineValid &&
+    fallbackCopyCount === 0 &&
     brokenImages.length === 0 &&
     imagesMissingAlt === 0;
   if (!valid) issues.push({ path, ...checks });
@@ -314,6 +325,8 @@ console.log(
       uniqueLocalImages: uniqueImages.size,
       validImageResponses: [...checkedImages.values()].filter((item) => item.ok).length,
       imagesMissingAlt: results.reduce((total, item) => total + item.imagesMissingAlt, 0),
+      fallbackCopyCount:
+        listingFallbackCount + results.reduce((total, item) => total + item.fallbackCopyCount, 0),
       missingMachineStatus: missingResponse.status,
       retainedMachinesListed,
       retiredMachinesAbsent,

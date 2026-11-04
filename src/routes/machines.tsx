@@ -2,6 +2,7 @@ import { createFileRoute, Link, Outlet, redirect, useLocation } from "@tanstack/
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, ArrowRight, Layers3 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
+import { MachineImage } from "@/components/machine-image";
 import { MachineMediaFallback } from "@/components/machine-media-fallback";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import {
@@ -218,6 +219,7 @@ function MachinesPage() {
                         key={machine.slug}
                         machine={machine}
                         index={index}
+                        priority={sectionIndex === 0}
                         activeDivision={activeDivision}
                       />
                     ))}
@@ -235,10 +237,12 @@ function MachinesPage() {
 function MachineCard({
   machine,
   index,
+  priority,
   activeDivision,
 }: {
   machine: Machine;
   index: number;
+  priority: boolean;
   activeDivision?: Mode;
 }) {
   return (
@@ -256,27 +260,31 @@ function MachineCard({
           isCatalogueCutout(machine) ? "bg-[#f6f7e5]" : "bg-secondary"
         }`}
       >
-        <MachineMediaFallback
-          title={machine.title}
-          code={machine.code}
-          compact
-          className="absolute inset-0"
-        />
         {machine.image ? (
-          <img
+          <MachineImage
             src={machine.image}
             alt={machine.title}
-            loading="lazy"
-            onError={(event) => {
-              event.currentTarget.style.display = "none";
-            }}
+            fallbackTitle={machine.title}
+            fallbackCode={machine.code}
+            fallbackCompact
+            fallbackClassName="absolute inset-0"
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
+            decoding="async"
             className={`relative z-10 h-full w-full transition duration-700 group-hover:scale-[1.035] ${
               isCatalogueCutout(machine)
                 ? `object-contain drop-shadow-[0_18px_18px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-5 sm:p-7 ${usesLightBackdropBlend(machine.image) ? "mix-blend-darken" : ""}`}`
                 : "object-cover"
             }`}
           />
-        ) : null}
+        ) : (
+          <MachineMediaFallback
+            title={machine.title}
+            code={machine.code}
+            compact
+            className="absolute inset-0"
+          />
+        )}
         <div className="absolute left-4 top-4 flex items-center gap-2">
           <span className="rounded-full border border-white/70 bg-carbon/85 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-brand shadow-sm backdrop-blur">
             {machine.code}
