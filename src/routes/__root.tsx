@@ -32,6 +32,8 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "color-scheme", content: "light dark" },
+      { name: "theme-color", content: "#06110f" },
       { title: "Modtech Machine | Robotics & Casting Automation" },
       {
         name: "description",
@@ -71,12 +73,12 @@ export const Route = createRootRoute({
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
-  const themeInit = `(function(){var r=document.documentElement;var t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';r.classList.toggle('light',t==='light');r.classList.toggle('dark',t==='dark');r.style.colorScheme=t})();`;
+  const themeInit = `(function(){var r=document.documentElement;var m=matchMedia('(prefers-color-scheme: dark)');var a=function(e){var t=e.matches?'dark':'light';r.classList.toggle('light',t==='light');r.classList.toggle('dark',t==='dark');r.style.colorScheme=t;r.dataset.theme=t;var c=document.querySelector('meta[name="theme-color"]');if(c)c.content=t==='dark'?'#06110f':'#f8fbfa'};a(m);if(m.addEventListener)m.addEventListener('change',a);else m.addListener(a)})();`;
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
         <HeadContent />
+        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
       <body>
         {children}

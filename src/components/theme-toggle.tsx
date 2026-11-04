@@ -13,6 +13,10 @@ function applyTheme(theme: Theme) {
   root.classList.toggle("light", theme === "light");
   root.classList.toggle("dark", theme === "dark");
   root.style.colorScheme = theme;
+  root.dataset.theme = theme;
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", theme === "dark" ? "#06110f" : "#f8fbfa");
 }
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
