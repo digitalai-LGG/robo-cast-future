@@ -60,7 +60,7 @@ const heroSpecIcons = [CircleGauge, Ruler, Cpu, Activity];
 
 const detailNavigation = [
   { target: "overview", label: "Overview", icon: Activity },
-  { target: "models", label: "Models & range", icon: Layers3 },
+  { target: "models", label: "Related range", icon: Layers3 },
   { target: "features", label: "Key features", icon: Sparkles },
   { target: "applications", label: "Applications", icon: Factory },
   { target: "specifications", label: "Specifications", icon: ClipboardCheck },
@@ -115,10 +115,10 @@ function rangeCopy(sectionId: ReturnType<typeof machineSection>, exactVariants: 
 
   if (sectionId === "wax-injection-machines" || sectionId === "ceramic-injectors") {
     return {
-      eyebrow: "Model range",
+      eyebrow: "Machine range",
       title: "Compare machines in this product family.",
       description:
-        "Each model is engineered around a different tooling envelope, production volume and automation requirement.",
+        "Each machine is engineered around a different tooling envelope, production volume and automation requirement.",
     };
   }
 
@@ -209,6 +209,13 @@ function MachineDetail() {
   const sectionId = machineSection(m);
   const section = productSectionMeta[sectionId];
   const isExactVariantFamily = m.slug.startsWith("wax-extruder-");
+  const isSystemRange =
+    sectionId === "end-of-line-packaging" || sectionId === "flexible-industrial-automation";
+  const rangeItemNoun = isExactVariantFamily
+    ? { singular: "variant", plural: "variants" }
+    : isSystemRange
+      ? { singular: "system", plural: "systems" }
+      : { singular: "machine", plural: "machines" };
   const modelRange = catalogue.filter((item) =>
     isExactVariantFamily
       ? item.slug.startsWith("wax-extruder-")
@@ -225,7 +232,16 @@ function MachineDetail() {
   const navigationItems = detailNavigation
     .filter((item) => item.target !== "models" || modelRange.length > 1)
     .map((item) =>
-      item.target === "models" && isExactVariantFamily ? { ...item, label: "Variants" } : item,
+      item.target === "models"
+        ? {
+            ...item,
+            label: isExactVariantFamily
+              ? "Variants"
+              : isSystemRange
+                ? "Related systems"
+                : "Related machines",
+          }
+        : item,
     );
   const activeSection = useActiveDetailSection(navigationItems.map((item) => item.target));
   const quickSpecs = m.specs.slice(0, 4);
@@ -290,9 +306,10 @@ function MachineDetail() {
               {modelRange.length > 1 && (
                 <a
                   href="#models"
+                  data-range-kind={rangeItemNoun.plural}
                   className="rounded-md border border-brand/30 bg-brand/[0.08] px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-brand transition hover:border-brand/60 hover:bg-brand/[0.14]"
                 >
-                  {modelRange.length} {isExactVariantFamily ? "variants" : "models"}
+                  {modelRange.length} {rangeItemNoun.plural}
                 </a>
               )}
             </div>
@@ -422,7 +439,11 @@ function MachineDetail() {
                       <thead className="border-b border-border bg-secondary/35">
                         <tr className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
                           <th className="px-4 py-3 font-medium" scope="col">
-                            Model / equipment
+                            {isExactVariantFamily
+                              ? "Variant"
+                              : isSystemRange
+                                ? "System"
+                                : "Machine"}
                           </th>
                           <th className="px-4 py-3 font-medium" scope="col">
                             Primary specification
@@ -473,7 +494,7 @@ function MachineDetail() {
                                     </span>
                                     <span className="mt-0.5 block font-mono text-[8px] uppercase tracking-[0.14em] text-brand">
                                       {model.code}
-                                      {current ? " · Current model" : ""}
+                                      {current ? ` · Current ${rangeItemNoun.singular}` : ""}
                                     </span>
                                   </span>
                                 </span>
@@ -513,7 +534,7 @@ function MachineDetail() {
                                     params={{ slug: model.slug }}
                                     className="inline-flex items-center gap-1.5 rounded-full border border-brand/35 px-3 py-1.5 font-mono text-[8px] font-semibold uppercase tracking-[0.13em] text-brand transition hover:bg-brand hover:text-brand-foreground"
                                   >
-                                    View model <ArrowRight className="h-3 w-3" />
+                                    View {rangeItemNoun.singular} <ArrowRight className="h-3 w-3" />
                                   </Link>
                                 )}
                               </td>
@@ -666,7 +687,11 @@ function MachineDetail() {
                 {m.specificationTables?.length ? (
                   <dl className="grid grid-cols-3 gap-2 lg:min-w-[27rem]">
                     {[
-                      { value: specificationModelCount, label: "Models", icon: Layers3 },
+                      {
+                        value: specificationModelCount,
+                        label: "Configurations",
+                        icon: Layers3,
+                      },
                       {
                         value: specificationParameterCount,
                         label: "Parameters",

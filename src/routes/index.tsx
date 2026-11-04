@@ -158,8 +158,8 @@ function HomePage() {
               points={[
                 "Wax injectors",
                 "Wax conditioning systems",
-                "Slurry equipment",
-                "Rain sanders & shelling cells",
+                "Slurry preparation tanks",
+                "Vertical sanders & shelling cells",
               ]}
             />
             <DivisionChapter

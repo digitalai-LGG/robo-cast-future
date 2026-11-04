@@ -10,6 +10,25 @@ function decode(value) {
 }
 
 const listingPath = "/machines?division=casting";
+const retainedMachineChecks = {
+  "/machines/vertical-sander": {
+    title: "Vertical Sander",
+    image: "/productsimg/casting/gallery/rain-sander/front.webp?v=2",
+    rangeKind: "machines",
+  },
+  "/machines/slurry-preparation-tank": {
+    title: "Slurry Preparation Tank",
+    image: "/productsimg/casting/gallery/slurry-mixer/front.webp?v=2",
+    rangeKind: "machines",
+  },
+};
+const retiredMachinePaths = [
+  "/machines/shell-drying-conveyor",
+  "/machines/stucco-elevator",
+  "/machines/shell-hangers",
+  "/machines/ic-series-robot",
+  "/machines/robot-gripper",
+];
 const listingResponse = await fetch(new URL(listingPath, base));
 if (!listingResponse.ok) throw new Error(`Machine listing returned ${listingResponse.status}.`);
 const listingHtml = await listingResponse.text();
@@ -42,6 +61,19 @@ if (
     classifiedCards: listingDivisions.length,
   });
 }
+
+const retainedListingPaths = Object.keys(retainedMachineChecks);
+const retainedMachinesListed = retainedListingPaths.every((path) => pathSet.has(path));
+const retiredMachinesAbsent = retiredMachinePaths.every((path) => !pathSet.has(path));
+if (!retainedMachinesListed || !retiredMachinesAbsent) {
+  issues.push({
+    path: listingPath,
+    expectedRetainedMachines: retainedListingPaths,
+    retainedMachinesListed,
+    expectedRetiredMachinesAbsent: retiredMachinePaths,
+    retiredMachinesAbsent,
+  });
+}
 const checkedImages = new Map();
 const uniqueImages = new Set();
 
@@ -68,9 +100,25 @@ for (const page of ["/", "/divisions"]) {
     casting: html.includes('href="/machines?division=casting"'),
     robotics: html.includes('href="/machines?division=robotics"'),
   };
-  const valid = response.ok && links.casting && links.robotics;
-  divisionNavigation[page] = { valid, status: response.status, links };
-  if (!valid) issues.push({ path: page, expected: "links to both filtered catalogues", links });
+  const currentCastingTerminology =
+    html.includes("Vertical sanders") &&
+    html.includes("Slurry preparation") &&
+    !html.includes("Rain sanders");
+  const valid = response.ok && links.casting && links.robotics && currentCastingTerminology;
+  divisionNavigation[page] = {
+    valid,
+    status: response.status,
+    links,
+    currentCastingTerminology,
+  };
+  if (!valid) {
+    issues.push({
+      path: page,
+      expected: "links to both filtered catalogues and current casting-machine terminology",
+      links,
+      currentCastingTerminology,
+    });
+  }
 }
 
 const filteredCatalogueChecks = {};
@@ -178,6 +226,13 @@ for (const path of paths) {
 
   const imageTags = [...html.matchAll(/<img\b[^>]*>/g)].map((match) => match[0]);
   const imagesMissingAlt = imageTags.filter((tag) => !/\balt=["'][^"']*["']/.test(tag)).length;
+  const retainedMachineCheck = retainedMachineChecks[path];
+  const retainedMachineValid = retainedMachineCheck
+    ? heading === retainedMachineCheck.title &&
+      title.startsWith(`${retainedMachineCheck.title} —`) &&
+      imageSources.includes(retainedMachineCheck.image) &&
+      html.includes(`data-range-kind="${retainedMachineCheck.rangeKind}"`)
+    : true;
 
   const checks = {
     status: response.status,
@@ -190,6 +245,7 @@ for (const path of paths) {
     localImages: imageSources.length,
     brokenImages,
     imagesMissingAlt,
+    retainedMachineValid,
   };
   const valid =
     response.ok &&
@@ -200,6 +256,7 @@ for (const path of paths) {
     checks.hasApplications &&
     checks.hasSpecs &&
     checks.hasQuoteAction &&
+    retainedMachineValid &&
     brokenImages.length === 0 &&
     imagesMissingAlt === 0;
   if (!valid) issues.push({ path, ...checks });
@@ -213,6 +270,28 @@ if (missingResponse.status !== 404) {
     expected: 404,
     status: missingResponse.status,
   });
+}
+
+const legacyRedirects = {};
+for (const [legacyPath, expectedPath] of Object.entries({
+  "/machines/rain-sander": "/machines/vertical-sander",
+  "/machines/slurry-tank": "/machines/slurry-preparation-tank",
+})) {
+  const response = await fetch(new URL(legacyPath, base), { redirect: "manual" });
+  const location = response.headers.get("location");
+  const valid =
+    [301, 302, 303, 307, 308].includes(response.status) &&
+    location !== null &&
+    new URL(location, base).pathname === expectedPath;
+  legacyRedirects[legacyPath] = { valid, status: response.status, location, expectedPath };
+  if (!valid) issues.push({ path: legacyPath, expected: `redirect to ${expectedPath}` });
+}
+
+const retiredMachineStatuses = {};
+for (const path of retiredMachinePaths) {
+  const response = await fetch(new URL(path, base));
+  retiredMachineStatuses[path] = response.status;
+  if (response.status !== 404) issues.push({ path, expected: 404, status: response.status });
 }
 
 console.log(
@@ -236,6 +315,10 @@ console.log(
       validImageResponses: [...checkedImages.values()].filter((item) => item.ok).length,
       imagesMissingAlt: results.reduce((total, item) => total + item.imagesMissingAlt, 0),
       missingMachineStatus: missingResponse.status,
+      retainedMachinesListed,
+      retiredMachinesAbsent,
+      legacyRedirects,
+      retiredMachineStatuses,
       issues,
     },
     null,

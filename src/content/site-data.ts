@@ -91,15 +91,18 @@ export const modeData: Record<
     kicker: "Precision foundry machinery",
     title: "End-to-end casting line equipment, built for uptime.",
     description:
-      "From wax injectors and conditioning tanks to slurry machines, rain sanders and ceramic injectors — industrial reliability across every step of the line.",
+      "From wax injectors and conditioning tanks to slurry preparation tanks, vertical sanders and ceramic injectors — industrial reliability across every step of the line.",
     image: castingImg,
     features: [
       {
         title: "Wax injectors",
         desc: "Hydraulic and servo-controlled platforms from 12T to 300T.",
       },
-      { title: "Slurry systems", desc: "Purpose-built mixing, conditioning and handling." },
-      { title: "Rain sanders", desc: "Curtain stucco for complex shells." },
+      {
+        title: "Slurry preparation",
+        desc: "Purpose-built mixing, conditioning and handling.",
+      },
+      { title: "Vertical sanders", desc: "Controlled stucco application for complex shells." },
       { title: "Ceramic injectors", desc: "Hydraulic precision for cores." },
     ],
     primaryCta: "Explore machines",
@@ -139,12 +142,12 @@ export const divisions: Array<{
     image: automationImages.castingMachine,
     category: "casting",
     description:
-      "End-to-end casting line equipment — wax injectors, conditioning tanks, slurry machines, rain sanders, and ceramic injectors built for industrial reliability.",
+      "End-to-end casting line equipment — wax injectors, conditioning tanks, slurry preparation tanks, vertical sanders, and ceramic injectors built for industrial reliability.",
     points: [
       "Wax injectors",
       "Conditioning tanks",
-      "Slurry equipment",
-      "Rain sanders",
+      "Slurry preparation tanks",
+      "Vertical sanders",
       "Ceramic injectors",
       "Fettling equipment",
     ],

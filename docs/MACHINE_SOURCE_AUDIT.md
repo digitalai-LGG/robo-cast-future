@@ -1,6 +1,7 @@
 # Machine source audit
 
-Audit date: 7 October 2026
+Initial audit date: 7 October 2026
+Latest verification: 4 November 2026
 
 ## Source priority
 
@@ -12,20 +13,20 @@ No technical value was copied from one machine into another. Where the supplied 
 
 ## Final catalogue count
 
-| Division | Machines |
-| --- | ---: |
-| Investment Casting | 22 |
-| Robotics & Automation | 5 |
-| **Total** | **27** |
+| Division              | Machines |
+| --------------------- | -------: |
+| Investment Casting    |       22 |
+| Robotics & Automation |        5 |
+| **Total**             |   **27** |
 
 ## Source-document products retained
 
 Two source-document products are retained as requested. Their existing genuine machine photographs from the product records are now used on both the catalogue cards and detail pages.
 
-| Source product | Catalogue slug | Photograph record |
-| --- | --- | --- |
-| Vertical Sander | `vertical-sander` | Existing Rainfall Sander front and interior photographs |
-| Slurry Preparation Tank | `slurry-preparation-tank` | Existing Slurry Mixer front and side photographs |
+| Source product          | Catalogue slug            | Photograph record                                       |
+| ----------------------- | ------------------------- | ------------------------------------------------------- |
+| Vertical Sander         | `vertical-sander`         | Existing Rainfall Sander front and interior photographs |
+| Slurry Preparation Tank | `slurry-preparation-tank` | Existing Slurry Mixer front and side photographs        |
 
 The five other document-only entries—Shell Drying Conveyor, Stucco Elevator, Shell Hangers, IC-Series Shell-Handling Robot and Robot Gripper—are not published in the catalogue.
 
@@ -46,6 +47,9 @@ The automated catalogue audit checks all 27 machine detail pages, expects 22 cas
 
 - Re-read the PDF product sections and the five primary DOCX system sections against the corresponding catalogue records.
 - Retained only Vertical Sander and Slurry Preparation Tank from the document-only additions and connected both to their existing genuine product photographs.
+- Standardised the public casting copy to use `Vertical Sander` and `Slurry Preparation Tank`; retired Rain Sander and Slurry Tank URLs redirect to the retained pages.
+- Confirmed all 27 catalogue records have unique slugs and machine codes, complete titles, descriptions, highlights, applications, primary images and specifications. All structured specification tables have matching columns and values.
+- Corrected detail-page range labels so separate products are described as machines or systems, not as models; only true wax-extruder variants use the variant label.
 - Removed `palletizing-line.png` from the Robotic Palletizing gallery because the photograph shows a case-packing line; the two verified palletizing installation photographs remain.
 - Confirmed that catalogue source files are clean UTF-8 and that degree, range, multiplication and separator symbols render from the correct characters.
 - Final automated result is recorded after each catalogue verification run; the audit accepts a machine without an image only when the page otherwise remains complete and contains no broken image reference.
