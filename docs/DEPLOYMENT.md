@@ -82,7 +82,8 @@ Use the generated Netlify server output. Do not publish only the client assets.
 
 ## Supabase launch checklist
 
-1. Apply every SQL file in `drizzle/migrations` in numerical order.
+1. Apply every SQL file in `drizzle/migrations` in numerical order. This is the canonical migration
+   sequence; `supabase/migrations` is a partial legacy history, not a complete bootstrap path.
 2. In Supabase Auth, set the production Site URL and add the production auth redirect URLs.
 3. Disable public user sign-up. Team accounts are created from the protected admin area.
 4. Set the email OTP expiry to 3600 seconds. The application enforces a 60-second resend wait.

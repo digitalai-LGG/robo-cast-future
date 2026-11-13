@@ -306,20 +306,28 @@ function cacheSiteContent(pageId: string, values: Record<string, string>) {
 export async function fetchSiteContent(pageId: string) {
   if (DEMO_MODE) return getSiteContent(pageId);
   const { data, error } = await supabase
-    .from("site_content" as never)
+    .from("site_content")
     .select("content")
     .eq("page_id", pageId)
     .maybeSingle();
   if (error) throw error;
-  const remote = (data as { content?: Record<string, string> } | null)?.content;
+  const content = data?.content;
+  const remote =
+    content && typeof content === "object" && !Array.isArray(content)
+      ? Object.fromEntries(
+          Object.entries(content).filter((entry): entry is [string, string] => {
+            return typeof entry[1] === "string";
+          }),
+        )
+      : undefined;
   return { ...getDefaultSiteContent(pageId), ...(remote ?? {}) };
 }
 
 export async function saveSiteContent(pageId: string, values: Record<string, string>) {
   if (!DEMO_MODE) {
     const { data, error } = await supabase
-      .from("site_content" as never)
-      .upsert({ page_id: pageId, content: values } as never, { onConflict: "page_id" })
+      .from("site_content")
+      .upsert({ page_id: pageId, content: values }, { onConflict: "page_id" })
       .select("page_id");
     if (error) throw error;
     if (!data?.length) throw new Error("Page update was not confirmed. Please retry.");

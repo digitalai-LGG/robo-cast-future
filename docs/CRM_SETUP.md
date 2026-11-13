@@ -72,12 +72,18 @@ Apply these migrations in order:
 11. `drizzle/migrations/0010_lead_notification_email.sql`
 12. `drizzle/migrations/0011_product_specification_metadata.sql`
 13. `drizzle/migrations/0012_career_vacancies.sql`
+14. `drizzle/migrations/0013_enforce_active_team_access.sql`
 
 The third migration adds the CRM and role policies. The fourth adds the server-only, atomic resend
 rate limit for authentication emails. The fifth keeps profiles and roles linked to Supabase Auth
 users and removes orphan records safely. The sixth limits the public enquiry form to five requests
 per browser/network fingerprint per hour and keeps its server-only counter table self-cleaning.
-The seventh adds editable product divisions, catalogue sections and gallery images.
+The seventh adds editable product divisions, catalogue sections and gallery images. The fourteenth
+ensures inactive team members lose role-based database access even if they still hold a valid token.
+
+`drizzle/migrations` is the canonical deployment sequence. The SQL files under `supabase/migrations`
+are a partial legacy history and are not a complete bootstrap path; do not use them instead of the
+numbered Drizzle migration sequence.
 
 ## Brevo transactional email
 

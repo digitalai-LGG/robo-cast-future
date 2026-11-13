@@ -93,6 +93,10 @@ try {
       salesDraftCount: await countAs(users.salesOne, "blog_posts", "published = false"),
     };
 
+    await tx`update public.profiles set active = false where id = ${users.admin}`;
+    results.inactiveAdminLeadCount = await countAs(users.admin, "enquiries");
+    results.inactiveAdminDraftCount = await countAs(users.admin, "blog_posts", "published = false");
+
     const passed =
       results.adminLeadCount === 2 &&
       results.managerLeadCount === 2 &&
@@ -101,7 +105,9 @@ try {
       results.editorLeadCount === 0 &&
       results.adminDraftCount === 1 &&
       results.editorDraftCount === 1 &&
-      results.salesDraftCount === 0;
+      results.salesDraftCount === 0 &&
+      results.inactiveAdminLeadCount === 0 &&
+      results.inactiveAdminDraftCount === 0;
 
     results.passed = passed;
     throw new RollbackWithResults(results);
