@@ -8,6 +8,7 @@ import {
   Bold,
   BriefcaseBusiness,
   CalendarDays,
+  Copy,
   Download,
   Clock3,
   Eye,
@@ -761,10 +762,21 @@ function DashboardOverview({
           .select("id, name, company, status, created_at")
           .order("created_at", { ascending: false }),
       ]);
-      const failure = [posts, products, news, exhibitions, careers, enquiries].find(
-        (result) => result.error,
-      )?.error;
-      if (failure) throw failure;
+      // One unavailable table (for example a migration that has not been applied yet)
+      // must not blank the whole dashboard — report it instead.
+      const unavailable = (
+        [
+          ["Blog & articles", posts.error],
+          ["Products", products.error],
+          ["News items", news.error],
+          ["Exhibitions", exhibitions.error],
+          ["Careers", careers.error],
+          ["Enquiries", enquiries.error],
+        ] as const
+      )
+        .filter(([, failure]) => failure)
+        .map(([label]) => label);
+      if (unavailable.length === 6) throw enquiries.error ?? new Error("Dashboard unavailable");
       return {
         posts: posts.data ?? [],
         products: mergeAdminProductRows((products.data ?? []) as Row[]),
@@ -772,6 +784,7 @@ function DashboardOverview({
         exhibitions: exhibitions.data ?? [],
         careers: careers.data ?? [],
         enquiries: enquiries.data ?? [],
+        unavailable,
       };
     },
   });
@@ -818,6 +831,8 @@ function DashboardOverview({
         ];
   const newEnquiries = data?.enquiries.filter((item) => item.status === "new") ?? [];
   const salesWorkspace = role === "sales" || role === "sales_manager";
+  const unavailableSections =
+    data && "unavailable" in data ? ((data.unavailable as string[] | undefined) ?? []) : [];
 
   return (
     <div>
@@ -852,6 +867,18 @@ function DashboardOverview({
         </div>
       ) : (
         <>
+          {unavailableSections.length > 0 && (
+            <div className="mt-8 flex items-start gap-3 rounded-2xl border border-amber/40 bg-amber/10 p-4 text-sm">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
+              <p className="leading-relaxed">
+                <span className="font-semibold">
+                  {unavailableSections.join(", ")} could not be loaded.
+                </span>{" "}
+                The rest of the dashboard is up to date. This usually means a database migration is
+                still pending for those tables.
+              </p>
+            </div>
+          )}
           <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {cards.map(({ tab, label, value, published, Icon }) => (
               <button
@@ -1226,6 +1253,28 @@ function WebsiteContent({ demo }: { demo: boolean }) {
   );
 }
 
+type BulkAction = "publish" | "unpublish" | "delete";
+
+type SortMode = "default" | "newest" | "oldest" | "az" | "za";
+
+const SORT_OPTIONS: Array<{ value: SortMode; label: string }> = [
+  { value: "default", label: "Default order" },
+  { value: "newest", label: "Recently updated" },
+  { value: "oldest", label: "Oldest updated" },
+  { value: "az", label: "Title A–Z" },
+  { value: "za", label: "Title Z–A" },
+];
+
+function rowKey(row: Row, titleKey: string) {
+  return String(row["id"] ?? row["slug"] ?? row[titleKey] ?? "");
+}
+
+function rowTimestamp(row: Row) {
+  const raw = row["updated_at"] ?? row["created_at"] ?? row["published_at"] ?? row["date"];
+  const time = raw ? new Date(String(raw)).getTime() : Number.NaN;
+  return Number.isFinite(time) ? time : 0;
+}
+
 function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
   const schema = SCHEMAS[tab];
   const queryClient = useQueryClient();
@@ -1233,6 +1282,8 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
   const [deleting, setDeleting] = useState<Row | null>(null);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<"all" | "published" | "draft">("all");
+  const [sort, setSort] = useState<SortMode>("default");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["admin", schema.table],
@@ -1251,8 +1302,18 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
     },
   });
 
-  const save = useMutation({
-    mutationFn: async (row: Row) => {
+  const invalidateAfterWrite = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ["admin", schema.table] });
+    queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
+    queryClient.invalidateQueries({ queryKey: ["posts"] });
+    if (tab === "products") queryClient.invalidateQueries({ queryKey: ["public-machines"] });
+    if (tab === "news") queryClient.invalidateQueries({ queryKey: ["public-news"] });
+    if (tab === "exhibitions") queryClient.invalidateQueries({ queryKey: ["public-exhibitions"] });
+    if (tab === "careers") queryClient.invalidateQueries({ queryKey: ["public-career-vacancies"] });
+  }, [queryClient, schema.table, tab]);
+
+  const persistRow = useCallback(
+    async (row: Row) => {
       if (demo) {
         saveDemoRow(schema.table, row);
         return;
@@ -1279,24 +1340,11 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
       if (!result.data?.length)
         throw new Error("Save was not confirmed. Please check your access and retry.");
     },
-    onSuccess: () => {
-      toast.success("Saved");
-      setEditing(null);
-      queryClient.invalidateQueries({ queryKey: ["admin", schema.table] });
-      queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      if (tab === "products") queryClient.invalidateQueries({ queryKey: ["public-machines"] });
-      if (tab === "news") queryClient.invalidateQueries({ queryKey: ["public-news"] });
-      if (tab === "exhibitions")
-        queryClient.invalidateQueries({ queryKey: ["public-exhibitions"] });
-      if (tab === "careers")
-        queryClient.invalidateQueries({ queryKey: ["public-career-vacancies"] });
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
+    [demo, schema.table],
+  );
 
-  const remove = useMutation({
-    mutationFn: async (id: string) => {
+  const deleteRow = useCallback(
+    async (id: string) => {
       if (demo) {
         deleteDemoRow(schema.table, id);
         return;
@@ -1309,24 +1357,59 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
       if (error) throw error;
       if (!data?.length) throw new Error("Delete was not confirmed. Please refresh and retry.");
     },
+    [demo, schema.table],
+  );
+
+  const save = useMutation({
+    mutationFn: persistRow,
     onSuccess: () => {
-      toast.success("Entry deleted");
-      setDeleting(null);
-      queryClient.invalidateQueries({ queryKey: ["admin", schema.table] });
-      queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      if (tab === "products") queryClient.invalidateQueries({ queryKey: ["public-machines"] });
-      if (tab === "news") queryClient.invalidateQueries({ queryKey: ["public-news"] });
-      if (tab === "exhibitions")
-        queryClient.invalidateQueries({ queryKey: ["public-exhibitions"] });
-      if (tab === "careers")
-        queryClient.invalidateQueries({ queryKey: ["public-career-vacancies"] });
+      toast.success("Saved");
+      setEditing(null);
+      invalidateAfterWrite();
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const remove = useMutation({
+    mutationFn: deleteRow,
+    onSuccess: () => {
+      toast.success("Entry deleted");
+      setDeleting(null);
+      invalidateAfterWrite();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const bulk = useMutation({
+    mutationFn: async ({ action, rows }: { action: BulkAction; rows: Row[] }) => {
+      let done = 0;
+      for (const row of rows) {
+        if (action === "delete") {
+          const id = row["id"];
+          if (!id) continue;
+          await deleteRow(String(id));
+        } else {
+          await persistRow({ ...row, published: action === "publish" });
+        }
+        done += 1;
+      }
+      return { action, done };
+    },
+    onSuccess: ({ action, done }) => {
+      const verb =
+        action === "delete" ? "deleted" : action === "publish" ? "published" : "moved to draft";
+      toast.success(`${done} ${done === 1 ? "entry" : "entries"} ${verb}.`);
+      setSelected(new Set());
+      invalidateAfterWrite();
+    },
+    onError: (e: Error) => {
+      toast.error(e.message);
+      invalidateAfterWrite();
+    },
+  });
+
   const rows = data ?? [];
-  const visibleRows = rows.filter((row) => {
+  const filteredRows = rows.filter((row) => {
     if (status === "published" && row["published"] === false) return false;
     if (status === "draft" && row["published"] !== false) return false;
     const needle = search.trim().toLowerCase();
@@ -1337,6 +1420,49 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
       .toLowerCase()
       .includes(needle);
   });
+
+  const visibleRows =
+    sort === "default"
+      ? filteredRows
+      : [...filteredRows].sort((a, b) => {
+          if (sort === "newest") return rowTimestamp(b) - rowTimestamp(a);
+          if (sort === "oldest") return rowTimestamp(a) - rowTimestamp(b);
+          const left = String(a[schema.titleKey] ?? "").toLowerCase();
+          const right = String(b[schema.titleKey] ?? "").toLowerCase();
+          return sort === "az" ? left.localeCompare(right) : right.localeCompare(left);
+        });
+
+  const publishedCount = rows.filter((row) => row["published"] !== false).length;
+  const visibleKeys = visibleRows.map((row) => rowKey(row, schema.titleKey));
+  const selectedRows = visibleRows.filter((row) => selected.has(rowKey(row, schema.titleKey)));
+  const allVisibleSelected = visibleKeys.length > 0 && selectedRows.length === visibleKeys.length;
+  const busy = save.isPending || remove.isPending || bulk.isPending;
+
+  const toggleSelection = (key: string) => {
+    setSelected((current) => {
+      const next = new Set(current);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const duplicateRow = (row: Row) => {
+    const copy: Row = { ...row };
+    delete copy["id"];
+    delete copy["created_at"];
+    delete copy["updated_at"];
+    for (const key of Object.keys(copy)) {
+      if (key.startsWith("_")) delete copy[key];
+    }
+    copy[schema.titleKey] = `${String(row[schema.titleKey] ?? "Untitled")} (copy)`;
+    if ("slug" in copy) copy["slug"] = `${slugify(String(row["slug"] ?? ""))}-copy`;
+    if ("code" in copy && copy["code"]) copy["code"] = `${String(copy["code"])}-COPY`;
+    if ("published" in copy) copy["published"] = false;
+    if ("pinned" in copy) copy["pinned"] = false;
+    save.reset();
+    setEditing(copy);
+  };
 
   const previewUrl = (row: Row) => {
     if (tab === "posts" && row["slug"]) return `/blog/${String(row["slug"])}`;
@@ -1396,10 +1522,74 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
             </button>
           ))}
         </div>
+        <label className="shrink-0">
+          <span className="sr-only">Sort entries</span>
+          <select
+            value={sort}
+            onChange={(event) => setSort(event.target.value as SortMode)}
+            className="rounded-xl border border-border bg-background px-3 py-2.5 text-xs outline-none ring-brand/30 transition focus:border-brand focus:ring-2"
+          >
+            {SORT_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
         <span className="shrink-0 text-xs text-muted-foreground">
-          {visibleRows.length} of {rows.length}
+          {visibleRows.length} of {rows.length} · {publishedCount} live
         </span>
       </div>
+
+      {selectedRows.length > 0 && (
+        <div className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl border border-brand/40 bg-brand/[0.07] p-3 sm:p-4">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">
+            {selectedRows.length} selected
+          </span>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => bulk.mutate({ action: "publish", rows: selectedRows })}
+              className="rounded-full border border-border bg-background px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] transition hover:border-brand hover:text-brand disabled:opacity-50"
+            >
+              Publish
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => bulk.mutate({ action: "unpublish", rows: selectedRows })}
+              className="rounded-full border border-border bg-background px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] transition hover:border-brand hover:text-brand disabled:opacity-50"
+            >
+              Move to draft
+            </button>
+            <button
+              type="button"
+              disabled={busy || selectedRows.every((row) => !row["id"])}
+              onClick={() => {
+                const deletable = selectedRows.filter((row) => row["id"]);
+                const resettable = deletable.filter((row) => row["_builtIn"]).length;
+                const message = resettable
+                  ? `Delete ${deletable.length - resettable} entries and reset ${resettable} built-in products to default content?`
+                  : `Delete ${deletable.length} ${deletable.length === 1 ? "entry" : "entries"}? This cannot be undone.`;
+                if (!window.confirm(message)) return;
+                bulk.mutate({ action: "delete", rows: deletable });
+              }}
+              className="rounded-full border border-destructive/40 bg-background px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-destructive transition hover:bg-destructive/10 disabled:opacity-50"
+            >
+              Delete
+            </button>
+          </div>
+          {bulk.isPending && <Loader2 className="h-4 w-4 animate-spin text-brand" />}
+          <button
+            type="button"
+            onClick={() => setSelected(new Set())}
+            className="ml-auto font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground underline underline-offset-4 transition hover:text-brand"
+          >
+            Clear selection
+          </button>
+        </div>
+      )}
 
       {isLoading ? (
         <div className="mt-8 space-y-3">
@@ -1422,6 +1612,17 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
         </div>
       ) : (
         <div className="mt-8 grid gap-3">
+          {visibleRows.length > 0 && (
+            <label className="flex w-fit cursor-pointer items-center gap-2 px-1 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground transition hover:text-brand">
+              <input
+                type="checkbox"
+                checked={allVisibleSelected}
+                onChange={() => setSelected(allVisibleSelected ? new Set() : new Set(visibleKeys))}
+                className="h-3.5 w-3.5 accent-[var(--brand)]"
+              />
+              {allVisibleSelected ? "Clear all" : `Select all ${visibleRows.length}`}
+            </label>
+          )}
           {visibleRows.length === 0 && (
             <div className="rounded-2xl border border-dashed border-border bg-card/50 p-10 text-center">
               <SectionIcon className="mx-auto h-8 w-8 text-muted-foreground/50" />
@@ -1434,9 +1635,20 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
           )}
           {visibleRows.map((row) => (
             <div
-              key={String(row["id"] ?? row["slug"] ?? row[schema.titleKey])}
-              className="group flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-card p-4 shadow-card transition hover:border-brand/40"
+              key={rowKey(row, schema.titleKey)}
+              className={`group flex flex-wrap items-center gap-4 rounded-2xl border bg-card p-4 shadow-card transition ${
+                selected.has(rowKey(row, schema.titleKey))
+                  ? "border-brand/60 ring-1 ring-brand/25"
+                  : "border-border hover:border-brand/40"
+              }`}
             >
+              <input
+                type="checkbox"
+                checked={selected.has(rowKey(row, schema.titleKey))}
+                onChange={() => toggleSelection(rowKey(row, schema.titleKey))}
+                aria-label={`Select ${String(row[schema.titleKey] ?? "entry")}`}
+                className="h-4 w-4 shrink-0 accent-[var(--brand)]"
+              />
               <div className="grid h-14 w-16 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-secondary/60 text-muted-foreground">
                 {row["cover_url"] || row["image_url"] ? (
                   <img
@@ -1501,6 +1713,14 @@ function Collection({ tab, demo }: { tab: CollectionTab; demo: boolean }) {
                   <Eye className="h-3.5 w-3.5" /> Preview
                 </a>
               )}
+              <button
+                type="button"
+                onClick={() => duplicateRow(row)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground transition hover:border-brand hover:text-brand"
+                title="Create a draft copy of this entry"
+              >
+                <Copy className="h-3.5 w-3.5" /> Duplicate
+              </button>
               <button
                 type="button"
                 onClick={() => {
