@@ -1,8 +1,15 @@
 import { useEffect } from "react";
 
+const SAFETY_REVEAL_MS = 1_500;
+
 /**
  * Applies the shared reveal timing and observes scroll-reveal elements.
  * Once a scroll-reveal element is visible, the class stays.
+ *
+ * Elements that appear after this effect ran — a client-side navigation to
+ * another machine, a keyed component remounting, a list that finished loading —
+ * are picked up by a MutationObserver. Without it they would keep the
+ * `.reveal-ready` opacity of 0 and never become visible.
  */
 export function useRevealOnScroll() {
   useEffect(() => {
@@ -19,59 +26,78 @@ export function useRevealOnScroll() {
       if (el.classList.contains("reveal-on-scroll")) el.style.transitionDelay = `${delay}ms`;
     };
 
-    const immediateReveals = Array.from(
-      document.querySelectorAll<HTMLElement>(".reveal[data-reveal-delay]"),
-    );
-    immediateReveals.forEach(applyDelay);
+    const supportsObserver = typeof IntersectionObserver !== "undefined";
+    const tracked = new WeakSet<HTMLElement>();
+    const timers = new Set<number>();
 
-    const els = Array.from(document.querySelectorAll<HTMLElement>(".reveal-on-scroll"));
+    const observer = supportsObserver
+      ? new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) reveal(entry.target as HTMLElement);
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+        )
+      : null;
 
-    if (typeof IntersectionObserver === "undefined") {
-      els.forEach((el) => el.classList.add("is-visible"));
-      return;
+    function reveal(el: HTMLElement) {
+      el.classList.add("is-visible");
+      observer?.unobserve(el);
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const el = entry.target as HTMLElement;
-            el.classList.add("is-visible");
-            observer.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
-    );
-
-    els.forEach((el) => {
-      applyDelay(el);
-      observer.observe(el);
-    });
-
-    // IntersectionObserver can miss elements that are already inside the
-    // viewport while a streamed route is hydrating. Reveal those immediately
-    // so primary content and product photography can never remain transparent.
-    const revealVisibleElements = () => {
-      els.forEach((el) => {
-        const bounds = el.getBoundingClientRect();
-        if (bounds.bottom >= 0 && bounds.top <= window.innerHeight * 1.08) {
-          el.classList.add("is-visible");
-          observer.unobserve(el);
-        }
-      });
+    const isInViewport = (el: HTMLElement) => {
+      const bounds = el.getBoundingClientRect();
+      return bounds.bottom >= 0 && bounds.top <= window.innerHeight * 1.08;
     };
 
-    const animationFrame = window.requestAnimationFrame(revealVisibleElements);
-    const visibilityFallback = window.setTimeout(() => {
-      els.forEach((el) => el.classList.add("is-visible"));
-      observer.disconnect();
-    }, 1_500);
+    const register = (el: HTMLElement) => {
+      if (tracked.has(el)) return;
+      tracked.add(el);
+      applyDelay(el);
+
+      if (!observer) {
+        el.classList.add("is-visible");
+        return;
+      }
+
+      observer.observe(el);
+
+      // Anything already on screen (hydration, or the section a navigation
+      // landed on) reveals straight away rather than waiting for a scroll.
+      if (isInViewport(el)) {
+        reveal(el);
+        return;
+      }
+
+      // Content must never be left transparent, whatever the observer does.
+      const timer = window.setTimeout(() => {
+        timers.delete(timer);
+        reveal(el);
+      }, SAFETY_REVEAL_MS);
+      timers.add(timer);
+    };
+
+    const scan = () => {
+      document.querySelectorAll<HTMLElement>(".reveal[data-reveal-delay]").forEach(applyDelay);
+      document.querySelectorAll<HTMLElement>(".reveal-on-scroll").forEach(register);
+    };
+
+    scan();
+    let frame = window.requestAnimationFrame(scan);
+
+    const mutationObserver = new MutationObserver(() => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(scan);
+    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      window.cancelAnimationFrame(animationFrame);
-      window.clearTimeout(visibilityFallback);
-      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+      mutationObserver.disconnect();
+      observer?.disconnect();
+      timers.forEach((timer) => window.clearTimeout(timer));
+      timers.clear();
     };
   }, []);
 }
