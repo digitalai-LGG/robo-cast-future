@@ -27,10 +27,14 @@ function esc(v: string) {
 
 async function enquiryFingerprint() {
   const request = getRequest();
+  // x-forwarded-for first: every supported host (Vercel, Netlify, Cloudflare, Render and a
+  // Node server behind a proxy) sets it from the real connection, overwriting whatever the
+  // client sent. cf-connecting-ip is only authoritative on Cloudflare, so trusting it first
+  // let a caller on any other host forge a fresh rate-limit bucket per request.
   const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const address =
-    request.headers.get("cf-connecting-ip")?.trim() ||
     forwardedFor ||
+    request.headers.get("cf-connecting-ip")?.trim() ||
     request.headers.get("x-real-ip")?.trim() ||
     "unknown";
   const userAgent = request.headers.get("user-agent")?.slice(0, 200) || "unknown";

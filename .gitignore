@@ -34,3 +34,16 @@ handoff/*.zip
 *.njsproj
 *.sln
 *.sw?
+
+# Environment files
+# .env is committed on purpose: it holds only public, publishable Supabase values
+# that the hosted build needs. Anything holding a real secret stays untracked.
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.server
+
+# Browser profiles and scratch output from QA scripts
+.tmp-machine-qa/
+.tmp-*/

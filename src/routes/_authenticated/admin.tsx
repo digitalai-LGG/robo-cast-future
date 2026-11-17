@@ -2254,7 +2254,13 @@ function Enquiries({
   });
 
   function exportCsv() {
-    const escape = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;
+    // Lead fields are public form input. Prefix anything a spreadsheet would treat as a
+    // formula so Excel, Numbers and Sheets show the text instead of executing it.
+    const escape = (value: unknown) => {
+      const text = String(value ?? "");
+      const safe = /^[=+\-@\t\r]/.test(text) ? `'${text}` : text;
+      return `"${safe.replace(/"/g, '""')}"`;
+    };
     const header = [
       "Created",
       "Name",
@@ -2641,6 +2647,18 @@ function Team({
     sales: "Sales Person",
   };
 
+  // Mirrors the server rule in updateTeamMember: an admin manages anyone but themselves,
+  // a sales manager manages sales people only. Everyone else is listed read-only.
+  const canManage = (member: TeamMember) =>
+    member.id !== userId &&
+    (role === "admin" || (role === "sales_manager" && member.role === "sales"));
+
+  const manageBlockedReason = (member: TeamMember) => {
+    if (member.id === userId) return "You cannot change your own access.";
+    if (!canManage(member)) return `Only a super admin can manage a ${roleLabel[member.role]}.`;
+    return undefined;
+  };
+
   return (
     <div>
       <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
@@ -2690,7 +2708,7 @@ function Team({
                   {role === "admin" ? (
                     <select
                       value={member.role}
-                      disabled={manageMember.isPending || member.id === userId}
+                      disabled={manageMember.isPending || !canManage(member)}
                       onChange={(event) =>
                         manageMember.mutate({
                           member,
@@ -2698,8 +2716,8 @@ function Team({
                         })
                       }
                       aria-label={`Role for ${member.full_name || member.email}`}
-                      title={member.id === userId ? "You cannot change your own role." : undefined}
-                      className="rounded-full border border-brand/30 bg-background px-3 py-1.5 font-mono text-[9px] uppercase tracking-wider text-brand outline-none"
+                      title={manageBlockedReason(member)}
+                      className="rounded-full border border-brand/30 bg-background px-3 py-1.5 font-mono text-[9px] uppercase tracking-wider text-brand outline-none disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <option value="admin">Super Admin</option>
                       <option value="editor">Content Editor</option>
@@ -2718,14 +2736,12 @@ function Team({
                   </span>
                   <button
                     type="button"
-                    disabled={manageMember.isPending || member.id === userId}
+                    disabled={manageMember.isPending || !canManage(member)}
                     onClick={() =>
                       manageMember.mutate({ member, changes: { active: !member.active } })
                     }
-                    className={`rounded-full border px-3 py-1.5 font-mono text-[9px] uppercase tracking-wider transition ${member.active ? "border-border text-muted-foreground hover:border-destructive hover:text-destructive" : "border-border text-muted-foreground hover:border-brand hover:text-brand"}`}
-                    title={
-                      member.id === userId ? "You cannot deactivate your own account." : undefined
-                    }
+                    className={`rounded-full border px-3 py-1.5 font-mono text-[9px] uppercase tracking-wider transition disabled:cursor-not-allowed disabled:opacity-40 ${member.active ? "border-border text-muted-foreground hover:border-destructive hover:text-destructive" : "border-border text-muted-foreground hover:border-brand hover:text-brand"}`}
+                    title={manageBlockedReason(member)}
                   >
                     {member.active ? "Deactivate" : "Activate"}
                   </button>
@@ -3140,8 +3156,9 @@ const SETTING_FIELDS: {
   {
     key: "site_url",
     label: "Public website URL",
-    hint: "Used for branded links in customer and sales emails.",
+    hint: "Optional. Used for branded links in customer and sales emails; the emails omit those links while it is empty.",
     placeholder: "https://www.modtechworld.com",
+    required: false,
   },
   {
     key: "email_logo_url",
