@@ -125,20 +125,12 @@ function MachinesPage() {
             >
               <ArrowLeft className="h-3.5 w-3.5" /> Divisions
             </Link>
-            <span className="text-foreground/25">/</span>
-            <span className="text-brand">Step 02 / 02 · Complete catalogue</span>
           </div>
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <p
-                className="reveal font-mono text-[10px] uppercase tracking-[0.28em] text-brand"
-                style={{ animationDelay: "60ms" }}
-              >
-                {divisionContent.kicker}
-              </p>
               <h1
-                className="reveal mt-3 max-w-4xl font-display text-[clamp(2.5rem,5.5vw,5.7rem)] font-bold leading-[0.96] tracking-[-0.04em]"
+                className="reveal max-w-4xl font-display text-[clamp(2.5rem,5.5vw,5.7rem)] font-bold leading-[0.96] tracking-[-0.04em]"
                 style={{ animationDelay: "110ms" }}
               >
                 {categoryMeta[division].label}
@@ -285,7 +277,7 @@ function MachineCard({
             className="absolute inset-0"
           />
         )}
-        <div className="absolute left-4 top-4 flex items-center gap-2">
+        <div className="on-dark absolute left-4 top-4 flex items-center gap-2">
           <span className="rounded-full border border-white/70 bg-carbon/85 px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-brand shadow-sm backdrop-blur">
             {machine.code}
           </span>
@@ -294,7 +286,7 @@ function MachineCard({
           </span>
         </div>
         {(machine.images?.length ?? 0) > 1 && (
-          <span className="absolute bottom-4 right-4 rounded-full border border-white/70 bg-white/90 px-2.5 py-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-carbon shadow-sm backdrop-blur">
+          <span className="on-dark absolute bottom-4 right-4 rounded-full border border-white/70 bg-white/90 px-2.5 py-1 font-mono text-[9px] font-semibold uppercase tracking-wider text-carbon shadow-sm backdrop-blur">
             {machine.images?.length} views
           </span>
         )}

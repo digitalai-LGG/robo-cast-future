@@ -138,10 +138,7 @@ function HomePage() {
       <section className="bg-background px-5 py-12 sm:px-8 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl">
           <header className="reveal-on-scroll border-b border-border pb-5 sm:pb-9">
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-brand">
-              Our divisions
-            </p>
-            <h2 className="mt-3 max-w-3xl font-display text-[1.75rem] font-bold tracking-tight sm:text-5xl">
+            <h2 className="max-w-3xl font-display text-[1.75rem] font-bold tracking-tight sm:text-5xl">
               Precision foundry machinery. Factory automation.
             </h2>
           </header>
@@ -224,10 +221,7 @@ function HomePage() {
         <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[minmax(17rem,0.7fr)_minmax(0,1.3fr)] lg:gap-0">
           <header className="reveal-on-scroll flex min-w-0 flex-col lg:border-r lg:border-foreground/20 lg:pr-12 xl:pr-16">
             <div className="max-w-xl">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand">
-                {processContent.eyebrow.replace(/^\/\s*/, "")}
-              </p>
-              <h2 className="mt-3 font-display text-[clamp(2rem,7.5vw,3.7rem)] font-bold leading-[0.98] tracking-[-0.035em]">
+              <h2 className="font-display text-[clamp(2rem,7.5vw,3.7rem)] font-bold leading-[0.98] tracking-[-0.035em]">
                 {processContent.title}
                 <span className="block text-gradient-brand">{processContent.accent}</span>
               </h2>

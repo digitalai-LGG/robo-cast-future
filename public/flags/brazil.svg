@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24" role="img" aria-label="Flag of Brazil">
+  <defs><clipPath id="r"><rect width="36" height="24" rx="2.5"/></clipPath></defs>
+  <g clip-path="url(#r)">
+    <path fill="#009b3a" d="M0 0h36v24H0z"/>
+    <path fill="#fedf00" d="M18 3.2 33.2 12 18 20.8 2.8 12z"/>
+    <circle cx="18" cy="12" r="5" fill="#002776"/>
+    <path fill="#ffffff" d="M13.2 10.2a11 11 0 0 1 9.6 1.5 5 5 0 0 1-.25 1.1 10 10 0 0 0-9.1-1.5z"/>
+  </g>
+</svg>

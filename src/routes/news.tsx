@@ -9,7 +9,6 @@ import {
   MapPin,
   Newspaper,
   Search,
-  Sparkles,
   X,
 } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
@@ -259,10 +258,7 @@ export function BlogsPage() {
         <div className="pointer-events-none absolute -right-40 -top-40 -z-10 h-[34rem] w-[34rem] rounded-full bg-brand/15 blur-[130px]" />
 
         <div className="mx-auto max-w-7xl">
-          <div className="reveal inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/10 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-brand backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5" /> Blogs · Insights · Events
-          </div>
-          <div className="mt-5 grid gap-6 sm:mt-8 lg:grid-cols-[1fr_0.72fr] lg:items-end lg:gap-10">
+          <div className="grid gap-6 sm:mt-8 lg:grid-cols-[1fr_0.72fr] lg:items-end lg:gap-10">
             <div>
               <h1 className="reveal max-w-4xl font-display text-[clamp(2.25rem,6vw,6.5rem)] font-bold leading-[1.02] tracking-[-0.05em] sm:leading-[0.92]">
                 Ideas in motion.{" "}
@@ -290,10 +286,7 @@ export function BlogsPage() {
         <div className="relative mx-auto max-w-7xl">
           <header className="mb-5 flex flex-col gap-3 border-b border-border pb-5 sm:mb-8 sm:flex-row sm:items-end sm:justify-between sm:pb-7">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-brand">
-                Knowledge centre
-              </p>
-              <h2 className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-5xl">
+              <h2 className="font-display text-2xl font-bold tracking-tight sm:text-5xl">
                 Explore the latest from Modtech.
               </h2>
             </div>
@@ -404,10 +397,7 @@ export function BlogsPage() {
             <section className="mt-14" aria-labelledby="latest-stories-heading">
               <div className="flex items-end justify-between gap-4 border-b border-border pb-4">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-brand">
-                    Latest stories
-                  </p>
-                  <h3 id="latest-stories-heading" className="mt-2 font-display text-2xl font-bold">
+                  <h3 id="latest-stories-heading" className="font-display text-2xl font-bold">
                     Blogs, insights & case studies
                   </h3>
                 </div>
@@ -429,10 +419,7 @@ export function BlogsPage() {
         <div className="relative mx-auto max-w-7xl">
           <div className="reveal-on-scroll flex flex-col gap-5 border-b border-foreground/15 pb-7 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-brand">
-                Exhibitions & events
-              </p>
-              <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-5xl">
+              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-5xl">
                 Meet our team <span className="text-gradient-brand">on the show floor.</span>
               </h2>
             </div>
@@ -448,7 +435,7 @@ export function BlogsPage() {
                 className="reveal-on-scroll group overflow-hidden rounded-2xl border border-foreground/15 bg-card shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand/60"
                 data-reveal-delay={index * 80}
               >
-                <div className="relative aspect-[16/10] overflow-hidden bg-carbon-2">
+                <div className="on-dark relative aspect-[16/10] overflow-hidden bg-carbon-2">
                   <img
                     src={event.image}
                     alt={event.title}
@@ -579,7 +566,7 @@ function StoryCard({
   const content = (
     <>
       <div
-        className={`relative overflow-hidden bg-carbon-2 ${featured ? "min-h-72 lg:min-h-[28rem]" : "aspect-[16/10]"}`}
+        className={`on-dark relative overflow-hidden bg-carbon-2 ${featured ? "min-h-72 lg:min-h-[28rem]" : "aspect-[16/10]"}`}
       >
         <img
           src={story.image}
@@ -682,7 +669,7 @@ function LoadingGrid() {
 function StoryDialog({ story, onClose }: { story: UnifiedStory; onClose: () => void }) {
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-carbon/85 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm sm:p-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="story-dialog-title"

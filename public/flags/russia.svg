@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24" role="img" aria-label="Flag of Russia">
+  <defs><clipPath id="r"><rect width="36" height="24" rx="2.5"/></clipPath></defs>
+  <g clip-path="url(#r)">
+    <path fill="#ffffff" d="M0 0.00h36v8.00H0z"/>
+    <path fill="#0039a6" d="M0 8.00h36v8.00H0z"/>
+    <path fill="#d52b1e" d="M0 16.00h36v8.00H0z"/>
+  </g>
+</svg>

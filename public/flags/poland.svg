@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24" role="img" aria-label="Flag of Poland">
+  <defs><clipPath id="r"><rect width="36" height="24" rx="2.5"/></clipPath></defs>
+  <g clip-path="url(#r)">
+    <path fill="#ffffff" d="M0 0.00h36v12.00H0z"/>
+    <path fill="#dc143c" d="M0 12.00h36v12.00H0z"/>
+  </g>
+</svg>

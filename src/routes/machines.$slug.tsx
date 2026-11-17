@@ -269,7 +269,7 @@ function MachineDetail() {
 
   return (
     <PageShell>
-      <section className="relative isolate overflow-hidden bg-carbon">
+      <section className="on-dark relative isolate overflow-hidden bg-carbon">
         <div className="pointer-events-none absolute inset-0 -z-10">
           {m.image && (
             <img
@@ -314,10 +314,7 @@ function MachineDetail() {
                 </a>
               )}
             </div>
-            <p className="mt-7 inline-flex items-center gap-2 font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-brand-soft">
-              <Sparkles className="h-3.5 w-3.5" /> Engineered around your process
-            </p>
-            <h1 className="mt-3 max-w-2xl font-display text-4xl font-bold leading-[1.02] tracking-[-0.045em] text-foreground sm:text-6xl lg:text-[4.25rem]">
+            <h1 className="mt-7 max-w-2xl font-display text-4xl font-bold leading-[1.02] tracking-[-0.045em] text-foreground sm:text-6xl lg:text-[4.25rem]">
               {m.title}
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -347,7 +344,7 @@ function MachineDetail() {
                   return (
                     <div
                       key={spec.label}
-                      className="group rounded-xl border border-white/10 bg-white/[0.035] px-3 py-3 backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand/[0.06]"
+                      className="group rounded-xl border border-foreground/10 bg-foreground/[0.04] px-3 py-3 backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand/[0.06]"
                     >
                       <div className="flex items-center gap-2 text-brand">
                         <SpecIcon className="h-3.5 w-3.5" />
@@ -396,10 +393,7 @@ function MachineDetail() {
           <section id="overview" className="scroll-mt-36 reveal-on-scroll">
             <div className="grid gap-8 pb-14 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
-                  01 / Overview
-                </p>
-                <h2 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+                <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
                   Engineered for repeatable production.
                 </h2>
               </div>
@@ -420,10 +414,7 @@ function MachineDetail() {
             <section id="models" className="scroll-mt-36 border-y border-border py-14">
               <div className="reveal-on-scroll grid gap-7 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
-                    02 / {modelRangeCopy.eyebrow}
-                  </p>
-                  <h2 className="mt-3 font-display text-3xl font-bold tracking-tight">
+                  <h2 className="font-display text-3xl font-bold tracking-tight">
                     {modelRangeCopy.title}
                   </h2>
                   <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">
@@ -560,10 +551,7 @@ function MachineDetail() {
                 <Settings2 className="h-4 w-4" />
               </span>
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
-                  03 / Key features
-                </p>
-                <h2 className="mt-1 font-display text-2xl font-bold tracking-tight">
+                <h2 className="font-display text-2xl font-bold tracking-tight">
                   Built around the process.
                 </h2>
               </div>
@@ -590,10 +578,7 @@ function MachineDetail() {
           <section id="applications" className="scroll-mt-36 border-y border-border py-14">
             <div className="reveal-on-scroll grid gap-7 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
-                  04 / Applications
-                </p>
-                <h2 className="mt-2 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+                <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
                   Where this machine fits.
                 </h2>
                 <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted-foreground">
@@ -642,15 +627,7 @@ function MachineDetail() {
                 }
               >
                 <div className="max-w-2xl">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-11 w-11 place-items-center rounded-xl border border-brand/20 bg-brand/10 text-brand shadow-[0_0_28px_-14px_var(--brand)]">
-                      <ClipboardCheck className="h-5 w-5" />
-                    </span>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
-                      05 / Technical specifications
-                    </p>
-                  </div>
-                  <h2 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+                  <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
                     {specificationModelCount > 1
                       ? "Every model. Every critical detail."
                       : "Complete published machine details."}
@@ -968,7 +945,7 @@ function SpecificationTableCard({
       </header>
 
       <div className="border-b border-border bg-carbon/55 px-4 py-2.5 md:hidden">
-        <p className="flex items-center gap-2 font-mono text-[8px] uppercase tracking-[0.14em] text-carbon-foreground/70">
+        <p className="flex items-center gap-2 font-mono text-[8px] uppercase tracking-[0.14em] text-foreground/70">
           <MoveHorizontal className="h-3.5 w-3.5 text-brand" /> All model values shown below
         </p>
       </div>
@@ -980,10 +957,10 @@ function SpecificationTableCard({
           }`}
         >
           <thead>
-            <tr className="border-b border-border bg-carbon text-carbon-foreground">
+            <tr className="border-b border-border bg-carbon text-foreground">
               <th
                 scope="col"
-                className="sticky left-0 z-20 min-w-64 border-r border-white/10 bg-carbon px-5 py-4 font-mono text-[9px] font-semibold uppercase tracking-[0.14em]"
+                className="sticky left-0 z-20 min-w-64 border-r border-border bg-carbon px-5 py-4 font-mono text-[9px] font-semibold uppercase tracking-[0.14em]"
               >
                 <span className="flex items-center gap-2">
                   <SlidersHorizontal className="h-3.5 w-3.5 text-brand" /> Technical parameter
@@ -993,7 +970,7 @@ function SpecificationTableCard({
                 <th
                   key={column}
                   scope="col"
-                  className="min-w-44 border-r border-white/10 px-4 py-4 text-center last:border-r-0"
+                  className="min-w-44 border-r border-border px-4 py-4 text-center last:border-r-0"
                 >
                   <span className="block font-mono text-[8px] font-medium uppercase tracking-[0.14em] text-brand">
                     Model {String(columnIndex + 1).padStart(2, "0")}
@@ -1114,7 +1091,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
       data-reveal-delay="120"
     >
       <div
-        className={`relative aspect-[4/3] overflow-hidden ${isCastingImage ? "bg-[#f6f7e5]" : "bg-secondary"}`}
+        className={`on-dark relative aspect-[4/3] overflow-hidden ${isCastingImage ? "bg-[#f6f7e5]" : "bg-secondary"}`}
       >
         {activeVideo ? (
           <iframe
@@ -1142,7 +1119,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
             <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-carbon/35 via-transparent to-transparent" />
           </>
         ) : null}
-        <span className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/25 bg-carbon/75 px-3 py-1.5 font-mono text-[8px] uppercase tracking-[0.15em] text-carbon-foreground backdrop-blur-md">
+        <span className="pointer-events-none absolute left-3 top-3 inline-flex items-center gap-2 rounded-full border border-white/25 bg-carbon/75 px-3 py-1.5 font-mono text-[8px] uppercase tracking-[0.15em] text-foreground backdrop-blur-md">
           {activeVideo ? (
             <Play className="h-3 w-3 fill-current text-brand" />
           ) : (
@@ -1158,18 +1135,18 @@ function MachineGallery({ machine }: { machine: Machine }) {
               type="button"
               onClick={() => setActiveIndex((activeIndex - 1 + mediaCount) % mediaCount)}
               aria-label="Show previous product media"
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-carbon/80 text-carbon-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground sm:h-9 sm:w-9"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-carbon/80 text-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground sm:h-9 sm:w-9"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
             </button>
-            <span className="rounded-full border border-white/20 bg-carbon/80 px-3 py-2 font-mono text-[9px] uppercase tracking-widest text-carbon-foreground backdrop-blur">
+            <span className="rounded-full border border-white/20 bg-carbon/80 px-3 py-2 font-mono text-[9px] uppercase tracking-widest text-foreground backdrop-blur">
               {String(activeIndex + 1).padStart(2, "0")} / {String(mediaCount).padStart(2, "0")}
             </span>
             <button
               type="button"
               onClick={() => setActiveIndex((activeIndex + 1) % mediaCount)}
               aria-label="Show next product media"
-              className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-carbon/80 text-carbon-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground sm:h-9 sm:w-9"
+              className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-carbon/80 text-foreground backdrop-blur transition hover:border-brand hover:bg-brand hover:text-brand-foreground sm:h-9 sm:w-9"
             >
               <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -1188,7 +1165,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
             </span>
           </div>
           <div
-            className="flex gap-2 overflow-x-auto pb-1"
+            className="on-dark flex gap-2 overflow-x-auto pb-1"
             aria-label={`${machine.title} media gallery`}
           >
             {images.map((image, index) => (
@@ -1241,7 +1218,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
                       <Play className="ml-0.5 h-3.5 w-3.5 fill-current" />
                     </span>
                   </span>
-                  <span className="absolute bottom-1 left-1 rounded bg-carbon/85 px-1.5 py-0.5 font-mono text-[7px] uppercase tracking-wider text-white">
+                  <span className="on-dark absolute bottom-1 left-1 rounded bg-carbon/85 px-1.5 py-0.5 font-mono text-[7px] uppercase tracking-wider text-white">
                     Video
                   </span>
                 </button>

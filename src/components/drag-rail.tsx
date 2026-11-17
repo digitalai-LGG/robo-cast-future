@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 /**
@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
  * - Touch: native swipe
  * - Buttons: scroll one viewport-card at a time
  * - Wheel: vertical scroll converted to horizontal when hovered
+ * - Optional autoplay that advances one card at a time and loops back to the start
  */
 export function DragRail({
   children,
@@ -14,6 +15,7 @@ export function DragRail({
   step,
   ariaLabel = "Horizontal scroller",
   controlsPlacement = "overlay",
+  autoPlayMs,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -21,8 +23,12 @@ export function DragRail({
   step?: number | "item";
   ariaLabel?: string;
   controlsPlacement?: "overlay" | "below";
+  /** Advance automatically every N milliseconds. Pauses on hover, drag and focus. */
+  autoPlayMs?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+  const loop = Boolean(autoPlayMs && autoPlayMs > 0);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
   const [progress, setProgress] = useState(0); // 0..1 across the rail
@@ -123,26 +129,78 @@ export function DragRail({
     };
   }, []);
 
-  const scrollBy = (dir: 1 | -1) => {
+  const scrollBy = useCallback(
+    (dir: 1 | -1) => {
+      const el = ref.current;
+      if (!el) return;
+      const max = Math.max(0, el.scrollWidth - el.clientWidth - 1);
+      if (step === "item") {
+        const positions = Array.from(el.children, (child) =>
+          Math.min(max, Math.max(0, (child as HTMLElement).offsetLeft - el.offsetLeft)),
+        );
+        const target =
+          dir === 1
+            ? positions.find((position) => position > el.scrollLeft + 8)
+            : [...positions].reverse().find((position) => position < el.scrollLeft - 8);
+        if (target !== undefined) {
+          el.scrollTo({ left: target, behavior: "smooth" });
+        } else if (loop) {
+          el.scrollTo({ left: dir === 1 ? 0 : max, behavior: "smooth" });
+        }
+        return;
+      }
+      const amount = step ?? Math.round(el.clientWidth * 0.8);
+      if (loop && dir === 1 && el.scrollLeft >= max - 4) {
+        el.scrollTo({ left: 0, behavior: "smooth" });
+        return;
+      }
+      if (loop && dir === -1 && el.scrollLeft <= 4) {
+        el.scrollTo({ left: max, behavior: "smooth" });
+        return;
+      }
+      el.scrollBy({ left: dir * amount, behavior: "smooth" });
+    },
+    [loop, step],
+  );
+
+  // ----- autoplay: one card at a time, looping back to the start -----
+  useEffect(() => {
+    if (!autoPlayMs || autoPlayMs <= 0) return;
     const el = ref.current;
     if (!el) return;
-    if (step === "item") {
-      const positions = Array.from(el.children, (child) =>
-        Math.max(0, (child as HTMLElement).offsetLeft - el.offsetLeft),
-      );
-      const target =
-        dir === 1
-          ? positions.find((position) => position > el.scrollLeft + 8)
-          : [...positions].reverse().find((position) => position < el.scrollLeft - 8);
-      if (target !== undefined) el.scrollTo({ left: target, behavior: "smooth" });
-      return;
-    }
-    const amount = step ?? Math.round(el.clientWidth * 0.8);
-    el.scrollBy({ left: dir * amount, behavior: "smooth" });
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+
+    const id = window.setInterval(() => {
+      if (pausedRef.current || document.hidden) return;
+      if (el.scrollWidth - el.clientWidth <= 1) return;
+      scrollBy(1);
+    }, autoPlayMs);
+
+    return () => window.clearInterval(id);
+  }, [autoPlayMs, scrollBy]);
+
+  const pause = () => {
+    pausedRef.current = true;
+  };
+  const resume = () => {
+    pausedRef.current = false;
   };
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") pause();
+      }}
+      onPointerLeave={resume}
+      onPointerDown={pause}
+      onPointerUp={(event) => {
+        if (event.pointerType !== "mouse") resume();
+      }}
+      onPointerCancel={resume}
+      onFocusCapture={pause}
+      onBlurCapture={resume}
+    >
       <div
         ref={ref}
         role="region"
@@ -164,7 +222,7 @@ export function DragRail({
           type="button"
           aria-label="Scroll left"
           onClick={() => scrollBy(-1)}
-          disabled={!canPrev}
+          disabled={!loop && !canPrev}
           className="rail-arrow pointer-events-auto"
         >
           <ChevronLeft className="h-5 w-5" />
@@ -173,7 +231,7 @@ export function DragRail({
           type="button"
           aria-label="Scroll right"
           onClick={() => scrollBy(1)}
-          disabled={!canNext}
+          disabled={!loop && !canNext}
           className="rail-arrow pointer-events-auto"
         >
           <ChevronRight className="h-5 w-5" />

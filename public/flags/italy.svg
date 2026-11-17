@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24" role="img" aria-label="Flag of Italy">
+  <defs><clipPath id="r"><rect width="36" height="24" rx="2.5"/></clipPath></defs>
+  <g clip-path="url(#r)">
+    <path fill="#008c45" d="M0.00 0h12.00v24H0.00z"/>
+    <path fill="#f4f5f0" d="M12.00 0h12.00v24H12.00z"/>
+    <path fill="#cd212a" d="M24.00 0h12.00v24H24.00z"/>
+  </g>
+</svg>

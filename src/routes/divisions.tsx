@@ -79,10 +79,7 @@ function DivisionsPage() {
         <div className="pointer-events-none absolute -right-32 top-0 -z-10 h-96 w-96 rounded-full bg-brand/15 blur-[110px]" />
 
         <div className="relative mx-auto max-w-7xl">
-          <p className="reveal font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand">
-            Modtech divisions
-          </p>
-          <h1 className="reveal mt-3 max-w-3xl font-display text-3xl font-bold leading-tight sm:text-5xl">
+          <h1 className="reveal max-w-3xl font-display text-3xl font-bold leading-tight sm:text-5xl">
             Choose your division.
           </h1>
           <p className="reveal mt-3 max-w-xl text-sm leading-relaxed text-foreground/75 sm:text-base">
@@ -123,7 +120,7 @@ function DivisionsPage() {
                   to="/machines"
                   search={{ division: mode }}
                   aria-label={`Open all ${division.title} machines`}
-                  className="division-choice-card reveal-on-scroll group relative isolate flex min-h-[34rem] overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+                  className="division-choice-card on-dark reveal-on-scroll group relative isolate flex min-h-[34rem] overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                   data-reveal-delay={index * 140}
                 >
                   <YouTubeBackground

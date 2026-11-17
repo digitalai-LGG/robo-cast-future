@@ -910,6 +910,80 @@
     animation: field-story-enter 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
 
+  /* ---- Global presence country board ---- */
+  .presence-panel {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .presence-panel::before {
+    content: "";
+    position: absolute;
+    inset: -40% -20%;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at 20% 0%,
+      color-mix(in oklab, var(--brand) 16%, transparent),
+      transparent 58%
+    );
+    animation: presence-aurora 14s ease-in-out infinite alternate;
+  }
+  .reveal-ready .presence-chip-in {
+    opacity: 0;
+  }
+  .reveal-ready .is-visible .presence-chip-in {
+    animation: presence-chip-in 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .presence-chip {
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+      border-color 0.4s ease,
+      background-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+  .presence-chip:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--brand) 55%, transparent);
+    background-color: color-mix(in oklab, var(--brand) 9%, transparent);
+    box-shadow: 0 18px 34px -24px color-mix(in oklab, var(--brand) 70%, transparent);
+  }
+  .presence-flag {
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .presence-chip:hover .presence-flag {
+    transform: scale(1.12) rotate(-2deg);
+  }
+  .presence-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--foreground) 35%, transparent);
+  }
+  .presence-dot-base {
+    position: relative;
+    background: var(--brand);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--brand) 55%, transparent);
+    animation: presence-ping 2.6s cubic-bezier(0.25, 0.8, 0.4, 1) infinite;
+  }
+  .presence-rail {
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 7%,
+      #000 93%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+  .presence-marquee {
+    animation: marquee 46s linear infinite;
+  }
+  .presence-rail:hover .presence-marquee {
+    animation-play-state: paused;
+  }
+
   /* ---- Drag rail progress indicator ---- */
   .rail-progress {
     user-select: none;
@@ -1252,6 +1326,9 @@
     .parallax-slow,
     .parallax-mid,
     .parallax-fast,
+    .presence-marquee,
+    .presence-dot-base,
+    .presence-panel::before,
     .home-marquee {
       animation: none !important;
       transition: none !important;
@@ -1272,6 +1349,9 @@
     .gallery-card-media,
     .gallery-card-caption,
     .field-story-card,
+    .presence-chip,
+    .presence-chip-in,
+    .presence-flag,
     .gallery-lightbox,
     .gallery-lightbox-image,
     .testimonial-card {
@@ -1328,6 +1408,38 @@
   to {
     opacity: 1;
     translate: 0 0;
+  }
+}
+
+@keyframes presence-chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes presence-ping {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--brand) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 7px color-mix(in oklab, var(--brand) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--brand) 0%, transparent);
+  }
+}
+
+@keyframes presence-aurora {
+  from {
+    transform: translate3d(-4%, -3%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6%, 4%, 0) scale(1.12);
   }
 }
 

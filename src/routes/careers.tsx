@@ -67,10 +67,7 @@ function CareersPage() {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
-                / careers
-              </p>
-              <h2 id="openings-title" className="mt-3 font-display text-3xl font-bold sm:text-4xl">
+              <h2 id="openings-title" className="font-display text-3xl font-bold sm:text-4xl">
                 Current openings
               </h2>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">

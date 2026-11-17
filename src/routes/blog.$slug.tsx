@@ -133,7 +133,7 @@ function BlogArticle() {
         />
       </div>
       <article>
-        <header className="relative isolate overflow-hidden bg-carbon px-5 py-16 sm:px-8 sm:py-20">
+        <header className="on-dark relative isolate overflow-hidden bg-carbon px-5 py-16 sm:px-8 sm:py-20">
           <div className="pointer-events-none absolute inset-0 -z-10">
             <img
               src={post.cover_url || automationImages.casting}

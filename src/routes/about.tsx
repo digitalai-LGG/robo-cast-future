@@ -26,6 +26,7 @@ import { DragRail } from "@/components/drag-rail";
 import { HeroVideoBackground } from "@/components/hero-video-background";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
+import { presenceBases, presenceCountries } from "@/content/global-presence";
 import { stats } from "@/content/site-data";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { isAboutPhotoUrl, parseAboutFieldGallery } from "@/lib/about-field-gallery";
@@ -184,7 +185,9 @@ function IndustriesRail() {
     <div className="mt-7">
       <DragRail
         ariaLabel="Industries served by Modtech"
-        controlsPlacement="below"
+        step="item"
+        controlsPlacement="overlay"
+        autoPlayMs={5000}
         className="-mx-1 px-1 sm:-mx-2 sm:px-2"
       >
         {servedIndustries.map((industry, index) => (
@@ -193,7 +196,7 @@ function IndustriesRail() {
       </DragRail>
       <p className="mt-1 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
         <MoveHorizontal className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-        Browse in groups · drag, swipe or use the arrows
+        Drag, swipe or use the arrows
       </p>
     </div>
   );
@@ -226,14 +229,8 @@ function AboutPage() {
 
         <div className="relative z-20 mx-auto flex max-w-7xl flex-col justify-between px-5 pb-8 pt-8 sm:px-8 sm:pb-10 lg:min-h-[680px] lg:pt-16">
           <div className="max-w-4xl">
-            <p
-              className="reveal font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand"
-              style={{ animationDelay: "40ms" }}
-            >
-              {content.eyebrow.replace(/^\/\s*/, "")}
-            </p>
             <h1
-              className="reveal mt-4 max-w-5xl font-display text-[clamp(2.4rem,7vw,6.2rem)] font-bold leading-[1.01] tracking-[-0.035em] sm:leading-[0.96]"
+              className="reveal max-w-5xl font-display text-[clamp(2.4rem,7vw,6.2rem)] font-bold leading-[1.01] tracking-[-0.035em] sm:leading-[0.96]"
               style={{ animationDelay: "100ms" }}
             >
               {content.title} <span className="text-gradient-brand">{content.accent}</span>
@@ -291,13 +288,7 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-20">
             <div className="reveal-on-scroll lg:sticky lg:top-28 lg:self-start">
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/[0.07] px-3.5 py-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand shadow-[0_0_12px_rgba(49,208,165,0.8)]" />
-                <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-brand">
-                  Our story
-                </p>
-              </div>
-              <h2 className="mt-5 max-w-xl font-display text-[clamp(2.25rem,5vw,4.75rem)] font-bold leading-[0.98] tracking-[-0.035em]">
+              <h2 className="max-w-xl font-display text-[clamp(2.25rem,5vw,4.75rem)] font-bold leading-[0.98] tracking-[-0.035em]">
                 Built around real production
                 <span className="block text-gradient-brand">since 1990.</span>
               </h2>
@@ -369,10 +360,7 @@ function AboutPage() {
           <div className="reveal-on-scroll mt-12 overflow-hidden rounded-3xl border border-foreground/10 bg-carbon text-foreground shadow-deep sm:mt-16">
             <div className="grid gap-4 border-b border-foreground/10 px-5 py-6 sm:px-7 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:items-end lg:px-9">
               <div>
-                <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-brand">
-                  What stays constant
-                </p>
-                <h3 className="mt-2 font-display text-2xl font-bold sm:text-3xl">
+                <h3 className="font-display text-2xl font-bold sm:text-3xl">
                   One accountable engineering team.
                 </h3>
               </div>
@@ -409,10 +397,7 @@ function AboutPage() {
           <div className="mx-auto max-w-7xl">
             <header className="reveal-on-scroll grid gap-4 lg:grid-cols-[1fr_0.7fr] lg:items-end lg:gap-12">
               <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand">
-                  Inside Modtech
-                </p>
-                <h2 className="mt-3 font-display text-3xl font-bold sm:text-5xl">
+                <h2 className="font-display text-3xl font-bold sm:text-5xl">
                   Engineering in action.
                 </h2>
               </div>
@@ -425,7 +410,8 @@ function AboutPage() {
               <DragRail
                 ariaLabel="Modtech people and project photos"
                 step="item"
-                controlsPlacement="below"
+                controlsPlacement="overlay"
+                autoPlayMs={5000}
                 className="-mx-1 px-1 sm:-mx-2 sm:px-2"
               >
                 {fieldPhotos.map((photo, index) => (
@@ -433,7 +419,7 @@ function AboutPage() {
                     key={photo.id}
                     className="field-story-card group flex w-[82vw] max-w-[22rem] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand/50 hover:shadow-deep sm:w-[23rem] lg:w-[26rem]"
                   >
-                    <div className="relative overflow-hidden">
+                    <div className="on-dark relative overflow-hidden">
                       <img
                         src={photo.image_url}
                         alt={photo.alt_text}
@@ -473,16 +459,7 @@ function AboutPage() {
         <div className="mx-auto max-w-7xl">
           <header className="reveal-on-scroll grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.65fr)] lg:items-end lg:gap-12">
             <div>
-              <div className="flex items-center gap-3">
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand">
-                  {industriesContent.eyebrow.replace(/^\/\s*/, "")}
-                </p>
-                <span className="h-px w-8 bg-brand/50" aria-hidden="true" />
-                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
-                  14 sectors
-                </span>
-              </div>
-              <h2 className="mt-3 max-w-3xl font-display text-[clamp(2rem,4vw,3.75rem)] font-bold leading-[1.05] tracking-[-0.025em]">
+              <h2 className="max-w-3xl font-display text-[clamp(2rem,4vw,3.75rem)] font-bold leading-[1.05] tracking-[-0.025em]">
                 {industriesContent.title}{" "}
                 <span className="text-gradient-brand">{industriesContent.accent}</span>
               </h2>
@@ -520,29 +497,130 @@ function AboutPage() {
         <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-carbon/90 via-transparent to-carbon/65" />
         <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-15" />
 
-        <div className="mx-auto flex min-h-[320px] max-w-7xl items-center">
-          <div className="reveal-on-scroll max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-carbon/55 px-3.5 py-2 font-mono text-[9px] font-semibold uppercase tracking-[0.22em] text-brand backdrop-blur-md">
-              <Globe2 className="h-3.5 w-3.5" aria-hidden="true" /> Global presence
+        <div className="mx-auto max-w-7xl">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
+            <div className="reveal-on-scroll">
+              <h2 className="font-display text-[clamp(2.25rem,5vw,4.9rem)] font-bold leading-[0.98] tracking-[-0.04em]">
+                Expanding horizons.
+                <span className="block text-gradient-brand">Engineering without borders.</span>
+              </h2>
+              <p className="mt-6 max-w-xl text-base leading-8 text-foreground/70 sm:text-lg">
+                Modtech machines and automation systems support manufacturers across more than 45
+                countries, backed by commissioning, remote diagnostics and lifecycle service.
+              </p>
+
+              <dl className="mt-8 grid max-w-lg grid-cols-3 overflow-hidden rounded-2xl border border-foreground/15 bg-carbon/45 backdrop-blur-md">
+                {[
+                  { value: "45+", label: "Countries served" },
+                  { value: presenceCountries.length.toString(), label: "Named markets" },
+                  { value: presenceBases.length.toString(), label: "Modtech locations" },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="border-r border-foreground/15 px-4 py-4 last:border-r-0 sm:px-5"
+                  >
+                    <dd className="font-display text-2xl font-bold text-brand sm:text-4xl">
+                      {item.value}
+                    </dd>
+                    <dt className="mt-1 font-mono text-[9px] uppercase leading-snug tracking-[0.14em] text-foreground/60">
+                      {item.label}
+                    </dt>
+                  </div>
+                ))}
+              </dl>
+
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/60">
+                <span className="inline-flex items-center gap-2">
+                  <span className="presence-dot presence-dot-base" aria-hidden="true" />
+                  Modtech location
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <span className="presence-dot" aria-hidden="true" />
+                  Served market
+                </span>
+              </div>
             </div>
-            <h2 className="mt-6 font-display text-[clamp(2.5rem,5.5vw,5.75rem)] font-bold leading-[0.98] tracking-[-0.04em]">
-              Expanding horizons.
-              <span className="block text-gradient-brand">Engineering without borders.</span>
-            </h2>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-foreground/70 sm:text-lg">
-              Modtech machines and automation systems support manufacturers across more than 45
-              countries, backed by commissioning, remote diagnostics and lifecycle service.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/70">
-              <span className="rounded-full border border-foreground/15 bg-carbon/55 px-4 py-2 backdrop-blur-md">
-                45+ countries
-              </span>
-              <span className="rounded-full border border-foreground/15 bg-carbon/55 px-4 py-2 backdrop-blur-md">
-                Worldwide support
-              </span>
-              <span className="rounded-full border border-foreground/15 bg-carbon/55 px-4 py-2 backdrop-blur-md">
-                Remote diagnostics
-              </span>
+
+            <div className="reveal-on-scroll" data-reveal-delay="120">
+              <div className="presence-panel rounded-3xl border border-foreground/15 bg-carbon/55 p-4 shadow-deep backdrop-blur-md sm:p-6">
+                <div className="flex items-center justify-between gap-4 border-b border-foreground/12 pb-3">
+                  <p className="font-display text-sm font-semibold">Where Modtech works</p>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand">
+                    {presenceCountries.length} countries
+                  </span>
+                </div>
+                <ul className="mt-4 grid grid-cols-2 gap-2">
+                  {presenceCountries.map((country, index) => (
+                    <li
+                      key={country.code}
+                      className="presence-chip-in"
+                      style={{ animationDelay: `${index * 55}ms` }}
+                    >
+                      <div className="presence-chip flex h-full items-center gap-3 rounded-xl border border-foreground/12 bg-carbon/55 px-3 py-2.5">
+                        <img
+                          src={country.flag}
+                          alt=""
+                          aria-hidden="true"
+                          loading="lazy"
+                          decoding="async"
+                          width="36"
+                          height="24"
+                          className="presence-flag h-4 w-6 shrink-0 rounded-[3px] ring-1 ring-white/25"
+                        />
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-semibold leading-tight">
+                            {country.name}
+                          </span>
+                          <span className="mt-0.5 hidden truncate font-mono text-[8px] uppercase tracking-[0.14em] text-foreground/50 sm:block">
+                            {country.note}
+                          </span>
+                        </span>
+                        <span
+                          className={`presence-dot shrink-0 ${country.kind === "base" ? "presence-dot-base" : ""}`}
+                          aria-hidden="true"
+                        />
+                        <span className="hidden shrink-0 font-mono text-[9px] tracking-[0.14em] text-foreground/40 sm:inline">
+                          {country.code}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="presence-rail reveal-on-scroll mt-10 overflow-hidden"
+            data-reveal-delay="80"
+          >
+            <div className="presence-marquee flex w-max items-center">
+              {[0, 1].map((pass) => (
+                <div
+                  key={pass}
+                  className="flex shrink-0 items-center gap-3 pr-3"
+                  aria-hidden={pass === 1}
+                >
+                  {presenceCountries.map((country) => (
+                    <span
+                      key={`${pass}-${country.code}`}
+                      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-foreground/12 bg-carbon/50 px-3.5 py-2 font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/65 backdrop-blur-md"
+                    >
+                      <img
+                        src={country.flag}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        decoding="async"
+                        width="36"
+                        height="24"
+                        className="h-3.5 w-5 rounded-[2px] ring-1 ring-white/20"
+                      />
+                      {country.name}
+                    </span>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -573,23 +651,17 @@ function AboutPage() {
                 height="1426"
                 className="certificate-preview-image h-auto w-full rounded-2xl border border-black/10 bg-white transition duration-700 ease-out group-hover:scale-[1.015]"
               />
-              <span className="absolute left-5 top-5 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-carbon/80 px-3 py-2 font-mono text-[8px] font-semibold uppercase tracking-[0.15em] text-white shadow-lg backdrop-blur-md sm:left-7 sm:top-7">
+              <span className="on-dark absolute left-5 top-5 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-carbon/80 px-3 py-2 font-mono text-[8px] font-semibold uppercase tracking-[0.15em] text-white shadow-lg backdrop-blur-md sm:left-7 sm:top-7">
                 <BadgeCheck className="h-3.5 w-3.5 text-brand" aria-hidden="true" /> Official
                 document
               </span>
-              <span className="absolute bottom-5 right-5 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-carbon/80 text-white shadow-lg backdrop-blur-md transition group-hover:bg-brand group-hover:text-brand-foreground sm:bottom-7 sm:right-7">
+              <span className="on-dark absolute bottom-5 right-5 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-carbon/80 text-white shadow-lg backdrop-blur-md transition group-hover:bg-brand group-hover:text-brand-foreground sm:bottom-7 sm:right-7">
                 <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
               </span>
             </a>
 
             <div className="reveal-on-scroll" data-reveal-delay="120">
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand/[0.08] px-3.5 py-2 text-brand">
-                <BadgeCheck className="h-4 w-4" aria-hidden="true" />
-                <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em]">
-                  Certified quality
-                </span>
-              </div>
-              <h2 className="mt-5 max-w-2xl font-display text-[clamp(2.25rem,5vw,4.75rem)] font-bold leading-[0.98] tracking-[-0.035em]">
+              <h2 className="max-w-2xl font-display text-[clamp(2.25rem,5vw,4.75rem)] font-bold leading-[0.98] tracking-[-0.035em]">
                 Quality you can
                 <span className="block text-gradient-brand">see and verify.</span>
               </h2>
@@ -640,10 +712,7 @@ function AboutPage() {
       <section className="bg-background px-5 py-12 sm:px-8 sm:py-16">
         <div className="reveal-on-scroll mx-auto grid max-w-7xl gap-8 overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-card sm:p-9 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:p-12">
           <div>
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-brand">
-              Start a conversation
-            </p>
-            <h2 className="mt-3 max-w-4xl font-display text-3xl font-bold leading-tight sm:text-5xl">
+            <h2 className="max-w-4xl font-display text-3xl font-bold leading-tight sm:text-5xl">
               Bring us the production challenge. We&apos;ll engineer the line.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
