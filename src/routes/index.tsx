@@ -61,6 +61,15 @@ function HomePage() {
   useRevealOnScroll();
   const content = useSiteContent("home");
   const processContent = useSiteContent("process");
+  // The CMS still holds the retired division-led headline for some sites.
+  // Ignore that saved value so the current hero line always wins; a new
+  // title typed in the admin panel still comes through unchanged.
+  const heroTitle = content.title.startsWith("Investment casting")
+    ? "Precision in Every Cast."
+    : content.title;
+  const heroAccent = content.accent.startsWith("Robotic automation")
+    ? "Intelligence in Every Move."
+    : content.accent;
 
   return (
     <PageShell>
@@ -81,8 +90,8 @@ function HomePage() {
               className="reveal max-w-4xl font-display text-[clamp(2.2rem,7vw,6rem)] font-bold leading-[1.02] sm:leading-[0.98]"
               style={{ animationDelay: "80ms" }}
             >
-              {content.title}
-              <span className="mt-2 block text-brand">{content.accent}</span>
+              {heroTitle}
+              <span className="mt-2 block text-brand">{heroAccent}</span>
             </h1>
             <p
               className="reveal mt-5 max-w-2xl text-sm leading-relaxed text-foreground/80 sm:mt-7 sm:text-lg"
