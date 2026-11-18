@@ -39,8 +39,8 @@ export const SITE_CONTENT_PAGES: SiteContentPage[] = [
         label: "Hero eyebrow",
         defaultValue: "Engineering manufacturing systems since 1990",
       },
-      { key: "title", label: "Hero title", defaultValue: "Investment casting." },
-      { key: "accent", label: "Hero accent title", defaultValue: "Robotic automation." },
+      { key: "title", label: "Hero title", defaultValue: "Precision in Every Cast." },
+      { key: "accent", label: "Hero accent title", defaultValue: "Intelligence in Every Move." },
       {
         key: "description",
         label: "Hero description",

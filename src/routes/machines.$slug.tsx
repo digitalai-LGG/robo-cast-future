@@ -600,10 +600,7 @@ function MachineDetail() {
                       )}
                     </span>
                     <span>
-                      <span className="block font-mono text-[8px] uppercase tracking-[0.14em] text-brand/75">
-                        Application {(index + 1).toString().padStart(2, "0")}
-                      </span>
-                      <span className="mt-0.5 block font-medium">{application}</span>
+                      <span className="block font-medium">{application}</span>
                     </span>
                   </li>
                 ))}

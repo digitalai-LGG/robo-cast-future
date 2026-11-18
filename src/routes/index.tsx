@@ -2,9 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight, Check, Factory, Globe2, Wrench } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 import { HeroVideoBackground } from "@/components/hero-video-background";
+import { PresenceMarquee } from "@/components/presence-marquee";
 import { Button } from "@/components/ui/button";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { processSteps, stats, type Mode } from "@/content/site-data";
+import { presenceCountries } from "@/content/global-presence";
 import { useSiteContent } from "@/lib/site-content";
 import { automationImages } from "@/content/automation-data";
 
@@ -208,6 +210,28 @@ function HomePage() {
               ))}
             </ol>
           </div>
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="global-reach-heading"
+        className="border-y border-border bg-carbon-2 py-7 sm:py-9"
+      >
+        <div className="reveal-on-scroll mx-auto grid max-w-7xl items-center gap-5 px-5 sm:px-8 lg:grid-cols-[minmax(0,auto)_minmax(0,1fr)] lg:gap-10 lg:px-8">
+          <div className="min-w-0 lg:max-w-xs lg:border-r lg:border-border lg:pr-10">
+            <h2
+              id="global-reach-heading"
+              className="font-display text-xl font-bold leading-tight sm:text-2xl"
+            >
+              Engineered in India.
+              <span className="block text-gradient-brand">Deployed worldwide.</span>
+            </h2>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
+              Modtech machines run in {presenceCountries.length} countries across Europe, Asia and
+              the Americas.
+            </p>
+          </div>
+          <PresenceMarquee className="min-w-0 lg:-mr-5" />
         </div>
       </section>
 

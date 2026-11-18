@@ -27,6 +27,7 @@ import { HeroVideoBackground } from "@/components/hero-video-background";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
 import { presenceBases, presenceCountries } from "@/content/global-presence";
+import { PresenceMarquee } from "@/components/presence-marquee";
 import { stats } from "@/content/site-data";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { isAboutPhotoUrl, parseAboutFieldGallery } from "@/lib/about-field-gallery";
@@ -163,9 +164,6 @@ function IndustryCard({
       <div className="flex items-start justify-between gap-4">
         <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-brand/20 bg-brand/10 text-brand transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
           <industry.Icon className="h-5 w-5" aria-hidden="true" />
-        </span>
-        <span className="font-mono text-[9px] font-semibold tracking-[0.18em] text-muted-foreground">
-          {String(index + 1).padStart(2, "0")}
         </span>
       </div>
       <div className="mt-6">
@@ -370,17 +368,14 @@ function AboutPage() {
               </p>
             </div>
             <ul className="grid md:grid-cols-3">
-              {commitments.map(({ title, description, Icon }, index) => (
+              {commitments.map(({ title, description, Icon }) => (
                 <li
                   key={title}
                   className="group border-b border-foreground/10 p-5 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 sm:p-7"
                 >
-                  <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
                     <span className="grid h-10 w-10 place-items-center rounded-xl border border-brand/20 bg-brand/10 text-brand transition duration-300 group-hover:bg-brand group-hover:text-brand-foreground">
                       <Icon className="h-4.5 w-4.5" aria-hidden="true" />
-                    </span>
-                    <span className="font-mono text-[9px] tracking-[0.18em] text-foreground/35">
-                      0{index + 1}
                     </span>
                   </div>
                   <h3 className="mt-5 font-display text-lg font-bold">{title}</h3>
@@ -590,39 +585,7 @@ function AboutPage() {
             </div>
           </div>
 
-          <div
-            className="presence-rail reveal-on-scroll mt-10 overflow-hidden"
-            data-reveal-delay="80"
-          >
-            <div className="presence-marquee flex w-max items-center">
-              {[0, 1].map((pass) => (
-                <div
-                  key={pass}
-                  className="flex shrink-0 items-center gap-3 pr-3"
-                  aria-hidden={pass === 1}
-                >
-                  {presenceCountries.map((country) => (
-                    <span
-                      key={`${pass}-${country.code}`}
-                      className="inline-flex shrink-0 items-center gap-2 rounded-full border border-foreground/12 bg-carbon/50 px-3.5 py-2 font-mono text-[9px] uppercase tracking-[0.18em] text-foreground/65 backdrop-blur-md"
-                    >
-                      <img
-                        src={country.flag}
-                        alt=""
-                        aria-hidden="true"
-                        loading="lazy"
-                        decoding="async"
-                        width="36"
-                        height="24"
-                        className="h-3.5 w-5 rounded-[2px] ring-1 ring-white/20"
-                      />
-                      {country.name}
-                    </span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
+          <PresenceMarquee className="reveal-on-scroll mt-10" />
         </div>
       </section>
 

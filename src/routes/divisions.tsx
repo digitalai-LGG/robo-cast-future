@@ -149,16 +149,9 @@ function DivisionsPage() {
                       <span className="grid h-12 w-12 place-items-center rounded-2xl border border-white/20 bg-carbon/55 text-brand shadow-lg backdrop-blur-md">
                         <Icon className="h-5 w-5" />
                       </span>
-                      <span className="rounded-full border border-white/20 bg-carbon/55 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-white/70 backdrop-blur-md">
-                        {division.code}
-                      </span>
                     </div>
 
                     <div>
-                      <div className="mb-4 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.22em] text-brand">
-                        <span>{division.tag}</span>
-                        <span className="h-px flex-1 bg-brand/35" />
-                      </div>
                       <h3 className="max-w-lg font-display text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl">
                         {division.title}
                       </h3>

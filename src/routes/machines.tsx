@@ -127,7 +127,7 @@ function MachinesPage() {
             </Link>
           </div>
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div className="mt-8">
             <div>
               <h1
                 className="reveal max-w-4xl font-display text-[clamp(2.5rem,5.5vw,5.7rem)] font-bold leading-[0.96] tracking-[-0.04em]"
@@ -142,17 +142,6 @@ function MachinesPage() {
               >
                 {divisionContent.description}
               </p>
-            </div>
-            <div
-              className="reveal flex items-center gap-4 border-l border-brand/35 pl-5 lg:mb-1"
-              style={{ animationDelay: "220ms" }}
-            >
-              <span className="font-display text-5xl font-bold text-brand sm:text-6xl">
-                {divisionMachines.length.toString().padStart(2, "0")}
-              </span>
-              <span className="max-w-24 font-mono text-[9px] uppercase leading-relaxed tracking-[0.2em] text-foreground/55">
-                Products in this division
-              </span>
             </div>
           </div>
         </div>
@@ -189,10 +178,7 @@ function MachinesPage() {
             <div className="space-y-14 sm:space-y-20">
               {sections.map((section, sectionIndex) => (
                 <section key={section.id} id={section.id} data-machine-section={section.id}>
-                  <div className="reveal-on-scroll mb-6 grid gap-3 border-b border-border pb-5 sm:grid-cols-[auto_1fr_auto] sm:items-end sm:gap-5">
-                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand">
-                      {(sectionIndex + 1).toString().padStart(2, "0")}
-                    </span>
+                  <div className="reveal-on-scroll mb-6 grid gap-3 border-b border-border pb-5 sm:grid-cols-[1fr_auto] sm:items-end sm:gap-5">
                     <div>
                       <h3 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
                         {section.title}
