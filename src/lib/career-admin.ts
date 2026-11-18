@@ -1,7 +1,9 @@
 const CAREER_TEXT_FIELDS = [
   { key: "title", label: "Vacancy name", maxLength: 160 },
+  { key: "department", label: "Department", maxLength: 80 },
   { key: "qualification", label: "Educational qualification", maxLength: 300 },
   { key: "experience", label: "Required experience", maxLength: 160 },
+  { key: "responsibilities", label: "Key responsibilities", maxLength: 1000 },
 ] as const;
 
 export function validateCareerDraft(

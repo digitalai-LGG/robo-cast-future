@@ -1,8 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowUpRight, BriefcaseBusiness, Mail } from "lucide-react";
+import {
+  ArrowUpRight,
+  BriefcaseBusiness,
+  Mail,
+  GraduationCap,
+  Clock3,
+  Building2,
+} from "lucide-react";
+import type { ReactNode } from "react";
 import { PageHero, PageShell } from "@/components/page-shell";
 import { supabase } from "@/integrations/supabase/client";
+import { DEMO_MODE, getDemoRows } from "@/lib/demo-admin";
 
 const HR_EMAIL = "hr@modtechworld.com";
 
@@ -10,8 +19,10 @@ type Vacancy = {
   id: string;
   title: string;
   openings: number;
+  department: string;
   qualification: string;
   experience: string;
+  responsibilities: string;
 };
 
 export const Route = createFileRoute("/careers")({
@@ -30,7 +41,9 @@ export const Route = createFileRoute("/careers")({
 });
 
 function applyHref(title: string) {
-  return `mailto:${HR_EMAIL}?subject=${encodeURIComponent(`Application for ${title}`)}`;
+  const subject = `Application for ${title}`;
+  const body = `Dear HR Team,\n\nI would like to apply for the position of ${title}.\n\nPlease find my CV attached.\n\nName:\nPhone:\nEmail:\n\nThank you.`;
+  return `mailto:${HR_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 function CareersPage() {
@@ -41,9 +54,14 @@ function CareersPage() {
   } = useQuery({
     queryKey: ["public-career-vacancies"],
     queryFn: async (): Promise<Vacancy[]> => {
+      if (DEMO_MODE) {
+        return (getDemoRows("career_vacancies") as Vacancy[])
+          .filter((vacancy) => vacancy.id)
+          .sort((a, b) => String(a.title).localeCompare(String(b.title)));
+      }
       const { data, error } = await supabase
         .from("career_vacancies")
-        .select("id, title, openings, qualification, experience")
+        .select("id, title, openings, department, qualification, experience, responsibilities")
         .eq("published", true)
         .order("sort_order", { ascending: true })
         .order("created_at", { ascending: false });
@@ -90,44 +108,60 @@ function CareersPage() {
               ))}
             </div>
           ) : vacancies.length > 0 ? (
-            <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-card shadow-card">
-              <div className="hidden grid-cols-[2fr_0.7fr_1.5fr_1.2fr_auto] gap-5 border-b border-border bg-secondary/40 px-6 py-4 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground lg:grid">
-                <span>Vacancy name</span>
-                <span>No. of vacancies</span>
-                <span>Educational qualification</span>
-                <span>Required experience</span>
-                <span className="sr-only">Apply</span>
-              </div>
-              <ul className="divide-y divide-border">
-                {vacancies.map((vacancy) => (
-                  <li
-                    key={vacancy.id}
-                    className="grid gap-5 px-5 py-6 transition hover:bg-secondary/20 sm:px-6 lg:grid-cols-[2fr_0.7fr_1.5fr_1.2fr_auto] lg:items-center"
-                  >
+            <div className="mt-10 grid gap-5 lg:grid-cols-2">
+              {vacancies.map((vacancy) => (
+                <article
+                  key={vacancy.id}
+                  className="group flex min-h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-card transition hover:-translate-y-1 hover:border-brand/40 sm:p-6"
+                >
+                  <div className="flex items-start justify-between gap-4">
                     <div>
-                      <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground lg:hidden">
-                        Vacancy name
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-brand/10 px-3 py-1 font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-brand">
+                        <Building2 className="h-3 w-3" />
+                        {vacancy.department || "Modtech"}
                       </span>
-                      <h3 className="mt-1 font-display text-lg font-semibold text-foreground lg:mt-0">
+                      <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
                         {vacancy.title}
                       </h3>
                     </div>
-                    <VacancyDetail label="No. of vacancies" value={String(vacancy.openings)} />
+                    <span className="shrink-0 rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+                      {vacancy.openings} {vacancy.openings === 1 ? "opening" : "openings"}
+                    </span>
+                  </div>
+
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
                     <VacancyDetail
-                      label="Educational qualification"
+                      icon={<GraduationCap className="h-4 w-4" />}
+                      label="Education"
                       value={vacancy.qualification}
                     />
-                    <VacancyDetail label="Required experience" value={vacancy.experience} />
-                    <a
-                      href={applyHref(vacancy.title)}
-                      aria-label={`Apply for ${vacancy.title} by email`}
-                      className="inline-flex w-fit items-center justify-center gap-2 rounded-full bg-brand px-5 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-brand-foreground transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-card"
-                    >
-                      Apply <ArrowUpRight className="h-3.5 w-3.5" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                    <VacancyDetail
+                      icon={<Clock3 className="h-4 w-4" />}
+                      label="Experience"
+                      value={vacancy.experience}
+                    />
+                  </div>
+
+                  {vacancy.responsibilities && (
+                    <div className="mt-5 flex-1 border-t border-border pt-5">
+                      <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                        Key responsibilities
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-foreground/80">
+                        {vacancy.responsibilities}
+                      </p>
+                    </div>
+                  )}
+
+                  <a
+                    href={applyHref(vacancy.title)}
+                    aria-label={`Apply for ${vacancy.title} by email`}
+                    className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-wider text-brand-foreground transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-card"
+                  >
+                    Apply by email <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                </article>
+              ))}
             </div>
           ) : (
             <div className="mt-10 rounded-2xl border border-dashed border-border bg-card p-8 text-center sm:p-12">
@@ -154,13 +188,22 @@ function CareersPage() {
   );
 }
 
-function VacancyDetail({ label, value }: { label: string; value: string }) {
+function VacancyDetail({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}) {
   return (
-    <div className="min-w-0">
-      <span className="block font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground lg:hidden">
+    <div className="min-w-0 rounded-xl bg-secondary/45 p-3">
+      <span className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
+        <span className="text-brand">{icon}</span>
         {label}
       </span>
-      <span className="mt-1 block text-sm leading-relaxed text-foreground/85 lg:mt-0">{value}</span>
+      <span className="mt-1.5 block text-sm leading-relaxed text-foreground/85">{value}</span>
     </div>
   );
 }

@@ -97,8 +97,10 @@ export type Database = {
           id: string;
           title: string;
           openings: number;
+          department: string;
           qualification: string;
           experience: string;
+          responsibilities: string;
           sort_order: number;
           published: boolean;
           created_at: string;
@@ -108,8 +110,10 @@ export type Database = {
           id?: string;
           title: string;
           openings: number;
+          department: string;
           qualification: string;
           experience: string;
+          responsibilities: string;
           sort_order?: number;
           published?: boolean;
           created_at?: string;
@@ -119,8 +123,10 @@ export type Database = {
           id?: string;
           title?: string;
           openings?: number;
+          department?: string;
           qualification?: string;
           experience?: string;
+          responsibilities?: string;
           sort_order?: number;
           published?: boolean;
           created_at?: string;
