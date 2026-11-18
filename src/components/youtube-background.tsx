@@ -117,17 +117,21 @@ export function YouTubeBackground({
   }, [videoId]);
 
   useEffect(() => {
+    // Phones play too: the embed is muted and playsinline, which is what
+    // mobile browsers require before they allow autoplay. Two signals still
+    // hold the video back, because both are the visitor asking for it:
+    // the reduced-motion setting, and Data Saver.
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const smallScreen = window.matchMedia("(max-width: 47.99rem)");
-    const updatePlaybackPreference = () =>
-      setCanPlayVideo(!reducedMotion.matches && !smallScreen.matches);
+    const updatePlaybackPreference = () => {
+      const connection = (navigator as Navigator & { connection?: { saveData?: boolean } })
+        .connection;
+      setCanPlayVideo(!reducedMotion.matches && connection?.saveData !== true);
+    };
 
     updatePlaybackPreference();
     reducedMotion.addEventListener("change", updatePlaybackPreference);
-    smallScreen.addEventListener("change", updatePlaybackPreference);
     return () => {
       reducedMotion.removeEventListener("change", updatePlaybackPreference);
-      smallScreen.removeEventListener("change", updatePlaybackPreference);
     };
   }, []);
 
