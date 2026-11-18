@@ -5,6 +5,7 @@ import { PageShell } from "@/components/page-shell";
 import { YouTubeBackground } from "@/components/youtube-background";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { divisions, functionalities, machineDivision, type Mode } from "@/content/site-data";
+import { divisionVideoPreconnect, divisionVideos } from "@/content/division-media";
 import { automationImages } from "@/content/automation-data";
 import { useSiteContent } from "@/lib/site-content";
 import { fetchPublishedMachines } from "@/lib/catalogue";
@@ -24,10 +25,7 @@ export const Route = createFileRoute("/divisions")({
         content: "Choose a division to explore its complete machine portfolio.",
       },
     ],
-    links: [
-      { rel: "preconnect", href: "https://www.youtube.com" },
-      { rel: "preconnect", href: "https://www.youtube-nocookie.com" },
-    ],
+    links: divisionVideoPreconnect,
   }),
   component: DivisionsPage,
 });
@@ -36,19 +34,6 @@ const divisionIcons = {
   casting: Factory,
   robotics: Bot,
 } satisfies Record<Mode, typeof Factory>;
-
-const divisionVideos = {
-  casting: {
-    videoId: "Ah5mS5PDqwQ",
-    title: "Modtech AutoMode — Fully Automatic Wax Injection Machine",
-    startAt: 0,
-  },
-  robotics: {
-    videoId: "bd5fXFXLylE",
-    title: "Future of Smart Factory in India — Modtech Automation",
-    startAt: 15,
-  },
-} satisfies Record<Mode, { videoId: string; title: string; startAt: number }>;
 
 function DivisionsPage() {
   useRevealOnScroll();

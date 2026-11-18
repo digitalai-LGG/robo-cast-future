@@ -16,6 +16,8 @@ import {
   type Mode,
   type ProductSection,
 } from "@/content/site-data";
+import { YouTubeBackground } from "@/components/youtube-background";
+import { divisionVideoPreconnect, divisionVideos } from "@/content/division-media";
 import { fetchPublishedMachines } from "@/lib/catalogue";
 
 export const Route = createFileRoute("/machines")({
@@ -44,6 +46,7 @@ export const Route = createFileRoute("/machines")({
           "Wax injectors, shell-room systems, case handling, palletizing, pick-and-place and vision solutions.",
       },
     ],
+    links: divisionVideoPreconnect,
   }),
   component: MachinesRoute,
 });
@@ -94,6 +97,7 @@ function MachinesPage() {
 
   const division = activeDivision ?? "casting";
   const divisionContent = modeData[division];
+  const divisionVideo = divisionVideos[division];
   const divisionMachines = machines.filter((machine) => machineDivision(machine) === division);
   const sections = catalogueSections
     .filter((section) => section.division === division)
@@ -106,13 +110,23 @@ function MachinesPage() {
   return (
     <PageShell>
       <section className="catalogue-hero on-dark relative isolate overflow-hidden bg-carbon px-5 py-14 sm:px-8 sm:py-20">
-        <div className="pointer-events-none absolute inset-0 -z-20">
-          <img
-            src={divisionContent.image}
-            alt=""
-            aria-hidden
-            className="h-full w-full object-cover opacity-25"
-          />
+        <YouTubeBackground
+          key={division}
+          videoId={divisionVideo.videoId}
+          title={divisionVideo.title}
+          startAt={divisionVideo.startAt}
+          priority
+          className="-z-20"
+          fallbackImageSrc={divisionContent.image}
+          fallbackImageClassName={
+            // The casting still is a cut-out product shot, so it is contained
+            // rather than cropped. Both sit on the hero's dark carbon panel.
+            division === "casting"
+              ? "object-contain p-8 opacity-70 sm:p-12"
+              : "object-cover opacity-40"
+          }
+        />
+        <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-gradient-to-r from-carbon via-carbon/90 to-carbon/55" />
           <div className="absolute inset-0 bg-gradient-to-t from-carbon via-transparent to-carbon/35" />
         </div>
