@@ -109,7 +109,7 @@ function MachinesPage() {
 
   return (
     <PageShell>
-      <section className="catalogue-hero on-dark relative isolate overflow-hidden bg-carbon px-5 py-14 sm:px-8 sm:py-20">
+      <section className="catalogue-hero on-dark relative isolate flex min-h-[30rem] items-center overflow-hidden bg-carbon px-5 py-14 sm:min-h-[34rem] sm:px-8 sm:py-20 lg:min-h-[38rem]">
         <YouTubeBackground
           key={division}
           videoId={divisionVideo.videoId}
@@ -117,21 +117,19 @@ function MachinesPage() {
           startAt={divisionVideo.startAt}
           priority
           className="-z-20"
-          fallbackImageSrc={divisionContent.image}
-          fallbackImageClassName={
-            // The casting still is a cut-out product shot, so it is contained
-            // rather than cropped. Both sit on the hero's dark carbon panel.
-            division === "casting"
-              ? "object-contain p-8 opacity-70 sm:p-12"
-              : "object-cover opacity-40"
-          }
+          // No fallbackImageSrc: the clip's own poster frame is used, so it
+          // fills the hero and matches the first frame of the video. The
+          // division still is a cut-out that would letterbox into a panel.
+          fallbackImageClassName="object-cover"
         />
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-carbon via-carbon/90 to-carbon/55" />
-          <div className="absolute inset-0 bg-gradient-to-t from-carbon via-transparent to-carbon/35" />
+          {/* Dark on the left so the headline stays readable, clearing to the
+              right so the machine in the footage is actually visible. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-carbon via-carbon/70 to-carbon/15" />
+          <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/20 to-carbon/45" />
         </div>
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-20" />
-        <div className="relative mx-auto max-w-7xl">
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-10" />
+        <div className="relative mx-auto w-full max-w-7xl">
           <div className="reveal flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em]">
             <Link
               to="/divisions"
