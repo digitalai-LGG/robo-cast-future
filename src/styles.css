@@ -496,6 +496,9 @@
     text-transform: uppercase;
     box-shadow: 10px 0 24px -14px oklch(0 0 0 / 0.8);
     clip-path: polygon(0 0, 100% 0, calc(100% - 0.7rem) 100%, 0 100%);
+    color: var(--brand);
+    text-decoration: none;
+    cursor: pointer;
   }
   .announcement-viewport {
     min-width: 0;

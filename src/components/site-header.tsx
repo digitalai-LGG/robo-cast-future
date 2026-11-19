@@ -152,11 +152,17 @@ function AnnouncementBar({ announcement }: { announcement: Announcement }) {
 
   return (
     <div className="announcement-bar">
-      <span className="announcement-label" aria-hidden="true">
-        <Megaphone className="h-3.5 w-3.5" />
-        <span className="hidden sm:inline">Modtech update</span>
-        <span className="sm:hidden">Update</span>
-      </span>
+      {url ? (
+        <a className="announcement-label" href={url} aria-label="View upcoming events">
+          <Megaphone className="h-3.5 w-3.5" />
+          <span>Upcoming Events</span>
+        </a>
+      ) : (
+        <span className="announcement-label" aria-hidden="true">
+          <Megaphone className="h-3.5 w-3.5" />
+          <span>Upcoming Events</span>
+        </span>
+      )}
       <div className="announcement-viewport">
         {url ? (
           <a className="announcement-track" href={url} aria-label={message}>
