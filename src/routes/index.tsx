@@ -173,10 +173,11 @@ function HomePage() {
             <DivisionChapter
               title="Robotics & Automation"
               description="Custom robot cells for packaging, palletizing, pick-and-place and vision inspection, built around each product, process and factory layout."
-              image={automationImages.casePacker}
-              alt="Robotic automation cell in production"
+              image={automationImages.palletizingLine}
+              alt="Robotic palletizing line in production"
               division="robotics"
               linkLabel="Explore automation"
+              imageMode="product"
               points={[
                 "Robotic case erecting & packing",
                 "Robotic palletizing",
