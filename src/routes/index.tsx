@@ -347,7 +347,7 @@ function DivisionChapter({
           src={image}
           alt={alt}
           loading="lazy"
-          className={`home-machine-image absolute inset-0 h-full w-full ${isProductImage ? "object-contain p-3 drop-shadow-[0_22px_24px_rgba(13,46,36,0.2)] sm:p-7 md:p-10" : "object-cover"}`}
+          className={`home-machine-image absolute inset-0 h-full w-full ${isProductImage ? "home-product-image object-contain p-4 drop-shadow-[0_22px_24px_rgba(13,46,36,0.2)] sm:p-8 md:p-12" : "object-cover"}`}
         />
       </div>
       <div className={`lg:col-span-5 ${reverse ? "lg:order-1 lg:pr-10" : "lg:pl-10"}`}>

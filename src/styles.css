@@ -633,11 +633,18 @@
       transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1),
       filter 0.5s ease;
   }
+  .home-machine-image.home-product-image,
+  .is-visible .home-machine-image.home-product-image {
+    transform: none;
+  }
   .is-visible .home-machine-image {
     transform: scale(1);
   }
   .group:hover .home-machine-image {
     transform: scale(1.055);
+  }
+  .group:hover .home-machine-image.home-product-image {
+    transform: none;
   }
   .home-marquee {
     animation: marquee 48s linear infinite;
