@@ -13,7 +13,7 @@ export type Announcement = {
 export const DEFAULT_ANNOUNCEMENT: Announcement = {
   id: 1,
   message:
-    "Upcoming events 2027 — meet Modtech at EICF Sweden (May 10th – 13th) and GIFA, Dusseldorf (June 21st – 25th)",
+    "Meet Modtech in 2027 — EICF Sweden, May 10–13 | GIFA Düsseldorf, June 21–25",
   redirect_url: "/blog#upcoming-events",
   is_visible: true,
   active_until: null,

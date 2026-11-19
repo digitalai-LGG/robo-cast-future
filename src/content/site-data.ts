@@ -156,7 +156,7 @@ export const divisions: Array<{
     code: "DIV.02",
     title: "Robotics & Automation",
     tag: "Autonomous production cells",
-    image: automationImages.casePacker,
+    image: automationImages.palletizer,
     category: "robotics",
     description:
       "Six-axis robot integration, shelling cells, wax-room automation and PLC-driven process control engineered for repeatable factory output.",

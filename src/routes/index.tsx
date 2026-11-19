@@ -173,8 +173,8 @@ function HomePage() {
             <DivisionChapter
               title="Robotics & Automation"
               description="Custom robot cells for packaging, palletizing, pick-and-place and vision inspection, built around each product, process and factory layout."
-              image={automationImages.palletizingLine}
-              alt="Robotic palletizing line in production"
+              image={automationImages.palletizer}
+              alt="Modtech robotic palletizing machine"
               division="robotics"
               linkLabel="Explore automation"
               imageMode="product"
