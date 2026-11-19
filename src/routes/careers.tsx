@@ -214,7 +214,7 @@ function CareersPage() {
       <section
         id="openings"
         aria-labelledby="openings-title"
-        className="scroll-mt-20 bg-background px-5 py-14 sm:scroll-mt-24 sm:px-8 sm:py-20"
+        className="scroll-mt-[calc(var(--header-h)_+_1.5rem)] bg-background px-5 py-14 sm:px-8 sm:py-20"
       >
         <div className="mx-auto max-w-7xl">
           <div className="reveal-on-scroll flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
@@ -295,7 +295,7 @@ function CareersPage() {
       <section
         id="apply"
         aria-labelledby="apply-title"
-        className="scroll-mt-20 border-t border-border bg-carbon-2 px-5 py-14 sm:scroll-mt-24 sm:px-8 sm:py-20"
+        className="scroll-mt-[calc(var(--header-h)_+_1.5rem)] border-t border-border bg-carbon-2 px-5 py-14 sm:px-8 sm:py-20"
       >
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:gap-14">
           <div className="reveal-on-scroll">

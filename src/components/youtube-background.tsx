@@ -76,6 +76,12 @@ type YouTubeBackgroundProps = {
   fallbackVideoSrc?: string;
   priority?: boolean;
   startAt?: number;
+  /**
+   * Opacity applied to the playing film. Panels that present the video as the
+   * subject (the phone layouts) pass `opacity-100`; full-bleed backdrops keep
+   * the dimmed default so overlaid copy stays readable.
+   */
+  playingClassName?: string;
 };
 
 export function YouTubeBackground({
@@ -88,6 +94,7 @@ export function YouTubeBackground({
   fallbackVideoSrc,
   priority = false,
   startAt = 0,
+  playingClassName = "opacity-80",
 }: YouTubeBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -266,7 +273,7 @@ export function YouTubeBackground({
           allow="autoplay; encrypted-media; picture-in-picture"
           referrerPolicy="strict-origin-when-cross-origin"
           className={`absolute left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2 scale-[1.12] border-0 transition-opacity duration-700 motion-reduce:transition-none ${
-            playbackState === "playing" && !showFallback ? "opacity-80" : "opacity-0"
+            playbackState === "playing" && !showFallback ? playingClassName : "opacity-0"
           }`}
           style={{
             width: "max(100cqw, 177.78cqh)",

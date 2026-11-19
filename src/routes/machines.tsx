@@ -109,47 +109,51 @@ function MachinesPage() {
 
   return (
     <PageShell>
-      <section className="catalogue-hero on-dark relative isolate flex min-h-[30rem] items-center overflow-hidden bg-carbon px-5 py-14 sm:min-h-[34rem] sm:px-8 sm:py-20 lg:min-h-[38rem]">
-        <YouTubeBackground
-          key={division}
-          videoId={divisionVideo.videoId}
-          title={divisionVideo.title}
-          startAt={divisionVideo.startAt}
-          priority
-          className="-z-20"
-          // No fallbackImageSrc: the clip's own poster frame is used, so it
-          // fills the hero and matches the first frame of the video. The
-          // division still is a cut-out that would letterbox into a panel.
-          fallbackImageClassName="object-cover"
-        />
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          {/* Dark on the left so the headline stays readable, clearing to the
-              right so the machine in the footage is actually visible. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-carbon via-carbon/70 to-carbon/15" />
-          <div className="absolute inset-0 bg-gradient-to-t from-carbon via-carbon/20 to-carbon/45" />
+      <section className="catalogue-hero on-dark relative isolate flex flex-col overflow-hidden bg-carbon lg:min-h-[38rem] lg:items-center lg:justify-center lg:px-8 lg:py-20">
+        {/* The division's film leads the page as a 16:9 panel on phones, where
+            a full-bleed backdrop could only show a narrow centre crop of it,
+            and goes back behind the headline from lg up. */}
+        <div className="relative z-0 aspect-video w-full overflow-hidden border-b border-white/10 lg:absolute lg:inset-0 lg:aspect-auto lg:h-full lg:border-b-0">
+          <YouTubeBackground
+            key={division}
+            videoId={divisionVideo.videoId}
+            title={divisionVideo.title}
+            startAt={divisionVideo.startAt}
+            priority
+            // No fallbackImageSrc: the clip's own poster frame is used, so it
+            // fills the hero and matches the first frame of the video. The
+            // division still is a cut-out that would letterbox into a panel.
+            fallbackImageClassName="object-cover"
+            playingClassName="opacity-100 lg:opacity-80"
+          />
+          {/* Phones: a bottom fade that hands over to the copy below.
+              Desktop: dark on the left so the headline stays readable,
+              clearing to the right so the machine stays visible. */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-carbon via-carbon/15 to-transparent lg:bg-gradient-to-r lg:from-carbon lg:via-carbon/70 lg:to-carbon/15" />
+          <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-carbon via-carbon/20 to-carbon/45 lg:block" />
+          <div className="pointer-events-none absolute inset-0 bg-grid opacity-10" />
         </div>
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-10" />
-        <div className="relative mx-auto w-full max-w-7xl">
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 sm:py-10 lg:px-0 lg:py-0">
           <div className="reveal flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-[10px] uppercase tracking-[0.2em]">
             <Link
               to="/divisions"
-              className="inline-flex items-center gap-2 text-foreground/60 transition hover:text-brand"
+              className="inline-flex min-h-11 items-center gap-2 text-foreground/60 transition hover:text-brand sm:min-h-0"
             >
               <ArrowLeft className="h-3.5 w-3.5" /> Divisions
             </Link>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-2 sm:mt-6 lg:mt-8">
             <div>
               <h1
-                className="reveal max-w-4xl font-display text-[clamp(2.5rem,5.5vw,5.7rem)] font-bold leading-[0.96] tracking-[-0.04em]"
+                className="reveal max-w-4xl font-display text-[clamp(2.1rem,5.5vw,5.7rem)] font-bold leading-[0.98] tracking-[-0.035em] sm:leading-[0.96] sm:tracking-[-0.04em]"
                 style={{ animationDelay: "110ms" }}
               >
                 {categoryMeta[division].label}
                 <span className="block text-gradient-brand">machines & systems.</span>
               </h1>
               <p
-                className="reveal mt-6 max-w-2xl text-base leading-relaxed text-foreground/65 sm:text-lg"
+                className="reveal mt-4 max-w-2xl text-sm leading-relaxed text-foreground/70 sm:mt-6 sm:text-base lg:text-lg"
                 style={{ animationDelay: "170ms" }}
               >
                 {divisionContent.description}

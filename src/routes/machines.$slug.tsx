@@ -366,7 +366,7 @@ function MachineDetail() {
         </div>
       </section>
 
-      <nav className="sticky top-[4.5rem] z-20 border-y border-border bg-background/92 px-5 shadow-[0_12px_30px_-22px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:px-8">
+      <nav className="sticky top-[var(--header-h)] z-20 border-y border-border bg-background/92 px-5 shadow-[0_12px_30px_-22px_rgba(0,0,0,0.75)] backdrop-blur-xl sm:px-8">
         <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto py-2 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground sm:gap-2">
           {navigationItems.map(({ target, label, icon: NavigationIcon }, index) => (
             <a
@@ -390,7 +390,10 @@ function MachineDetail() {
       <section className="relative overflow-hidden bg-background px-5 py-16 sm:px-8 sm:py-20">
         <div className="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full bg-brand/[0.05] blur-3xl" />
         <div className="relative mx-auto max-w-7xl">
-          <section id="overview" className="scroll-mt-36 reveal-on-scroll">
+          <section
+            id="overview"
+            className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] reveal-on-scroll"
+          >
             <div className="grid gap-8 pb-14 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
               <div>
                 <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
@@ -411,7 +414,10 @@ function MachineDetail() {
           </section>
 
           {modelRange.length > 1 && (
-            <section id="models" className="scroll-mt-36 border-y border-border py-14">
+            <section
+              id="models"
+              className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] border-y border-border py-14"
+            >
               <div className="reveal-on-scroll grid gap-7 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
                 <div>
                   <h2 className="font-display text-3xl font-bold tracking-tight">
@@ -545,7 +551,7 @@ function MachineDetail() {
             </section>
           )}
 
-          <section id="features" className="scroll-mt-36 py-14">
+          <section id="features" className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] py-14">
             <div className="reveal-on-scroll flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand">
                 <Settings2 className="h-4 w-4" />
@@ -575,7 +581,10 @@ function MachineDetail() {
             </div>
           </section>
 
-          <section id="applications" className="scroll-mt-36 border-y border-border py-14">
+          <section
+            id="applications"
+            className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] border-y border-border py-14"
+          >
             <div className="reveal-on-scroll grid gap-7 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
               <div>
                 <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
@@ -608,7 +617,7 @@ function MachineDetail() {
             </div>
           </section>
 
-          <section id="specifications" className="scroll-mt-36 pt-14">
+          <section id="specifications" className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] pt-14">
             <div
               className={`reveal-on-scroll gap-8 ${
                 m.specificationTables?.length
@@ -1122,7 +1131,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
           ) : (
             <Sparkles className="h-3 w-3 text-brand" />
           )}
-          <span className="max-w-[16rem] truncate">
+          <span className="max-w-[12rem] truncate sm:max-w-[16rem]">
             {activeVideo ? "Official machine video" : activeCaption}
           </span>
         </span>

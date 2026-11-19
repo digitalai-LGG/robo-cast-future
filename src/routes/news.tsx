@@ -14,7 +14,15 @@ import {
 import { PageShell } from "@/components/page-shell";
 import { MarkdownContent } from "@/components/markdown-content";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
-import { news, exhibitions, categoryMeta, type Category } from "@/content/site-data";
+import {
+  news,
+  exhibitions,
+  categoryMeta,
+  upcomingEvents,
+  upcomingEventsIntro,
+  upcomingEventsStory,
+  type Category,
+} from "@/content/site-data";
 import { automationImages } from "@/content/automation-data";
 import { DEMO_MODE, getDemoRows } from "@/lib/demo-admin";
 import {
@@ -189,9 +197,23 @@ export function BlogsPage() {
   const newsItems = loadedNews ?? news;
   const posts = useMemo(() => loadedPosts ?? [], [loadedPosts]);
   const eventItems = loadedExhibitions ?? exhibitions;
+  // The 2027 show announcement ships with the build, so it stays on the hub
+  // whether or not the CMS already carries a matching row.
+  const eventStory = useMemo<UnifiedStory>(
+    () => ({
+      ...newsToStory(upcomingEventsStory, 0),
+      id: "news-upcoming-events-2027",
+      pinned: true,
+    }),
+    [],
+  );
   const stories = useMemo(
-    () => [...posts.map(postToStory), ...newsItems.map((item, index) => newsToStory(item, index))],
-    [newsItems, posts],
+    () => [
+      eventStory,
+      ...posts.map(postToStory),
+      ...newsItems.map((item, index) => newsToStory(item, index)),
+    ],
+    [eventStory, newsItems, posts],
   );
   const availableCategories = useMemo(
     () => Array.from(new Set(stories.map((story) => story.category))),
@@ -233,12 +255,29 @@ export function BlogsPage() {
   }, [queryClient]);
 
   useEffect(() => {
+    const target = window.location.hash.slice(1);
+    if (!target) return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById(target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
     if (!selected) return;
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setSelected(null);
     };
     window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
+    // Without this the page keeps scrolling behind the story on a phone, so
+    // closing the dialog drops the reader somewhere else entirely.
+    const { body } = document;
+    const previousOverflow = body.style.overflow;
+    body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      body.style.overflow = previousOverflow;
+    };
   }, [selected]);
 
   return (
@@ -275,7 +314,11 @@ export function BlogsPage() {
             <div className="reveal grid grid-cols-3 gap-3" style={{ animationDelay: "180ms" }}>
               <HeroStat value={newsCount} label="Updates" Icon={Newspaper} />
               <HeroStat value={insightCount} label="Insights" Icon={BookOpen} />
-              <HeroStat value={eventItems.length} label="Events" Icon={CalendarDays} />
+              <HeroStat
+                value={upcomingEvents.length + eventItems.length}
+                label="Events"
+                Icon={CalendarDays}
+              />
             </div>
           </div>
         </div>
@@ -413,13 +456,20 @@ export function BlogsPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden bg-carbon px-5 py-16 sm:px-8 sm:py-20">
+      <section
+        id="upcoming-events"
+        aria-labelledby="upcoming-events-heading"
+        className="relative scroll-mt-[calc(var(--header-h)_+_1.5rem)] overflow-hidden bg-carbon px-5 py-16 sm:px-8 sm:py-20"
+      >
         <div className="pointer-events-none absolute inset-0 bg-grid bg-grid-fade opacity-35" />
         <div className="pointer-events-none absolute -left-40 bottom-0 h-80 w-80 rounded-full bg-brand/10 blur-[110px]" />
         <div className="relative mx-auto max-w-7xl">
           <div className="reveal-on-scroll flex flex-col gap-5 border-b border-foreground/15 pb-7 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="font-display text-3xl font-bold tracking-tight sm:text-5xl">
+              <h2
+                id="upcoming-events-heading"
+                className="font-display text-3xl font-bold tracking-tight sm:text-5xl"
+              >
                 Meet our team <span className="text-gradient-brand">on the show floor.</span>
               </h2>
             </div>
@@ -428,7 +478,45 @@ export function BlogsPage() {
             </p>
           </div>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="reveal-on-scroll mt-10 rounded-3xl border border-brand/30 bg-brand/[0.06] p-6 sm:p-9">
+            <span className="inline-flex items-center gap-2 rounded-full border border-brand/40 bg-brand/10 px-3 py-1 font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-brand">
+              <CalendarDays className="h-3.5 w-3.5" /> Upcoming events
+            </span>
+            <p className="mt-4 max-w-2xl font-display text-xl font-bold leading-snug tracking-tight sm:text-2xl">
+              {upcomingEventsIntro}
+            </p>
+            <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+              {upcomingEvents.map((event) => (
+                <li
+                  key={event.title}
+                  className="rounded-2xl border border-foreground/15 bg-carbon-2/60 p-5 transition duration-300 hover:border-brand/60"
+                >
+                  <h3 className="font-display text-lg font-bold leading-snug tracking-tight sm:text-xl">
+                    {event.title}
+                  </h3>
+                  <p className="mt-3 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-brand">
+                    <CalendarDays className="h-3.5 w-3.5" /> {event.date}
+                  </p>
+                  <p className="mt-2 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-foreground/55">
+                    <MapPin className="h-3.5 w-3.5 text-brand" /> {event.location}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/contact"
+              search={{ machine: undefined }}
+              className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-xl bg-brand px-5 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-foreground transition hover:brightness-110"
+            >
+              Book a meeting at the show <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          <h3 className="reveal-on-scroll mt-12 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/50">
+            Exhibition calendar
+          </h3>
+
+          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {eventItems.map((event, index) => (
               <article
                 key={`${event.title}-${event.date}`}
@@ -669,7 +757,7 @@ function LoadingGrid() {
 function StoryDialog({ story, onClose }: { story: UnifiedStory; onClose: () => void }) {
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[80] flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="story-dialog-title"
@@ -677,33 +765,39 @@ function StoryDialog({ story, onClose }: { story: UnifiedStory; onClose: () => v
         if (event.currentTarget === event.target) onClose();
       }}
     >
-      <article className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-border bg-background shadow-deep">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-background/95 px-5 py-4 backdrop-blur sm:px-7">
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">
+      <article className="max-h-[92dvh] w-full max-w-3xl overflow-y-auto overscroll-contain rounded-t-2xl border border-border bg-background shadow-deep sm:max-h-[90dvh] sm:rounded-2xl">
+        <div className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-border bg-background/95 px-4 py-3 backdrop-blur sm:px-7 sm:py-4">
+          <div className="min-w-0 font-mono text-[10px] uppercase tracking-[0.14em] text-brand sm:tracking-[0.18em]">
             {story.label} · {story.date}
           </div>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close story"
-            className="grid h-9 w-9 place-items-center rounded-full border border-border transition hover:border-brand hover:text-brand"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-border transition hover:border-brand hover:text-brand sm:h-9 sm:w-9"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
-        <img src={story.image} alt="" className="aspect-[16/7] w-full object-cover" />
-        <div className="px-5 py-7 sm:px-8 sm:py-9">
+        <img
+          src={story.image}
+          alt=""
+          className="aspect-[16/9] w-full object-cover sm:aspect-[16/7]"
+        />
+        <div className="px-5 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-8 sm:py-9">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
             {CATEGORY_LABELS[story.category] ?? story.category}
           </div>
           <h2
             id="story-dialog-title"
-            className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight"
+            className="mt-3 font-display text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
           >
             {story.title}
           </h2>
-          <p className="mt-3 text-base leading-relaxed text-muted-foreground">{story.excerpt}</p>
-          <div className="mt-8 border-t border-border pt-8">
+          <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            {story.excerpt}
+          </p>
+          <div className="mt-6 border-t border-border pt-6 sm:mt-8 sm:pt-8">
             <MarkdownContent value={story.body} />
           </div>
         </div>

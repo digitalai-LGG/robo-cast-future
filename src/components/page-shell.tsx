@@ -30,9 +30,7 @@ export function PageShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <SiteHeader announcement={announcement} />
-      <main
-        className={`relative min-h-screen overflow-hidden bg-background text-foreground ${announcement ? "pt-[6.125rem] sm:pt-[6.625rem]" : "pt-16 sm:pt-[4.5rem]"}`}
-      >
+      <main className="relative min-h-screen overflow-hidden bg-background pt-[var(--header-h)] text-foreground">
         {children}
       </main>
       <SiteFooter />
@@ -218,9 +216,9 @@ function SiteFooter() {
                 rel="noopener noreferrer"
                 aria-label={s.label}
                 title={s.label}
-                className={`grid h-8 w-8 place-items-center rounded-full border border-border bg-card/60 text-muted-foreground transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${s.hoverClass}`}
+                className={`grid h-10 w-10 place-items-center rounded-full border border-border bg-card/60 text-muted-foreground transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:h-8 sm:w-8 ${s.hoverClass}`}
               >
-                <s.Icon className="h-3.5 w-3.5" />
+                <s.Icon className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
               </a>
             ))}
           </div>
@@ -232,7 +230,7 @@ function SiteFooter() {
               <Link
                 key={l.to}
                 to={l.to}
-                className="w-fit transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="inline-flex min-h-9 w-fit items-center transition-colors hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:min-h-0"
               >
                 {l.label}
               </Link>

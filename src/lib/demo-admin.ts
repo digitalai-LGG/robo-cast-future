@@ -19,8 +19,8 @@ const initialData: DemoData = {
     {
       id: 1,
       message:
-        "Engineering manufacturing systems since 1990 — Investment Casting Machines & Robotic Automation",
-      redirect_url: "/contact",
+        "Upcoming events 2027 — meet Modtech at EICF Sweden (May 10th – 13th) and GIFA, Dusseldorf (June 21st – 25th)",
+      redirect_url: "/blog#upcoming-events",
       is_visible: true,
       active_until: null,
       updated_at: "2026-10-03T17:30:00.000Z",

@@ -192,9 +192,10 @@ function IndustriesRail() {
           <IndustryCard key={industry.name} industry={industry} index={index} />
         ))}
       </DragRail>
-      <p className="mt-1 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+      <p className="mt-2 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground sm:mt-1">
         <MoveHorizontal className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-        Drag, swipe or use the arrows
+        <span className="sm:hidden">Swipe to see more</span>
+        <span className="hidden sm:inline">Drag, swipe or use the arrows</span>
       </p>
     </div>
   );
@@ -438,9 +439,10 @@ function AboutPage() {
                   </figure>
                 ))}
               </DragRail>
-              <p className="mt-1 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="mt-2 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground sm:mt-1">
                 <MoveHorizontal className="h-3.5 w-3.5 text-brand" aria-hidden="true" />
-                Drag, swipe or use the arrows
+                <span className="sm:hidden">Swipe to see more</span>
+                <span className="hidden sm:inline">Drag, swipe or use the arrows</span>
               </p>
             </div>
           </div>

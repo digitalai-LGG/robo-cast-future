@@ -1407,3 +1407,58 @@ export const exhibitions: Array<{ title: string; date: string; location: string;
       image: automationImages.robot6Axis,
     },
   ];
+
+// Confirmed 2027 show calendar. Deliberately kept in code as well as the CMS so
+// the announcement bar and the blogs hub always have a live target to point at,
+// even before an editor adds the rows in the admin panel.
+export const upcomingEventsIntro =
+  "Modtech will be participating in the following upcoming events in 2027:";
+
+export const upcomingEvents: Array<{
+  title: string;
+  date: string;
+  location: string;
+  image: string;
+}> = [
+  {
+    title: "EICF Sweden",
+    date: "May 10th – 13th, 2027",
+    location: "Sweden",
+    image: automationImages.casePackerLine,
+  },
+  {
+    title: "GIFA, Dusseldorf",
+    date: "June 21st – 25th, 2027",
+    location: "Dusseldorf · Germany",
+    image: automationImages.facility,
+  },
+];
+
+// Same announcement, shaped like a news row so the blogs hub can feature it
+// alongside CMS posts without a second card component.
+export const upcomingEventsStory: {
+  tag: string;
+  date: string;
+  title: string;
+  excerpt: string;
+  body: string;
+  image: string;
+  imageWebp: string;
+  category: Category;
+} = {
+  tag: "Events",
+  date: "UPCOMING · 2027",
+  title: "Meet Modtech at EICF Sweden and GIFA 2027",
+  excerpt:
+    "Modtech will be participating in EICF Sweden (May 10th – 13th, 2027) and GIFA, Dusseldorf (June 21st – 25th, 2027).",
+  body: [
+    "## Upcoming events",
+    upcomingEventsIntro,
+    upcomingEvents.map((event) => `- **${event.title}**: ${event.date}`).join("\n"),
+    "Our engineers will be on the floor with investment casting machines, robotic automation cells and turnkey line integration — bring your part drawings and cycle-time targets and we will walk through the options with you.",
+    "[Book a meeting with our team](/contact) ahead of the show, or see the full exhibition calendar on the [blogs hub](/blog#upcoming-events).",
+  ].join("\n\n"),
+  image: automationImages.facility,
+  imageWebp: automationImages.facility,
+  category: "automation",
+};

@@ -83,7 +83,7 @@ export function MarkdownContent({ value, compact = false }: { value: string; com
               <h1
                 key={index}
                 id={headingId(text)}
-                className="scroll-mt-36 pt-3 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+                className="scroll-mt-[calc(var(--header-h)_+_1.5rem)] pt-3 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
               >
                 {inlineMarkdown(text)}
               </h1>
@@ -93,7 +93,7 @@ export function MarkdownContent({ value, compact = false }: { value: string; com
               <h2
                 key={index}
                 id={headingId(text)}
-                className="scroll-mt-36 pt-5 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
+                className="scroll-mt-[calc(var(--header-h)_+_1.5rem)] pt-5 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl"
               >
                 {inlineMarkdown(text)}
               </h2>
@@ -102,7 +102,7 @@ export function MarkdownContent({ value, compact = false }: { value: string; com
             <h3
               key={index}
               id={headingId(text)}
-              className="scroll-mt-36 pt-3 font-display text-xl font-bold tracking-tight text-foreground"
+              className="scroll-mt-[calc(var(--header-h)_+_1.5rem)] pt-3 font-display text-xl font-bold tracking-tight text-foreground"
             >
               {inlineMarkdown(text)}
             </h3>

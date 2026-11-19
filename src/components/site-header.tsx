@@ -36,6 +36,17 @@ export function SiteHeader({ announcement }: { announcement: Announcement | null
     return () => document.documentElement.classList.remove("nav-open");
   }, [open]);
 
+  // --header-h drives the page's top padding, every sticky sub-nav and the
+  // anchor scroll offset, so it has to grow when the announcement bar is live.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (announcement) root.dataset.announcement = "true";
+    else delete root.dataset.announcement;
+    return () => {
+      delete root.dataset.announcement;
+    };
+  }, [announcement]);
+
   useEffect(() => {
     if (!open) return;
     const closeOnEscape = (event: KeyboardEvent) => {

@@ -32,6 +32,8 @@ export function DragRail({
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
   const [progress, setProgress] = useState(0); // 0..1 across the rail
+  // Visible share of the rail, used for the phone-only progress thumb.
+  const [visibleRatio, setVisibleRatio] = useState(1);
 
   // ----- arrow visibility + progress based on scroll position -----
   useEffect(() => {
@@ -42,6 +44,7 @@ export function DragRail({
       setCanPrev(el.scrollLeft > 4);
       setCanNext(el.scrollLeft < max);
       setProgress(max > 0 ? Math.min(1, Math.max(0, el.scrollLeft / max)) : 0);
+      setVisibleRatio(el.scrollWidth > 0 ? Math.min(1, el.clientWidth / el.scrollWidth) : 1);
     };
     update();
     el.addEventListener("scroll", update, { passive: true });
@@ -210,12 +213,14 @@ export function DragRail({
         {children}
       </div>
 
-      {/* Arrow controls */}
+      {/* Arrow controls. Overlaid arrows are hidden on phones: they sat on top
+          of the card content and swallowed taps, and a swipe already does the
+          job there — the progress bar below shows where you are instead. */}
       <div
         className={
           controlsPlacement === "below"
             ? "mt-1 flex justify-end gap-2"
-            : "pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 sm:px-4"
+            : "pointer-events-none absolute inset-y-0 left-0 right-0 hidden items-center justify-between px-2 sm:flex sm:px-4"
         }
       >
         <button
@@ -237,6 +242,21 @@ export function DragRail({
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
+
+      {controlsPlacement === "overlay" && visibleRatio < 1 && (
+        <div
+          className="relative -mt-3 h-[3px] w-full overflow-hidden rounded-full bg-border sm:hidden"
+          aria-hidden="true"
+        >
+          <div
+            className="absolute inset-y-0 rounded-full bg-brand transition-[left] duration-150 ease-out"
+            style={{
+              width: `${Math.max(visibleRatio * 100, 14)}%`,
+              left: `${progress * (100 - Math.max(visibleRatio * 100, 14))}%`,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

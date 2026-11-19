@@ -192,10 +192,32 @@
     border-color: var(--color-border);
   }
 
+  /* One source of truth for the fixed header's height, so sticky sub-navs,
+     anchor offsets and the page's top padding stay aligned on every screen
+     size — including phones, where the header is shorter, and when the
+     announcement bar is live. */
+  :root {
+    --header-h: 4rem;
+  }
+  @media (min-width: 40rem) {
+    :root {
+      --header-h: 4.5rem;
+    }
+  }
+  html[data-announcement="true"] {
+    --header-h: 6.125rem;
+  }
+  @media (min-width: 40rem) {
+    html[data-announcement="true"] {
+      --header-h: 6.625rem;
+    }
+  }
+
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
-    scroll-padding-top: 5rem; /* fixed header never covers an anchored section */
+    /* fixed header never covers an anchored section */
+    scroll-padding-top: calc(var(--header-h) + 1rem);
   }
   html.light {
     color-scheme: light;
@@ -827,7 +849,10 @@
     content: "";
     position: absolute;
     inset: -60% -35%;
-    z-index: -5;
+    /* Above the video panel (z-0), below the copy column (z-10): the card
+       stacks the same way whether the media is in flow (phones) or
+       absolutely positioned behind the copy (desktop). */
+    z-index: 1;
     pointer-events: none;
     background: linear-gradient(
       110deg,
@@ -852,26 +877,33 @@
       transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
       box-shadow 0.35s ease;
   }
-  .division-choice-card:hover {
-    transform: translateY(-8px);
-    border-color: color-mix(in oklab, var(--brand) 62%, transparent);
-    box-shadow:
-      0 38px 80px -34px oklch(0 0 0 / 0.75),
-      0 0 0 1px color-mix(in oklab, var(--brand) 24%, transparent),
-      0 0 70px -24px color-mix(in oklab, var(--brand) 55%, transparent);
+  /* Hover-only flourishes stay on pointer devices. On a touch screen they
+     would stick after a tap and leave the card looking stuck mid-animation. */
+  @media (hover: hover) {
+    .division-choice-card:hover {
+      transform: translateY(-8px);
+      border-color: color-mix(in oklab, var(--brand) 62%, transparent);
+      box-shadow:
+        0 38px 80px -34px oklch(0 0 0 / 0.75),
+        0 0 0 1px color-mix(in oklab, var(--brand) 24%, transparent),
+        0 0 70px -24px color-mix(in oklab, var(--brand) 55%, transparent);
+    }
+    .division-choice-card:hover::after {
+      transform: translateX(70%) rotate(4deg);
+    }
+    .division-choice-card:hover .division-choice-media {
+      transform: scale(1.085);
+      filter: saturate(1.08) contrast(1.03);
+    }
+    .division-choice-card:hover .division-choice-grid {
+      opacity: 0.26;
+    }
+    .division-choice-card:hover .division-choice-cta {
+      transform: translateX(4px);
+    }
   }
-  .division-choice-card:hover::after {
-    transform: translateX(70%) rotate(4deg);
-  }
-  .division-choice-card:hover .division-choice-media {
-    transform: scale(1.085);
-    filter: saturate(1.08) contrast(1.03);
-  }
-  .division-choice-card:hover .division-choice-grid {
-    opacity: 0.26;
-  }
-  .division-choice-card:hover .division-choice-cta {
-    transform: translateX(4px);
+  .division-choice-card:active {
+    transform: scale(0.992);
   }
 
   /* ---- Drag rail arrow buttons ---- */

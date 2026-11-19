@@ -29,9 +29,11 @@ try {
 
   const draft = {
     title: "  Test vacancy  ",
+    department: "  Production  ",
     openings: "2",
     qualification: "  Engineering diploma  ",
     experience: "  1 year  ",
+    responsibilities: "  Run the casting cell  ",
     published: true,
   };
   const validated = careers.validateCareerDraft(draft);
@@ -39,6 +41,11 @@ try {
   assert.equal(validated.value.title, "Test vacancy");
   assert.equal(validated.value.openings, 2);
   assert.equal(validated.value.qualification, "Engineering diploma");
+  assert.equal(validated.value.department, "Production");
+  assert.equal(validated.value.responsibilities, "Run the casting cell");
+  for (const field of ["department", "responsibilities"]) {
+    assert.match(careers.validateCareerDraft({ ...draft, [field]: "   " }).error, /required/);
+  }
   assert.equal(draft.title, "  Test vacancy  ", "validation must not mutate the form draft");
   for (const openings of [0, -1, 1.5, "abc", Number.MAX_SAFE_INTEGER + 1]) {
     assert.match(careers.validateCareerDraft({ ...draft, openings }).error, /whole number/);
