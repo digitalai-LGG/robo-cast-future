@@ -88,6 +88,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
     const validSections = [
       "overview",
       "website",
+      "announcement",
       "posts",
       "products",
       "news",
@@ -121,6 +122,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 type Tab =
   | "overview"
   | "website"
+  | "announcement"
   | "posts"
   | "products"
   | "news"
@@ -133,6 +135,12 @@ type Tab =
 const TABS = [
   { id: "overview", label: "Overview", description: "Dashboard", Icon: LayoutDashboard },
   { id: "website", label: "Website Content", description: "Pages & section copy", Icon: Globe2 },
+  {
+    id: "announcement",
+    label: "Announcement Bar",
+    description: "Upcoming events moving line",
+    Icon: Megaphone,
+  },
   { id: "posts", label: "Blog & Articles", description: "Editorial content", Icon: FileText },
   { id: "products", label: "Products", description: "Machine catalogue", Icon: Package },
   { id: "news", label: "Blog Updates", description: "Short updates & resources", Icon: Newspaper },
@@ -258,7 +266,10 @@ const PRODUCT_SECTION_OPTIONS = (
   label: `${section.division === "casting" ? "Casting" : "Robotics"} — ${section.label}`,
 }));
 
-type CollectionTab = Exclude<Tab, "overview" | "website" | "enquiries" | "team" | "settings">;
+type CollectionTab = Exclude<
+  Tab,
+  "overview" | "website" | "announcement" | "enquiries" | "team" | "settings"
+>;
 
 const SCHEMAS: Record<
   CollectionTab,
@@ -577,6 +588,7 @@ function AdminPage() {
     admin: [
       "overview",
       "website",
+      "announcement",
       "posts",
       "products",
       "news",
@@ -703,6 +715,8 @@ function AdminPage() {
             <DashboardOverview demo={demo} onNavigate={setTab} role={role} />
           ) : activeTab === "website" ? (
             <WebsiteContent demo={demo} />
+          ) : activeTab === "announcement" ? (
+            <AnnouncementSettings demo={demo} />
           ) : activeTab === "enquiries" ? (
             <Enquiries demo={demo} role={role} userId={user.id} />
           ) : activeTab === "team" ? (
@@ -3168,10 +3182,12 @@ function AnnouncementSettings({ demo }: { demo: boolean }) {
           <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
             / website announcement
           </p>
-          <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">Announcement bar</h1>
+          <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">
+            Upcoming Events announcement
+          </h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-            Publish a moving update across the top of every public page. Add a destination link and
-            let it switch off automatically at the selected time.
+            Edit the moving Upcoming Events line at the top of every public page, set where it
+            links, and choose when it should stop appearing.
           </p>
         </div>
         <span
@@ -3196,7 +3212,7 @@ function AnnouncementSettings({ demo }: { demo: boolean }) {
             <div className="announcement-bar">
               <div className="announcement-label" aria-hidden="true">
                 <Megaphone className="h-3.5 w-3.5" />
-                <span>Modtech update</span>
+                <span>Upcoming Events</span>
               </div>
               <div className="announcement-viewport">
                 <div className="announcement-track">
@@ -3266,7 +3282,7 @@ function AnnouncementSettings({ demo }: { demo: boolean }) {
 
           <label className="block">
             <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Announcement text
+              Moving line text
             </span>
             <textarea
               required
@@ -3275,7 +3291,7 @@ function AnnouncementSettings({ demo }: { demo: boolean }) {
               value={values.message}
               onChange={(event) => setForm({ ...values, message: event.target.value })}
               className="mt-2 w-full resize-y rounded-xl border border-border bg-background px-4 py-3 text-sm leading-relaxed outline-none ring-brand/40 transition focus:border-brand focus:ring-2"
-              placeholder="Add an update, notice, event or latest blog announcement"
+              placeholder="Add upcoming event details for the moving top line"
             />
             <span className="mt-1.5 flex justify-between text-xs text-muted-foreground">
               <span>Keep it short and action-oriented for the best scrolling experience.</span>
