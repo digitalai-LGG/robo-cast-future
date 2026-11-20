@@ -19,6 +19,9 @@ const updateMemberSchema = z.object({
   userId: z.string().uuid(),
   role: teamRoleSchema,
   active: z.boolean(),
+  // Optional so an untouched name is never overwritten by a role or access
+  // change; it is only written when the caller actually sends one.
+  fullName: z.string().trim().min(2).max(120).optional(),
 });
 
 function escapeHtml(value: string) {
@@ -239,9 +242,11 @@ export const updateTeamMember = createServerFn({ method: "POST" })
       .neq("role", data.role);
     if (deleteError) throw deleteError;
 
+    const profileChanges: { active: boolean; full_name?: string } = { active: data.active };
+    if (data.fullName !== undefined) profileChanges.full_name = data.fullName;
     const { error: profileError } = await supabaseAdmin
       .from("profiles")
-      .update({ active: data.active })
+      .update(profileChanges)
       .eq("id", data.userId);
     if (profileError) throw profileError;
 

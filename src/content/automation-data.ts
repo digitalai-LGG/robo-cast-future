@@ -1,6 +1,9 @@
 const caseErector = "/productsimg/products/case-erector.png";
 const casePacker = "/productsimg/products/case-packer-robot-cell.png";
 const palletizer = "/productsimg/products/palletizing-robot-cell.png";
+// Clean rectangular crop of case-erector.png: the source render has clipped
+// (transparent) corners that show as notches whenever it fills a frame.
+const roboticCellPhoto = "/productsimg/products/robotic-case-erector-cell.webp";
 const pickPlaceRobotCell = "/productsimg/products/pick-place-robot-cell.png";
 const visionInspectionCell = "/productsimg/products/vision-inspection-cell.png";
 const robot6Axis = "/productsimg/robots/robot-6-axis.jpg";
@@ -31,6 +34,7 @@ import abb from "@/assets/automation/partners/abb-robotics.jpeg";
 
 // Curated from Modtech's approved Robotics & Automation brochure and image pack.
 export const automationImages = {
+  roboticCellPhoto,
   caseErector,
   casePacker,
   palletizer,

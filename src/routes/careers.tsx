@@ -20,11 +20,15 @@ import { PageShell } from "@/components/page-shell";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { supabase } from "@/integrations/supabase/client";
 import { careerVacancies, type Vacancy } from "@/content/careers";
-import { companyContact } from "@/content/automation-data";
 import { presenceCountries } from "@/content/global-presence";
 import { DEMO_MODE, getDemoRows } from "@/lib/demo-admin";
+import { getDefaultSiteContent, useSiteContent } from "@/lib/site-content";
 
-const HR_EMAIL = "hr@modtechworld.com";
+// The HR address, phone and hiring copy are editable under
+// Admin > Website Content > Careers page. These are the shipped defaults, and
+// what renders until the saved CMS values arrive.
+const CAREERS_DEFAULTS = getDefaultSiteContent("careers");
+const GLOBAL_DEFAULTS = getDefaultSiteContent("global");
 const ALL_DEPARTMENTS = "All departments";
 
 export const Route = createFileRoute("/careers")({
@@ -51,7 +55,7 @@ export const Route = createFileRoute("/careers")({
  * Opens the candidate's mail app with the role already in the subject line, so
  * HR can route the CV without having to ask which position it is for.
  */
-function applyHref(title: string) {
+function applyHref(title: string, hrEmail: string) {
   const subject = `Application — ${title} | Modtech Machines`;
   const body = [
     "Dear HR Team,",
@@ -68,27 +72,29 @@ function applyHref(title: string) {
     "",
     "Thank you,",
   ].join("\n");
-  return `mailto:${HR_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${hrEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-const generalApplicationHref = `mailto:${HR_EMAIL}?subject=${encodeURIComponent(
-  "General application | Modtech Machines",
-)}&body=${encodeURIComponent(
-  [
-    "Dear HR Team,",
-    "",
-    "I would like to be considered for suitable openings at Modtech Machines.",
-    "",
-    "Name:",
-    "Phone:",
-    "Department of interest:",
-    "Total experience:",
-    "",
-    "My CV is attached with this email.",
-    "",
-    "Thank you,",
-  ].join("\n"),
-)}`;
+function generalApplicationHrefFor(hrEmail: string) {
+  return `mailto:${hrEmail}?subject=${encodeURIComponent(
+    "General application | Modtech Machines",
+  )}&body=${encodeURIComponent(
+    [
+      "Dear HR Team,",
+      "",
+      "I would like to be considered for suitable openings at Modtech Machines.",
+      "",
+      "Name:",
+      "Phone:",
+      "Department of interest:",
+      "Total experience:",
+      "",
+      "My CV is attached with this email.",
+      "",
+      "Thank you,",
+    ].join("\n"),
+  )}`;
+}
 
 async function loadVacancies(): Promise<Vacancy[]> {
   if (DEMO_MODE) {
@@ -115,6 +121,11 @@ async function loadVacancies(): Promise<Vacancy[]> {
 function CareersPage() {
   useRevealOnScroll();
   const [department, setDepartment] = useState(ALL_DEPARTMENTS);
+  const content = useSiteContent("careers");
+  const globalContent = useSiteContent("global");
+  const hrEmail = content.hr_email || CAREERS_DEFAULTS.hr_email;
+  const hrPhone = content.hr_phone || CAREERS_DEFAULTS.hr_phone;
+  const generalApplicationHref = generalApplicationHrefFor(hrEmail);
 
   // The bundled requisition list seeds the cache so the server renders real
   // roles (and search engines index them) instead of an empty skeleton; the
@@ -158,16 +169,16 @@ function CareersPage() {
 
         <div className="relative mx-auto max-w-7xl">
           <h1 className="reveal max-w-3xl font-display text-[clamp(2.25rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.035em]">
-            Build what&apos;s next
-            <span className="block text-gradient-brand">with Modtech.</span>
+            {content.title || CAREERS_DEFAULTS.title}
+            <span className="block text-gradient-brand">
+              {content.accent || CAREERS_DEFAULTS.accent}
+            </span>
           </h1>
           <p
             className="reveal mt-5 max-w-2xl text-base leading-relaxed text-foreground/70 sm:text-lg"
             style={{ animationDelay: "110ms" }}
           >
-            We design, build and commission investment casting machinery and robotic automation
-            under one roof in Ahmedabad. Pick the role that matches your experience and email your
-            CV to our HR team.
+            {content.description || CAREERS_DEFAULTS.description}
           </p>
 
           <div
@@ -184,7 +195,7 @@ function CareersPage() {
               href={generalApplicationHref}
               className="inline-flex items-center justify-center gap-2 break-all rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-medium text-white/85 backdrop-blur transition hover:border-brand/55 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
             >
-              <Mail className="h-4 w-4 shrink-0" /> {HR_EMAIL}
+              <Mail className="h-4 w-4 shrink-0" /> {hrEmail}
             </a>
           </div>
 
@@ -270,7 +281,7 @@ function CareersPage() {
           {visibleVacancies.length > 0 ? (
             <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
               {visibleVacancies.map((vacancy, index) => (
-                <VacancyCard key={vacancy.id} vacancy={vacancy} index={index} />
+                <VacancyCard key={vacancy.id} vacancy={vacancy} index={index} hrEmail={hrEmail} />
               ))}
             </div>
           ) : (
@@ -361,7 +372,7 @@ function CareersPage() {
                   Email
                 </span>
                 <span className="mt-0.5 block break-all text-sm font-semibold text-brand">
-                  {HR_EMAIL}
+                  {hrEmail}
                 </span>
               </span>
             </a>
@@ -369,14 +380,14 @@ function CareersPage() {
             <div className="mt-4 space-y-3 border-t border-border pt-4">
               <ContactLine
                 icon={<Phone className="h-4 w-4" />}
-                label="Reception"
-                value={companyContact.phone}
-                href={`tel:${companyContact.phone.replace(/\s/g, "")}`}
+                label="HR desk"
+                value={hrPhone}
+                href={`tel:${hrPhone.replace(/\s/g, "")}`}
               />
               <ContactLine
                 icon={<MapPin className="h-4 w-4" />}
                 label="Office"
-                value={companyContact.address}
+                value={globalContent.address || GLOBAL_DEFAULTS.address}
               />
             </div>
 
@@ -405,7 +416,15 @@ function HeroStat({ icon, value, label }: { icon: ReactNode; value: string; labe
   );
 }
 
-function VacancyCard({ vacancy, index }: { vacancy: Vacancy; index: number }) {
+function VacancyCard({
+  vacancy,
+  index,
+  hrEmail,
+}: {
+  vacancy: Vacancy;
+  index: number;
+  hrEmail: string;
+}) {
   return (
     <article
       className="reveal-on-scroll group flex min-h-full flex-col rounded-2xl border border-border bg-card p-5 shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand/45 hover:shadow-deep sm:p-6"
@@ -448,7 +467,7 @@ function VacancyCard({ vacancy, index }: { vacancy: Vacancy; index: number }) {
       )}
 
       <a
-        href={applyHref(vacancy.title)}
+        href={applyHref(vacancy.title, hrEmail)}
         aria-label={`Apply for ${vacancy.title} by email`}
         className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-foreground transition group-hover:gap-3 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-card"
       >

@@ -4,7 +4,13 @@ import { PageShell, PageHero } from "@/components/page-shell";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { EnquiryForm } from "@/components/enquiry-form";
 import { automationImages, companyContact } from "@/content/automation-data";
-import { useSiteContent } from "@/lib/site-content";
+import { getDefaultSiteContent, useSiteContent } from "@/lib/site-content";
+
+const GLOBAL_DEFAULTS = getDefaultSiteContent("global");
+
+function telHref(value: string) {
+  return value.replace(/[^+\d]/g, "");
+}
 
 const REPRESENTATIVES = [
   {
@@ -68,6 +74,11 @@ function ContactPage() {
   useRevealOnScroll();
   const content = useSiteContent("contact");
   const global = useSiteContent("global");
+  // Phone numbers are editable in Admin > Website Content > Global details, so
+  // the dialled number always follows the number on screen.
+  const primaryPhone = global.primary_phone || GLOBAL_DEFAULTS.primary_phone;
+  const automationPhone = global.automation_phone || GLOBAL_DEFAULTS.automation_phone;
+  const supportPhone = global.support_phone || GLOBAL_DEFAULTS.support_phone;
   const { machine } = Route.useSearch();
   const initialMessage = machine
     ? `I am interested in ${machine}. Please share the approved datasheet, available configuration and quotation.`
@@ -105,11 +116,11 @@ function ContactPage() {
                   {global.primary_email}
                 </a>
                 <a
-                  href="tel:+919723456251"
+                  href={`tel:${telHref(primaryPhone)}`}
                   className="mt-1 flex items-center gap-2 text-sm text-muted-foreground transition hover:text-brand"
                 >
                   <Phone className="h-3.5 w-3.5" />
-                  {companyContact.phone}
+                  {primaryPhone}
                 </a>
               </div>
             </div>
@@ -128,11 +139,11 @@ function ContactPage() {
                   {global.automation_email}
                 </a>
                 <a
-                  href="tel:+919898873558"
+                  href={`tel:${telHref(automationPhone)}`}
                   className="mt-1 flex items-center gap-2 text-sm text-muted-foreground transition hover:text-brand"
                 >
                   <Phone className="h-3.5 w-3.5" />
-                  {companyContact.automationPhone}
+                  {automationPhone}
                 </a>
               </div>
             </div>
@@ -143,10 +154,10 @@ function ContactPage() {
               <div className="min-w-0">
                 <div className="text-xs font-semibold text-muted-foreground">Customer support</div>
                 <a
-                  href="tel:+918735915913"
+                  href={`tel:${telHref(supportPhone)}`}
                   className="mt-1 block font-display text-sm font-semibold text-foreground transition group-hover:text-brand sm:text-base"
                 >
-                  {companyContact.supportPhone}
+                  {supportPhone}
                 </a>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Service, spares and on-site assistance

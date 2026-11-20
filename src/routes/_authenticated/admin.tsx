@@ -635,7 +635,8 @@ function AdminPage() {
           <span className="hidden font-mono text-[10px] uppercase tracking-[0.28em] text-brand sm:inline">
             / control centre
           </span>
-          <div className="ml-auto flex items-center gap-4">
+          <div className="ml-auto flex items-center gap-3 sm:gap-4">
+            <ConnectionStatus demo={demo} />
             <div className="hidden text-right sm:block">
               <div className="text-xs font-medium text-foreground">{user.email}</div>
               <div className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand">
@@ -682,12 +683,18 @@ function AdminPage() {
                 type="button"
                 onClick={() => setTab(id)}
                 aria-current={activeTab === id ? "page" : undefined}
-                className={`flex min-w-max shrink-0 items-center gap-2 rounded-xl border px-3 py-2.5 text-left transition lg:min-w-0 lg:gap-3 lg:py-3 ${
+                className={`relative flex min-w-max shrink-0 items-center gap-2 overflow-hidden rounded-xl border px-3 py-2.5 text-left transition duration-200 lg:min-w-0 lg:gap-3 lg:py-3 ${
                   activeTab === id
                     ? "border-brand/50 bg-brand/10 text-foreground shadow-card"
                     : "border-transparent text-muted-foreground hover:border-border hover:bg-card hover:text-foreground"
                 }`}
               >
+                {activeTab === id && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-y-1.5 left-0 hidden w-1 rounded-r-full bg-brand lg:block"
+                  />
+                )}
                 <span
                   className={`hidden h-8 w-8 shrink-0 place-items-center rounded-lg sm:grid ${activeTab === id ? "bg-brand text-brand-foreground" : "bg-secondary text-muted-foreground"}`}
                 >
@@ -710,7 +717,11 @@ function AdminPage() {
           </nav>
         </aside>
 
-        <section className="min-w-0 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+        <section className="relative min-w-0 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10 bg-grid bg-grid-fade opacity-[0.07]"
+          />
           {activeTab === "overview" ? (
             <DashboardOverview demo={demo} onNavigate={setTab} role={role} />
           ) : activeTab === "website" ? (
@@ -729,6 +740,72 @@ function AdminPage() {
         </section>
       </div>
     </main>
+  );
+}
+
+/**
+ * Shows whether the browser can still reach Supabase.
+ *
+ * Everything in here is one query away from the database, so when a key is
+ * rotated, a free project is paused or the network drops, the useful thing is
+ * to see it in the header rather than to guess from a form that will not save.
+ */
+function ConnectionStatus({ demo }: { demo: boolean }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin", "connection"],
+    enabled: !demo,
+    queryFn: async () => {
+      const startedAt = Date.now();
+      const { error } = await supabase.from("announcement_bar").select("id").limit(1);
+      if (error) throw error;
+      return { latency: Date.now() - startedAt };
+    },
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: true,
+    retry: 1,
+    staleTime: 30_000,
+  });
+
+  if (demo) {
+    return (
+      <span className="hidden items-center gap-2 rounded-full border border-brand/30 bg-brand/5 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-brand md:inline-flex">
+        <MonitorCog className="h-3 w-3" /> Local demo
+      </span>
+    );
+  }
+
+  const state = isLoading ? "checking" : data ? "online" : "offline";
+  const tone =
+    state === "online"
+      ? "border-brand/30 bg-brand/5 text-brand"
+      : state === "offline"
+        ? "border-destructive/40 bg-destructive/5 text-destructive"
+        : "border-border bg-card text-muted-foreground";
+  const label =
+    state === "online" ? "Database live" : state === "offline" ? "No database" : "Checking";
+
+  return (
+    <span
+      title={
+        state === "online"
+          ? `Supabase responded in ${data?.latency}ms`
+          : state === "offline"
+            ? "Supabase could not be reached. Saving will fail until it recovers."
+            : "Checking the Supabase connection…"
+      }
+      className={`hidden items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] md:inline-flex ${tone}`}
+    >
+      <span
+        className={`h-1.5 w-1.5 rounded-full ${
+          state === "online"
+            ? "bg-brand shadow-glow"
+            : state === "offline"
+              ? "bg-destructive"
+              : "animate-pulse bg-muted-foreground"
+        }`}
+      />
+      {label}
+    </span>
   );
 }
 
@@ -903,17 +980,31 @@ function DashboardOverview({
                 key={tab}
                 type="button"
                 onClick={() => onNavigate(tab)}
-                className="group rounded-2xl border border-border bg-card p-5 text-left shadow-card transition hover:-translate-y-1 hover:border-brand/60"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 text-left shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand/60 hover:shadow-deep"
               >
-                <div className="flex items-center justify-between">
-                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand">
+                <span className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-brand/10 opacity-0 blur-2xl transition duration-300 group-hover:opacity-100" />
+                <div className="relative flex items-center justify-between">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand transition duration-300 group-hover:bg-brand group-hover:text-brand-foreground">
                     <Icon className="h-5 w-5" />
                   </span>
                   <ArrowRight className="h-4 w-4 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-brand" />
                 </div>
-                <div className="mt-5 font-display text-3xl font-bold">{value}</div>
-                <div className="mt-1 text-sm font-medium">{label}</div>
-                <div className="mt-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                <div className="relative mt-5 font-display text-3xl font-bold tabular-nums">
+                  {value}
+                </div>
+                <div className="relative mt-1 text-sm font-medium">{label}</div>
+                {/* How much of this collection is actually live, at a glance. */}
+                <div
+                  className="relative mt-3 h-1 overflow-hidden rounded-full bg-secondary"
+                  role="img"
+                  aria-label={`${published} of ${value} published`}
+                >
+                  <span
+                    className="block h-full rounded-full bg-brand transition-[width] duration-500"
+                    style={{ width: `${value > 0 ? Math.round((published / value) * 100) : 0}%` }}
+                  />
+                </div>
+                <div className="relative mt-2 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
                   {published} published · {value - published} drafts
                 </div>
               </button>
@@ -2392,6 +2483,8 @@ function Enquiries({
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const [assignee, setAssignee] = useState("all");
+  const [editingContact, setEditingContact] = useState<string | null>(null);
+  const [deletingLead, setDeletingLead] = useState<EnquiryRow | null>(null);
   const { data, isLoading, error, refetch } = useQuery<EnquiryRow[]>({
     queryKey: ["admin", "enquiries"],
     queryFn: async () => {
@@ -2469,6 +2562,33 @@ function Enquiries({
       toast.success(
         result?.notified ? "Lead assigned and sales person notified." : "Lead assignment saved.",
       );
+      queryClient.invalidateQueries({ queryKey: ["admin", "enquiries"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  // Only a super admin may delete: it mirrors the "admins delete enquiries"
+  // row-level policy, so the button is never offered to someone the database
+  // would refuse.
+  const remove = useMutation({
+    mutationFn: async (id: string) => {
+      if (demo) {
+        deleteDemoRow("enquiries", id);
+        return;
+      }
+      const { data: deleted, error } = await supabase
+        .from("enquiries")
+        .delete()
+        .eq("id", id)
+        .select("id");
+      if (error) throw error;
+      if (!deleted?.length)
+        throw new Error("Delete was not confirmed. Only a super admin can remove a lead.");
+    },
+    onSuccess: () => {
+      toast.success("Lead deleted.");
+      setDeletingLead(null);
       queryClient.invalidateQueries({ queryKey: ["admin", "enquiries"] });
       queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
     },
@@ -2654,12 +2774,30 @@ function Enquiries({
                 />
                 <div className="font-display text-lg font-semibold">{r.name}</div>
                 {r.company && <span className="text-sm text-muted-foreground">· {r.company}</span>}
+                <button
+                  type="button"
+                  onClick={() => setEditingContact(editingContact === r.id ? null : r.id)}
+                  aria-expanded={editingContact === r.id}
+                  className="ml-auto rounded-full border border-border px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground transition hover:border-brand hover:text-brand"
+                >
+                  {editingContact === r.id ? "Close" : "Edit details"}
+                </button>
+                {role === "admin" && (
+                  <button
+                    type="button"
+                    onClick={() => setDeletingLead(r)}
+                    aria-label={`Delete lead from ${r.name}`}
+                    className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-destructive hover:text-destructive"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                )}
                 <select
                   value={r.status}
                   disabled={update.isPending}
                   onChange={(e) => update.mutate({ id: r.id, changes: { status: e.target.value } })}
                   aria-label={`Status for ${r.name}`}
-                  className="ml-auto rounded-full border border-border bg-background px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] disabled:opacity-50"
+                  className="rounded-full border border-border bg-background px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] disabled:opacity-50"
                 >
                   {statuses.map((s) => (
                     <option key={s} value={s}>
@@ -2687,6 +2825,68 @@ function Enquiries({
                   <Clock3 className="h-3 w-3" /> {new Date(r.created_at).toLocaleString("en-GB")}
                 </span>
               </div>
+              {editingContact === r.id && (
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.currentTarget);
+                    update.mutate({
+                      id: r.id,
+                      changes: {
+                        name: String(formData.get("name") ?? "").trim(),
+                        company: String(formData.get("company") ?? "").trim(),
+                        email: String(formData.get("email") ?? "").trim(),
+                        phone: String(formData.get("phone") ?? "").trim(),
+                      },
+                    });
+                    setEditingContact(null);
+                  }}
+                  className="mt-4 rounded-xl border border-brand/25 bg-brand/5 p-4"
+                >
+                  <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                    Correct the contact details
+                  </p>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    {(
+                      [
+                        { key: "name", label: "Name", type: "text", required: true },
+                        { key: "company", label: "Company", type: "text", required: false },
+                        { key: "email", label: "Email", type: "email", required: true },
+                        { key: "phone", label: "Phone", type: "text", required: false },
+                      ] as const
+                    ).map((field) => (
+                      <label key={field.key} className="block text-xs text-muted-foreground">
+                        <span className="mb-1.5 block font-mono text-[9px] uppercase tracking-wider">
+                          {field.label}
+                        </span>
+                        <input
+                          name={field.key}
+                          type={field.type}
+                          required={field.required}
+                          defaultValue={String(r[field.key] ?? "")}
+                          className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-brand"
+                        />
+                      </label>
+                    ))}
+                  </div>
+                  <div className="mt-4 flex gap-2">
+                    <button
+                      type="submit"
+                      disabled={update.isPending}
+                      className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 font-mono text-[10px] font-semibold uppercase tracking-wider text-brand-foreground disabled:opacity-50"
+                    >
+                      <Save className="h-3.5 w-3.5" /> Save details
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEditingContact(null)}
+                      className="rounded-full border border-border px-4 py-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground hover:border-brand hover:text-brand"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              )}
               <div className="mt-4 grid gap-3 border-t border-border pt-4 sm:grid-cols-3">
                 {(role === "admin" || role === "sales_manager") && (
                   <label className="text-xs text-muted-foreground">
@@ -2776,6 +2976,14 @@ function Enquiries({
           ))}
         </div>
       )}
+      {deletingLead && (
+        <DeleteConfirmation
+          title={`${deletingLead.name}${deletingLead.company ? ` · ${deletingLead.company}` : ""}`}
+          busy={remove.isPending}
+          onCancel={() => setDeletingLead(null)}
+          onConfirm={() => remove.mutate(deletingLead.id)}
+        />
+      )}
     </div>
   );
 }
@@ -2853,6 +3061,7 @@ function Team({
           userId: member.id,
           role: changes.role ?? member.role,
           active: changes.active ?? member.active,
+          ...(changes.full_name !== undefined ? { fullName: changes.full_name } : {}),
         },
       });
     },
@@ -2938,10 +3147,32 @@ function Team({
                     {(member.full_name || member.email || "T").slice(0, 1).toUpperCase()}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <div className="truncate text-sm font-semibold">
-                      {member.full_name || "Team member"}
+                    {canManage(member) ? (
+                      <input
+                        key={member.full_name ?? member.id}
+                        defaultValue={member.full_name ?? ""}
+                        placeholder="Team member"
+                        aria-label={`Name for ${member.email}`}
+                        onBlur={(event) => {
+                          const next = event.target.value.trim();
+                          if (next === (member.full_name ?? "").trim()) return;
+                          if (next.length < 2) {
+                            event.target.value = member.full_name ?? "";
+                            toast.error("A name needs at least two characters.");
+                            return;
+                          }
+                          manageMember.mutate({ member, changes: { full_name: next } });
+                        }}
+                        className="w-full truncate rounded-lg border border-transparent bg-transparent px-1.5 py-1 text-sm font-semibold outline-none transition hover:border-border focus:border-brand focus:bg-background"
+                      />
+                    ) : (
+                      <div className="truncate px-1.5 py-1 text-sm font-semibold">
+                        {member.full_name || "Team member"}
+                      </div>
+                    )}
+                    <div className="truncate px-1.5 text-xs text-muted-foreground">
+                      {member.email}
                     </div>
-                    <div className="truncate text-xs text-muted-foreground">{member.email}</div>
                   </div>
                   {role === "admin" ? (
                     <select

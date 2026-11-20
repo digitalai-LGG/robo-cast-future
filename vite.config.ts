@@ -37,6 +37,14 @@ export default defineConfig({
     }),
     nitro({
       preset: deploymentPreset,
+      // Registered explicitly rather than by directory scan: TanStack Start owns
+      // the route tree, so a file dropped in server/routes is never mounted.
+      handlers: [
+        {
+          route: "/api/keep-alive",
+          handler: "./server/keep-alive.ts",
+        },
+      ],
       // Applied by the server for every route, so the headers follow the app to Node,
       // Docker, Vercel, Netlify, Cloudflare and Render instead of living in one
       // provider's config file. No CSP here: the app loads YouTube embeds and an inline

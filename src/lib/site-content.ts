@@ -229,6 +229,37 @@ export const SITE_CONTENT_PAGES: SiteContentPage[] = [
     ],
   },
   {
+    id: "careers",
+    label: "Careers page",
+    description: "Hiring hero copy and the HR contact candidates apply to.",
+    group: "Main pages",
+    previewPath: "/careers",
+    fields: [
+      { key: "title", label: "Hero title", defaultValue: "Build what's next" },
+      { key: "accent", label: "Hero accent title", defaultValue: "with Modtech." },
+      {
+        key: "description",
+        label: "Hero description",
+        defaultValue:
+          "We design, build and commission investment casting machinery and robotic automation under one roof in Ahmedabad. Pick the role that matches your experience and email your CV to our HR team.",
+        multiline: true,
+      },
+      {
+        key: "hr_email",
+        label: "HR email (receives every application)",
+        defaultValue: "hr@modtechworld.com",
+      },
+      { key: "hr_phone", label: "HR phone", defaultValue: "+91 97234 56251" },
+      {
+        key: "hr_note",
+        label: "Application note",
+        defaultValue:
+          "Applications are handled directly by our HR team - there is no portal to sign up for.",
+        multiline: true,
+      },
+    ],
+  },
+  {
     id: "global",
     label: "Global details",
     description: "Contact information and footer messaging used across the website.",
@@ -251,6 +282,26 @@ export const SITE_CONTENT_PAGES: SiteContentPage[] = [
         key: "automation_email",
         label: "Robotics & automation enquiries email",
         defaultValue: "sales.automation@modtechworld.com",
+      },
+      {
+        key: "primary_phone",
+        label: "Casting machine enquiries phone",
+        defaultValue: "+91 97234 56251",
+      },
+      {
+        key: "automation_phone",
+        label: "Robotics & automation enquiries phone",
+        defaultValue: "+91 98988 73558",
+      },
+      {
+        key: "support_phone",
+        label: "Customer support phone",
+        defaultValue: "+91 87359 15913",
+      },
+      {
+        key: "support_email",
+        label: "Customer support email",
+        defaultValue: "customercare@modtechworld.com",
       },
       {
         key: "address",
