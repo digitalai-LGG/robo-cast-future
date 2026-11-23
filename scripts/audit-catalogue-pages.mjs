@@ -24,6 +24,8 @@ const retainedMachineChecks = {
   "/machines/kawas-2": {
     title: "KAWAS 2 — Wax Pattern Welding Cell",
     image: "/productsimg/casting/gallery/kawas-2/brochure-render.png?v=2",
+    imageBytes: 181056,
+    datasheet: "/datasheets/modtech-kawas-brochure.pdf",
     rangeKind: "machines",
   },
 };
@@ -37,6 +39,18 @@ const retiredMachinePaths = [
 const listingResponse = await fetch(new URL(listingPath, base));
 if (!listingResponse.ok) throw new Error(`Machine listing returned ${listingResponse.status}.`);
 const listingHtml = await listingResponse.text();
+const waxRoomSectionStart = listingHtml.indexOf('data-machine-section="wax-room-automation"');
+const nextSectionStart = listingHtml.indexOf('data-machine-section="', waxRoomSectionStart + 1);
+const waxRoomSectionHtml =
+  waxRoomSectionStart >= 0
+    ? listingHtml.slice(
+        waxRoomSectionStart,
+        nextSectionStart >= 0 ? nextSectionStart : listingHtml.length,
+      )
+    : "";
+const kawas2WaxRoomPlacement =
+  waxRoomSectionHtml.includes('data-machine-slug="kawas-2"') &&
+  waxRoomSectionHtml.includes('data-machine-division="casting"');
 const listingFallbackCount = (listingHtml.match(/Product media pending/g) ?? []).length;
 const discovered = [...listingHtml.matchAll(/data-machine-slug="([^"]+)"/g)].map(
   (match) => `/machines/${match[1]}`,
@@ -85,6 +99,13 @@ if (listingFallbackCount > 0) {
     path: listingPath,
     expected: "verified product images without fallback artwork behind them",
     listingFallbackCount,
+  });
+}
+if (!kawas2WaxRoomPlacement) {
+  issues.push({
+    path: listingPath,
+    expected: "KAWAS 2 as a casting machine inside Wax Room Automation",
+    kawas2WaxRoomPlacement,
   });
 }
 const checkedImages = new Map();
@@ -241,10 +262,26 @@ for (const path of paths) {
   const imagesMissingAlt = imageTags.filter((tag) => !/\balt=["'][^"']*["']/.test(tag)).length;
   const fallbackCopyCount = (html.match(/Product media pending/g) ?? []).length;
   const retainedMachineCheck = retainedMachineChecks[path];
+  let datasheetCheck = null;
+  if (retainedMachineCheck?.datasheet) {
+    const datasheetResponse = await fetch(new URL(retainedMachineCheck.datasheet, base));
+    const contentType = datasheetResponse.headers.get("content-type") ?? "";
+    const bytes = datasheetResponse.ok ? (await datasheetResponse.arrayBuffer()).byteLength : 0;
+    datasheetCheck = {
+      ok: datasheetResponse.ok && contentType.includes("pdf") && bytes > 0,
+      status: datasheetResponse.status,
+      contentType,
+      bytes,
+    };
+  }
   const retainedMachineValid = retainedMachineCheck
     ? heading === retainedMachineCheck.title &&
       title.startsWith(`${retainedMachineCheck.title} —`) &&
       imageSources.includes(retainedMachineCheck.image) &&
+      (!retainedMachineCheck.imageBytes ||
+        checkedImages.get(retainedMachineCheck.image)?.bytes === retainedMachineCheck.imageBytes) &&
+      (!retainedMachineCheck.datasheet ||
+        (html.includes(`href="${retainedMachineCheck.datasheet}"`) && datasheetCheck?.ok)) &&
       html.includes(`data-range-kind="${retainedMachineCheck.rangeKind}"`)
     : true;
 
@@ -260,6 +297,7 @@ for (const path of paths) {
     brokenImages,
     imagesMissingAlt,
     fallbackCopyCount,
+    datasheetCheck,
     retainedMachineValid,
   };
   const valid =
@@ -334,6 +372,7 @@ console.log(
         listingFallbackCount + results.reduce((total, item) => total + item.fallbackCopyCount, 0),
       missingMachineStatus: missingResponse.status,
       retainedMachinesListed,
+      kawas2WaxRoomPlacement,
       retiredMachinesAbsent,
       legacyRedirects,
       retiredMachineStatuses,
