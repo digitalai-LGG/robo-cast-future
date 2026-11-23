@@ -21,6 +21,11 @@ const retainedMachineChecks = {
     image: "/productsimg/casting/gallery/slurry-mixer/front.webp?v=2",
     rangeKind: "machines",
   },
+  "/machines/kawas-2": {
+    title: "KAWAS 2 — Automatic Wax Pattern Welding System",
+    image: "/productsimg/casting/gallery/kawas-2/front.webp?v=2",
+    rangeKind: "machines",
+  },
 };
 const retiredMachinePaths = [
   "/machines/shell-drying-conveyor",
@@ -52,12 +57,12 @@ const results = [];
 const issues = [];
 if (
   listingDivisions.length !== paths.length ||
-  divisionCounts.casting !== 22 ||
+  divisionCounts.casting !== 23 ||
   divisionCounts.robotics !== 0
 ) {
   issues.push({
     path: listingPath,
-    expectedDivisions: { casting: 22, robotics: 0 },
+    expectedDivisions: { casting: 23, robotics: 0 },
     divisionCounts,
     classifiedCards: listingDivisions.length,
   });
@@ -132,7 +137,7 @@ for (const page of ["/", "/divisions"]) {
 const filteredCatalogueChecks = {};
 const expectedFilteredCatalogues = {
   casting: {
-    products: 22,
+    products: 23,
     sections: [
       "wax-injection-machines",
       "wax-processing-conditioning",
