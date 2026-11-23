@@ -42,6 +42,7 @@ const isCatalogueCutout = (machine: Machine) =>
 const usesLightBackdropBlend = (image: string) =>
   image.includes("c-frame-wax-injector") ||
   image.includes("manual-wax-injector") ||
+  image.includes("kawas-2") ||
   image.includes("wax-extruder-");
 
 const preferredPrimarySpecs = [
@@ -1120,7 +1121,7 @@ function MachineGallery({ machine }: { machine: Machine }) {
               fallbackCode={machine.code}
               fallbackClassName="absolute inset-0"
               decoding="async"
-              className={`machine-image-enter relative z-10 h-full w-full ${isCastingImage ? `object-contain drop-shadow-[0_20px_20px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-6 sm:p-10 ${usesLightBackdropBlend(activeImage) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
+              className={`machine-image-enter relative z-10 h-full w-full ${isCastingImage ? `object-contain drop-shadow-[0_20px_20px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : machine.slug === "kawas-2" ? "p-3 mix-blend-darken sm:p-6" : `p-6 sm:p-10 ${usesLightBackdropBlend(activeImage) ? "mix-blend-darken" : ""}`}` : "object-cover"}`}
             />
             <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-carbon/35 via-transparent to-transparent" />
           </>

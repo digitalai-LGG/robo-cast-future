@@ -22,8 +22,8 @@ const retainedMachineChecks = {
     rangeKind: "machines",
   },
   "/machines/kawas-2": {
-    title: "KAWAS 2 — Automatic Wax Pattern Welding System",
-    image: "/productsimg/casting/gallery/kawas-2/front.webp?v=2",
+    title: "KAWAS 2 — Wax Pattern Welding Cell",
+    image: "/productsimg/casting/gallery/kawas-2/brochure-render.png?v=2",
     rangeKind: "machines",
   },
 };

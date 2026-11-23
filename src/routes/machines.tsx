@@ -57,6 +57,7 @@ const isCatalogueCutout = (machine: Machine) =>
 const usesLightBackdropBlend = (image: string) =>
   image.includes("c-frame-wax-injector") ||
   image.includes("manual-wax-injector") ||
+  image.includes("kawas-2") ||
   image.includes("wax-extruder-");
 
 type CatalogueSection = {
@@ -267,7 +268,7 @@ function MachineCard({
             decoding="async"
             className={`relative z-10 h-full w-full transition duration-700 group-hover:scale-[1.035] ${
               isCatalogueCutout(machine)
-                ? `object-contain drop-shadow-[0_18px_18px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : `p-5 sm:p-7 ${usesLightBackdropBlend(machine.image) ? "mix-blend-darken" : ""}`}`
+                ? `object-contain drop-shadow-[0_18px_18px_rgba(10,30,24,0.16)] ${machine.slug === "c-frame-wax-injector" ? "p-0 mix-blend-darken" : machine.slug === "kawas-2" ? "p-3 mix-blend-darken sm:p-4" : `p-5 sm:p-7 ${usesLightBackdropBlend(machine.image) ? "mix-blend-darken" : ""}`}`
                 : "object-cover"
             }`}
           />
