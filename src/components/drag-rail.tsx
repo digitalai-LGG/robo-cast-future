@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
  * - Mouse: click + drag to pan
  * - Touch: native swipe
  * - Buttons: scroll one viewport-card at a time
- * - Wheel: stays native so the page can keep scrolling vertically
+ * - Wheel: vertical scroll converted to horizontal when hovered
  * - Optional autoplay that advances one card at a time and loops back to the start
  */
 export function DragRail({
@@ -104,18 +104,30 @@ export function DragRail({
         moved = false;
       }
     };
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        const max = el.scrollWidth - el.clientWidth;
+        if ((e.deltaY < 0 && el.scrollLeft > 0) || (e.deltaY > 0 && el.scrollLeft < max)) {
+          e.preventDefault();
+          el.scrollLeft += e.deltaY;
+        }
+      }
+    };
+
     el.style.cursor = "grab";
     el.addEventListener("pointerdown", onDown);
     el.addEventListener("pointermove", onMove);
     el.addEventListener("pointerup", onUp);
     el.addEventListener("pointercancel", onUp);
     el.addEventListener("click", onClickCapture, true);
+    el.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       el.removeEventListener("pointerdown", onDown);
       el.removeEventListener("pointermove", onMove);
       el.removeEventListener("pointerup", onUp);
       el.removeEventListener("pointercancel", onUp);
       el.removeEventListener("click", onClickCapture, true);
+      el.removeEventListener("wheel", onWheel);
     };
   }, []);
 

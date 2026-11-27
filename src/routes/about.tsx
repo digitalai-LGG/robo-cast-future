@@ -405,7 +405,6 @@ function AboutPage() {
                 ariaLabel="Modtech people and project photos"
                 step="item"
                 controlsPlacement="overlay"
-                autoPlayMs={4000}
                 className="-mx-1 px-1 sm:-mx-2 sm:px-2"
               >
                 {fieldPhotos.map((photo, index) => (

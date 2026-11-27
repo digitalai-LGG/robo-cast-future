@@ -7,6 +7,7 @@ import {
   ChevronDown,
   Facebook,
   Factory,
+  Headset,
   Instagram,
   Linkedin,
   MapPin,
@@ -150,7 +151,7 @@ function SiteFooter() {
   const careersContent = useSiteContent("careers");
   const enquiryContacts = [
     {
-      label: "Investment Casting Machine and Robotic Shelling Line",
+      label: "Investment Casting Machine and Robotics Shelling Line",
       email: content.primary_email,
       Icon: Factory,
     },
@@ -158,6 +159,11 @@ function SiteFooter() {
       label: "Robotics & Automation",
       email: content.automation_email,
       Icon: Bot,
+    },
+    {
+      label: "Customer Support",
+      email: content.support_email || companyContact.supportEmail,
+      Icon: Headset,
     },
     {
       label: "Human Resources",
