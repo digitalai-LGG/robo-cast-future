@@ -12,13 +12,16 @@ export type MachineSpecificationTable = {
 };
 
 const referenceNote =
-  "Technical figures are based on the supplied Modtech master specification sheets and are for reference. Final values may change with the approved machine configuration; contact Modtech Sales for the project datasheet.";
+  "Technical figures are based on the supplied Modtech model specification documents and are for reference. Final values may change with the approved machine configuration; contact Modtech Sales for the project datasheet.";
 
 const publishedProductPageNote =
   "These details are cross-checked against the published Modtech product page and supplied source documents. Final values and included features may change with the approved machine configuration; contact Modtech Sales for the project datasheet.";
 
 const castingMasterNote =
   "Configuration and options are transcribed from the supplied MODTECH Casting Machines Master document. Final dimensions, capacities and included features are confirmed against the approved project datasheet.";
+
+const ceramicTankNote =
+  "The supplied 30T model documents specify a 35 L main ceramic tank; their optional second-tank heading states 30 L. Main-tank figures shown here follow the technical specification. Confirm optional-tank capacity on the approved project datasheet.";
 
 const table = (
   title: string,
@@ -53,13 +56,22 @@ export const publishedMachineSpecification = (
   },
 ];
 
-const fourPillarWaxModels = [
+const fourPillarSolubleWaxModels = [
   "SOL-Mod-12T-4P",
   "SOL-Mod-30T-4P",
   "SOL-Mod-50T-4P",
   "SOL-Mod-100T-4P",
 ];
-const cFrameWaxModels = ["SOL-Mod-12T-CF", "SOL-Mod-30T-CF", "SOL-Mod-50T-CF", "SOL-Mod-100T-CF"];
+const cFrameSolubleWaxModels = [
+  "SOL-Mod-12T-CF",
+  "SOL-Mod-30T-CF",
+  "SOL-Mod-50T-CF",
+  "SOL-Mod-100T-CF",
+];
+const fourPillarStandardWaxModels = ["WI-Mod-12T-4P", "WI-Mod-75T-4P"];
+const cFrameStandardWaxModels = ["WI-Mod-30T-CF", "WI-Mod-50T-CF", "WI-Mod-75T-CF"];
+const fourPillarIgtWaxModels = ["IGT-Mod-100T-4P", "IGT-Mod-200T-4P", "IGT-Mod-300T-4P"];
+const cFrameIgtWaxModels = ["IGT-Mod-50T-CF", "IGT-Mod-100T-CF"];
 const automodeWaxModels = ["AM-Mod-12T", "AM-Mod-30T"];
 const fourPillarCeramicModels = ["CI-Mod-30T-4P", "CI-Mod-50T-4P", "CI-Mod-100T-4P"];
 const cFrameCeramicModels = ["CI-Mod-30T-CF", "CI-Mod-50T-CF", "CI-Mod-100T-CF"];
@@ -67,8 +79,33 @@ const cFrameCeramicModels = ["CI-Mod-30T-CF", "CI-Mod-50T-CF", "CI-Mod-100T-CF"]
 export const officialMachineSpecifications: Record<string, MachineSpecificationTable[]> = {
   "4-pillar-wax-injector": [
     table(
-      "Machine and injection specification",
-      fourPillarWaxModels,
+      "Standard wax models",
+      fourPillarStandardWaxModels,
+      [
+        ["Clamp force range", "2–12 MT", "15–75 MT"],
+        ["Daylight maximum / minimum (mm)", "400 / 70", "1,000 / 100"],
+        ["Clearance between pillars W × D (mm)", "450 × 450", "1,000 × 1,000"],
+        ["Clamp-cylinder maximum stroke (mm)", "330", "900"],
+        ["Single-shot capacity (cc)", "2,000", "8,000"],
+        ["Wax tank capacity", "30 L", "120 L"],
+        ["Injection pressure (bar)", "5–50", "5–70"],
+        ["Injection rate (cc/sec)", "Up to 250", "Up to 350"],
+        ["Control system", '7" HMI, panel mounted', '15.6" HMI, panel / pedestal mounted'],
+        ["Electrical load", "12 kVA", "40 kVA"],
+        ["Water requirement (LPM)", "30", "60"],
+        [
+          "Approx. overall size W × D × H (mm)",
+          "2,050 × 1,800 × 2,050 / 2,280",
+          "3,200 × 3,200 × 3,650",
+        ],
+        ["Machine weight (kg)", "2,000", "13,000"],
+      ],
+      "https://www.modtechworld.com/product-detail.php?id=13",
+      referenceNote,
+    ),
+    table(
+      "Soluble wax — machine and injection specification",
+      fourPillarSolubleWaxModels,
       [
         ["Clamp force range", "2–12 MT", "5–30 MT", "10–50 MT", "20–100 MT"],
         ["Daylight maximum (mm)", "400", "600", "800", "1,000"],
@@ -111,8 +148,8 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
       referenceNote,
     ),
     table(
-      "Controls, utilities and dimensions",
-      fourPillarWaxModels,
+      "Soluble wax — controls, utilities and dimensions",
+      fourPillarSolubleWaxModels,
       [
         [
           "Control system",
@@ -162,8 +199,8 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
       referenceNote,
     ),
     table(
-      "Optional / additional features",
-      fourPillarWaxModels,
+      "Soluble wax — optional / additional features",
+      fourPillarSolubleWaxModels,
       [
         ["Platen heating system", "Not listed", "Available", "Available", "Available"],
         [
@@ -188,8 +225,44 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
   ],
   "c-frame-wax-injector": [
     table(
-      "Machine and injection specification",
-      cFrameWaxModels,
+      "Standard wax models",
+      cFrameStandardWaxModels,
+      [
+        ["Clamp force range", "5–30 MT", "10–50 MT", "15–75 MT"],
+        ["Daylight maximum / minimum (mm)", "600 / 100", "800 / 100", "1,000 / 100"],
+        ["Clamp platen W × D (mm)", "720 × 550", "800 × 800", "1,000 × 1,000"],
+        ["Clamp-cylinder maximum stroke (mm)", "500", "700", "900"],
+        ["Single-shot capacity (cc)", "2,500", "4,000", "8,000"],
+        ["Wax tank capacity", "120 L", "120 L", "120 L"],
+        ["Injection pressure (bar)", "5–70", "5–70", "5–70"],
+        ["Injection rate (cc/sec)", "Up to 250", "Up to 350", "Up to 350"],
+        [
+          "Control system",
+          '15.6" HMI, panel mounted',
+          '15.6" HMI, panel / pedestal mounted',
+          '15.6" HMI, panel / pedestal mounted',
+        ],
+        ["Electrical load", "25 kVA", "30 kVA", "40 kVA"],
+        [
+          "Air / water requirement",
+          "6 CFM @ 6 bar / 60 LPM",
+          "6 CFM @ 6 bar / 60 LPM",
+          "6 CFM @ 6 bar / 60 LPM",
+        ],
+        [
+          "Approx. overall size W × D × H (mm)",
+          "2,500 × 2,150 × 2,600",
+          "2,900 × 2,250 × 3,050",
+          "3,200 × 4,000 × 3,500",
+        ],
+        ["Machine weight (kg)", "5,000", "7,500", "13,000"],
+      ],
+      "https://www.modtechworld.com/product-detail.php?id=14",
+      referenceNote,
+    ),
+    table(
+      "Soluble wax — machine and injection specification",
+      cFrameSolubleWaxModels,
       [
         ["Clamp force range", "2–12 MT", "5–30 MT", "10–50 MT", "20–100 MT"],
         ["Daylight maximum (mm)", "400", "600", "800", "1,000"],
@@ -232,8 +305,8 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
       referenceNote,
     ),
     table(
-      "Controls, utilities and dimensions",
-      cFrameWaxModels,
+      "Soluble wax — controls, utilities and dimensions",
+      cFrameSolubleWaxModels,
       [
         [
           "Control system",
@@ -283,8 +356,8 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
       referenceNote,
     ),
     table(
-      "Optional / additional features",
-      cFrameWaxModels,
+      "Soluble wax — optional / additional features",
+      cFrameSolubleWaxModels,
       [
         ["Platen heating system", "Not listed", "Available", "Available", "Available"],
         [
@@ -312,7 +385,7 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
       "Detailed specification",
       automodeWaxModels,
       [
-        ["Clamp force (MT)", "12T", "30T"],
+        ["Clamp force range (MT)", "2–12", "5–30"],
         ["Daylight maximum (mm)", "800", "900"],
         ["Daylight minimum (mm)", "100", "100"],
         ["Clearance between pillars (mm)", "500 × 500", "600 × 600"],
@@ -320,14 +393,14 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
         ["Single-shot capacity (cc)", "2,500", "2,500"],
         ["Wax tank capacity", "120 L", "120 L"],
         ["Injection nozzle type", "Side", "Side"],
-        ["Injection pressure (bar)", "3.5–70", "3.5–70"],
+        ["Injection pressure (bar)", "5–70", "5–70"],
         ["Injection rate (cc/sec)", "250", "250"],
         ["Pattern ejector", "Included", "Included"],
         ["Melter unit", "Included", "Included"],
         ["Vacuum wax transfer unit", "Included", "Included"],
         ["Spray nozzle assembly", "Included", "Included"],
         ["Pattern catchment tank", "Included", "Included"],
-        ["Control system", '15" touch screen', '15" touch screen'],
+        ["Control system", '15.6" touch screen', '15.6" touch screen'],
         ["Electrical standard", "380–420 V / 50 Hz / 3 phase", "380–420 V / 50 Hz / 3 phase"],
         ["Air requirement", "6 bar / 6 CFM", "6 bar / 6 CFM"],
         ["Water requirement (LPM)", "60", "60"],
@@ -349,23 +422,82 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
       "https://www.modtechworld.com/product-detail.php?id=15",
     ),
   ],
+  "igt-wax-injector": [
+    table(
+      "4-pillar IGT models",
+      fourPillarIgtWaxModels,
+      [
+        ["Clamp force range", "20–100 MT", "40–200 MT", "50–300 MT"],
+        ["Daylight maximum / minimum (mm)", "1,000 / 100", "1,200 / 200", "1,200 / 200"],
+        ["Clearance between pillars W × D (mm)", "1,000 × 1,000", "1,200 × 1,200", "1,500 × 1,500"],
+        ["Clamp-cylinder maximum stroke (mm)", "900", "1,000", "1,000"],
+        ["Single-shot capacity (cc)", "18,500", "18,500", "18,500"],
+        ["Wax tank capacity", "120 L", "120 L", "120 L"],
+        ["Injection pressure (bar)", "5–70", "5–70", "5–70"],
+        ["Injection rate (cc/sec)", "Up to 500", "Up to 500", "Up to 500"],
+        [
+          "Control system",
+          '15.6" HMI, pendant mounted',
+          '15.6" HMI, pendant mounted',
+          '15.6" HMI, pendant mounted',
+        ],
+        ["Electrical load", "25 kVA", "60 kVA", "75 kVA"],
+        [
+          "Air / water requirement",
+          "6 CFM @ 6 bar / 60 LPM",
+          "6 CFM @ 6 bar / 60 LPM",
+          "6 CFM @ 6 bar / 60 LPM",
+        ],
+        [
+          "Approx. overall size W × D × H (mm)",
+          "3,600 × 5,100 × 3,900",
+          "3,900 × 5,400 × 4,500",
+          "4,300 × 5,750 × 5,100",
+        ],
+        ["Machine weight (kg)", "15,000", "20,000", "26,000"],
+      ],
+      "https://www.modtechworld.com/product-detail.php?id=16",
+      referenceNote,
+    ),
+    table(
+      "C-frame IGT models",
+      cFrameIgtWaxModels,
+      [
+        ["Clamp force range", "10–50 MT", "20–100 MT"],
+        ["Daylight maximum / minimum (mm)", "1,000 / 100", "1,200 / 200"],
+        ["Clamp platen W × D (mm)", "1,000 × 1,000", "1,200 × 1,200"],
+        ["Clamp-cylinder maximum stroke (mm)", "900", "1,000"],
+        ["Single-shot capacity (cc)", "8,000", "18,500"],
+        ["Wax tank capacity", "120 L", "120 L"],
+        ["Injection pressure (bar)", "5–70", "5–70"],
+        ["Injection rate (cc/sec)", "Up to 350", "Up to 500"],
+        ["Control system", '15.6" HMI, pendant mounted', '15.6" HMI, pendant mounted'],
+        ["Electrical load", "35 kVA", "25 kVA"],
+        ["Air / water requirement", "6 CFM @ 6 bar / 60 LPM", "6 CFM @ 6 bar / 60 LPM"],
+        ["Approx. overall size W × D × H (mm)", "3,200 × 4,000 × 3,500", "3,700 × 4,500 × 4,000"],
+        ["Machine weight (kg)", "11,000", "18,000"],
+      ],
+      "https://www.modtechworld.com/product-detail.php?id=16",
+      referenceNote,
+    ),
+  ],
   "4-pillar-ceramic-injector": [
     table(
       "Detailed specification",
       fourPillarCeramicModels,
       [
-        ["Clamp force (MT)", "30T", "50T", "100T"],
+        ["Clamp force range (MT)", "5–30", "10–50", "20–100"],
         ["Daylight maximum (mm)", "600", "800", "1,000"],
         ["Daylight minimum (mm)", "150", "150", "150"],
         ["Clearance between pillars (mm)", "600 × 600", "800 × 800", "1,000 × 1,000"],
         ["Die clamping", "T-slot", "T-slot", "T-slot"],
         ["Single-shot capacity (cc)", "1,500", "3,500", "3,500"],
-        ["Ceramic tank capacity", "30 L", "80 L", "80 L"],
+        ["Ceramic tank capacity", "35 L", "80 L", "80 L"],
         ["Injection nozzle type", "Side", "Side", "Side"],
-        ["Injection pressure (bar)", "3.5–70", "3.5–70", "3.5–70"],
+        ["Injection pressure (bar)", "5–70", "5–70", "5–70"],
         ["Injection rate (cc/sec)", "200", "250", "250"],
         ["Pattern ejector", "Included", "Included", "Included"],
-        ["Control system", '15" touch screen', '15" touch screen', '15" touch screen'],
+        ["Control system", '15.6" touch screen', '15.6" touch screen', '15.6" touch screen'],
         [
           "Electrical standard",
           "380–420 V / 50 Hz / 3 phase",
@@ -376,14 +508,14 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
         ["Water requirement (LPM)", "60", "60", "60"],
         [
           "Overall size W × D × H (mm)",
-          "3,500 × 2,150 × 2,900",
+          "3,200 × 2,150 × 2,900",
           "4,100 × 2,250 × 3,200",
           "4,550 × 2,300 × 3,900",
         ],
         ["Machine weight (kg)", "5,500", "8,500", "17,000"],
       ],
       "https://www.modtechworld.com/product-detail.php?id=17",
-      referenceNote,
+      ceramicTankNote,
     ),
     table(
       "Optional / additional features",
@@ -403,18 +535,18 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
       "Detailed specification",
       cFrameCeramicModels,
       [
-        ["Clamp force (MT)", "30T", "50T", "100T"],
+        ["Clamp force range (MT)", "5–30", "10–50", "20–100"],
         ["Daylight maximum (mm)", "600", "800", "1,000"],
         ["Daylight minimum (mm)", "150", "150", "150"],
         ["Clearance between pillars (mm)", "720 × 550", "800 × 800", "1,000 × 1,000"],
         ["Die clamping", "T-slot", "T-slot", "T-slot"],
         ["Single-shot capacity (cc)", "1,500", "3,500", "3,500"],
-        ["Ceramic tank capacity", "30 L", "80 L", "80 L"],
+        ["Ceramic tank capacity", "35 L", "80 L", "80 L"],
         ["Injection nozzle type", "Side", "Side", "Side"],
-        ["Injection pressure (bar)", "3.5–70", "3.5–70", "3.5–70"],
+        ["Injection pressure (bar)", "5–70", "5–70", "5–70"],
         ["Injection rate (cc/sec)", "200", "250", "250"],
         ["Pattern ejector", "Included", "Included", "Included"],
-        ["Control system", '15" touch screen', '15" touch screen', '15" touch screen'],
+        ["Control system", '15.6" touch screen', '15.6" touch screen', '15.6" touch screen'],
         [
           "Electrical standard",
           "380–420 V / 50 Hz / 3 phase",
@@ -429,10 +561,10 @@ export const officialMachineSpecifications: Record<string, MachineSpecificationT
           "4,100 × 2,250 × 3,200",
           "4,550 × 2,300 × 3,900",
         ],
-        ["Machine weight (kg)", "6,500", "9,500", "17,000"],
+        ["Machine weight (kg)", "6,500", "9,000", "17,000"],
       ],
       "https://www.modtechworld.com/product-detail.php?id=18",
-      referenceNote,
+      ceramicTankNote,
     ),
     table(
       "Optional / additional features",

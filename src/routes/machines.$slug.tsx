@@ -62,10 +62,10 @@ const heroSpecIcons = [CircleGauge, Ruler, Cpu, Activity];
 
 const detailNavigation = [
   { target: "overview", label: "Overview", icon: Activity },
+  { target: "specifications", label: "Specifications", icon: ClipboardCheck },
   { target: "models", label: "Related range", icon: Layers3 },
   { target: "features", label: "Key features", icon: Sparkles },
   { target: "applications", label: "Applications", icon: Factory },
-  { target: "specifications", label: "Specifications", icon: ClipboardCheck },
 ];
 
 function useActiveDetailSection(sectionIds: string[]) {
@@ -388,14 +388,14 @@ function MachineDetail() {
         </div>
       </nav>
 
-      <section className="relative overflow-hidden bg-background px-5 py-16 sm:px-8 sm:py-20">
+      <section className="relative overflow-hidden bg-background px-5 py-12 sm:px-8 sm:py-16">
         <div className="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full bg-brand/[0.05] blur-3xl" />
-        <div className="relative mx-auto max-w-7xl">
+        <div className="relative mx-auto flex max-w-7xl flex-col">
           <section
             id="overview"
-            className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] reveal-on-scroll"
+            className="order-1 scroll-mt-[calc(var(--header-h)_+_4.5rem)] reveal-on-scroll"
           >
-            <div className="grid gap-8 pb-14 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+            <div className="grid gap-8 pb-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
               <div>
                 <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
                   Engineered for repeatable production.
@@ -417,7 +417,7 @@ function MachineDetail() {
           {modelRange.length > 1 && (
             <section
               id="models"
-              className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] border-y border-border py-14"
+              className="order-3 scroll-mt-[calc(var(--header-h)_+_4.5rem)] border-y border-border py-14"
             >
               <div className="reveal-on-scroll grid gap-7 lg:grid-cols-[0.72fr_1.28fr] lg:gap-16">
                 <div>
@@ -552,7 +552,10 @@ function MachineDetail() {
             </section>
           )}
 
-          <section id="features" className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] py-14">
+          <section
+            id="features"
+            className="order-4 scroll-mt-[calc(var(--header-h)_+_4.5rem)] py-14"
+          >
             <div className="reveal-on-scroll flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand/10 text-brand">
                 <Settings2 className="h-4 w-4" />
@@ -584,7 +587,7 @@ function MachineDetail() {
 
           <section
             id="applications"
-            className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] border-y border-border py-14"
+            className="order-5 scroll-mt-[calc(var(--header-h)_+_4.5rem)] border-y border-border py-14"
           >
             <div className="reveal-on-scroll grid gap-7 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
               <div>
@@ -618,7 +621,10 @@ function MachineDetail() {
             </div>
           </section>
 
-          <section id="specifications" className="scroll-mt-[calc(var(--header-h)_+_4.5rem)] pt-14">
+          <section
+            id="specifications"
+            className="order-2 scroll-mt-[calc(var(--header-h)_+_4.5rem)] pb-14"
+          >
             <div
               className={`reveal-on-scroll gap-8 ${
                 m.specificationTables?.length
