@@ -447,20 +447,24 @@
     animation: marquee 38s linear infinite;
   }
   .announcement-bar {
+    --announcement-red-deep: oklch(0.39 0.17 27);
+    --announcement-red: oklch(0.58 0.23 27);
+    --announcement-red-soft: oklch(0.7 0.19 24);
+    --announcement-foreground: oklch(0.985 0.004 25);
     position: relative;
     isolation: isolate;
     display: flex;
     height: 2.125rem;
     overflow: hidden;
-    border-bottom: 1px solid color-mix(in oklab, var(--brand-foreground) 18%, transparent);
+    border-bottom: 1px solid color-mix(in oklab, var(--announcement-foreground) 22%, transparent);
     background: linear-gradient(
       100deg,
-      color-mix(in oklab, var(--brand-deep) 88%, var(--carbon)),
-      var(--brand) 46%,
-      color-mix(in oklab, var(--brand-soft) 82%, var(--brand))
+      var(--announcement-red-deep),
+      var(--announcement-red) 46%,
+      var(--announcement-red-soft)
     );
-    color: var(--brand-foreground);
-    box-shadow: 0 8px 26px -16px color-mix(in oklab, var(--brand) 75%, transparent);
+    color: var(--announcement-foreground);
+    box-shadow: 0 8px 26px -16px color-mix(in oklab, var(--announcement-red) 78%, transparent);
   }
   .announcement-bar::before {
     content: "";
@@ -487,8 +491,8 @@
     align-items: center;
     gap: 0.45rem;
     padding: 0 1rem 0 1.25rem;
-    background: color-mix(in oklab, var(--carbon) 94%, var(--brand));
-    color: var(--brand);
+    background: color-mix(in oklab, var(--carbon) 90%, var(--announcement-red-deep));
+    color: color-mix(in oklab, var(--announcement-red-soft) 82%, white);
     font-family: var(--font-mono);
     font-size: 0.6rem;
     font-weight: 700;
@@ -496,7 +500,6 @@
     text-transform: uppercase;
     box-shadow: 10px 0 24px -14px oklch(0 0 0 / 0.8);
     clip-path: polygon(0 0, 100% 0, calc(100% - 0.7rem) 100%, 0 100%);
-    color: var(--brand);
     text-decoration: none;
     cursor: pointer;
   }
@@ -545,8 +548,8 @@
     height: 0.38rem;
     flex: none;
     border-radius: 999px;
-    background: var(--brand-foreground);
-    box-shadow: 0 0 0 4px color-mix(in oklab, var(--brand-foreground) 14%, transparent);
+    background: var(--announcement-foreground);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--announcement-foreground) 16%, transparent);
     animation: announcement-signal 1.8s ease-in-out infinite;
   }
   @media (max-width: 639px) {
