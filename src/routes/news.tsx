@@ -158,13 +158,13 @@ export const Route = createFileRoute("/news")({
   },
   head: () => ({
     meta: [
-      { title: "Blogs — Modtech Machine" },
+      { title: "Blogs & News — Modtech Machine" },
       {
         name: "description",
         content:
           "Modtech engineering blogs, company updates, case studies and exhibitions in one place.",
       },
-      { property: "og:title", content: "Modtech Blogs & Engineering Insights" },
+      { property: "og:title", content: "Modtech Blogs & News" },
       {
         property: "og:description",
         content: "Engineering knowledge, factory stories and updates from Modtech Machine.",
@@ -441,7 +441,7 @@ export function BlogsPage() {
               <div className="flex items-end justify-between gap-4 border-b border-border pb-4">
                 <div>
                   <h3 id="latest-stories-heading" className="font-display text-2xl font-bold">
-                    Blogs, insights & case studies
+                    Blogs & News
                   </h3>
                 </div>
                 <span className="text-xs text-muted-foreground">{remaining.length} stories</span>

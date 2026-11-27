@@ -10,6 +10,7 @@ import {
   Instagram,
   Linkedin,
   MapPin,
+  UserRound,
   Youtube,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -146,9 +147,10 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 function SiteFooter() {
   const content = useSiteContent("global");
+  const careersContent = useSiteContent("careers");
   const enquiryContacts = [
     {
-      label: "Investment Casting Machines",
+      label: "Investment Casting Machine and Robotic Shelling Line",
       email: content.primary_email,
       Icon: Factory,
     },
@@ -157,6 +159,11 @@ function SiteFooter() {
       email: content.automation_email,
       Icon: Bot,
     },
+    {
+      label: "Human Resources",
+      email: careersContent.hr_email || "hr@modtechworld.com",
+      Icon: UserRound,
+    },
   ];
   const links: Array<{
     to: "/" | "/about" | "/divisions" | "/blog" | "/careers" | "/contact";
@@ -164,7 +171,7 @@ function SiteFooter() {
   }> = [
     { to: "/about", label: "About Us" },
     { to: "/divisions", label: "Divisions" },
-    { to: "/blog", label: "Blogs" },
+    { to: "/blog", label: "Blogs & News" },
     { to: "/careers", label: "Careers" },
     { to: "/contact", label: "Contact Us" },
   ];

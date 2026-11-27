@@ -9,7 +9,7 @@ const NAV_ITEMS = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
   { to: "/divisions", label: "Divisions" },
-  { to: "/blog", label: "Blogs" },
+  { to: "/blog", label: "Blogs & News" },
   { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
 ] as const;

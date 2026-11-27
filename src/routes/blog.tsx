@@ -4,10 +4,10 @@ export const Route = createFileRoute("/blog")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Blogs — Modtech Machine" },
+      { title: "Blogs & News — Modtech Machine" },
       {
         name: "description",
-        content: "Engineering blogs, case studies and company updates from Modtech Machine.",
+        content: "Engineering blogs, news, case studies and company updates from Modtech Machine.",
       },
     ],
   }),

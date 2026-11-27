@@ -26,8 +26,6 @@ import { DragRail } from "@/components/drag-rail";
 import { HeroVideoBackground } from "@/components/hero-video-background";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
-import { presenceBases, presenceCountries } from "@/content/global-presence";
-import { PresenceMarquee } from "@/components/presence-marquee";
 import { stats } from "@/content/site-data";
 import { useRevealOnScroll } from "@/hooks/use-reveal-on-scroll";
 import { isAboutPhotoUrl, parseAboutFieldGallery } from "@/lib/about-field-gallery";
@@ -407,13 +405,13 @@ function AboutPage() {
                 ariaLabel="Modtech people and project photos"
                 step="item"
                 controlsPlacement="overlay"
-                autoPlayMs={5000}
+                autoPlayMs={4000}
                 className="-mx-1 px-1 sm:-mx-2 sm:px-2"
               >
                 {fieldPhotos.map((photo, index) => (
                   <figure
                     key={photo.id}
-                    className="field-story-card group flex w-[82vw] max-w-[22rem] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand/50 hover:shadow-deep sm:w-[23rem] lg:w-[26rem]"
+                    className="field-story-card group flex w-[82vw] max-w-[22rem] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-card transition duration-300 hover:-translate-y-1 hover:border-brand/50 hover:shadow-deep sm:w-[23rem] lg:w-[calc((100%_-_2.5rem)/3)] lg:max-w-none"
                   >
                     <div className="on-dark relative overflow-hidden">
                       <img
@@ -421,7 +419,7 @@ function AboutPage() {
                         alt={photo.alt_text}
                         loading="lazy"
                         decoding="async"
-                        className="aspect-[4/3] w-full object-cover object-[center_35%] transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+                        className="aspect-video w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
                       />
                       <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-carbon/70 px-3 py-1.5 font-mono text-[9px] text-white backdrop-blur-md">
                         {String(index + 1).padStart(2, "0")} /{" "}
@@ -467,127 +465,6 @@ function AboutPage() {
           </header>
 
           <IndustriesRail />
-        </div>
-      </section>
-
-      <section
-        id="global-presence"
-        className="on-dark relative isolate overflow-hidden border-b border-border bg-carbon px-5 py-14 sm:px-8 sm:py-16"
-      >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          disablePictureInPicture
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-20 hidden h-full w-full object-cover md:block"
-        >
-          <source
-            src="/modtech-global-map.mp4"
-            type="video/mp4"
-            media="(min-width: 48rem) and (prefers-reduced-motion: no-preference)"
-          />
-        </video>
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-carbon via-carbon/90 to-carbon/35" />
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-carbon/90 via-transparent to-carbon/65" />
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-15" />
-
-        <div className="mx-auto max-w-7xl">
-          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-14">
-            <div className="reveal-on-scroll">
-              <h2 className="font-display text-[clamp(2.25rem,5vw,4.9rem)] font-bold leading-[0.98] tracking-[-0.04em]">
-                Expanding horizons.
-                <span className="block text-gradient-brand">Engineering without borders.</span>
-              </h2>
-              <p className="mt-6 max-w-xl text-base leading-8 text-foreground/70 sm:text-lg">
-                Modtech machines and automation systems support manufacturers across more than 45
-                countries, backed by commissioning, remote diagnostics and lifecycle service.
-              </p>
-
-              <dl className="mt-8 grid max-w-lg grid-cols-3 overflow-hidden rounded-2xl border border-foreground/15 bg-carbon/45 backdrop-blur-md">
-                {[
-                  { value: "45+", label: "Countries served" },
-                  { value: presenceCountries.length.toString(), label: "Named markets" },
-                  { value: presenceBases.length.toString(), label: "Modtech locations" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="border-r border-foreground/15 px-4 py-4 last:border-r-0 sm:px-5"
-                  >
-                    <dd className="font-display text-2xl font-bold text-brand sm:text-4xl">
-                      {item.value}
-                    </dd>
-                    <dt className="mt-1 font-mono text-[9px] uppercase leading-snug tracking-[0.14em] text-foreground/60">
-                      {item.label}
-                    </dt>
-                  </div>
-                ))}
-              </dl>
-
-              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[9px] uppercase tracking-[0.16em] text-foreground/60">
-                <span className="inline-flex items-center gap-2">
-                  <span className="presence-dot presence-dot-base" aria-hidden="true" />
-                  Modtech location
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <span className="presence-dot" aria-hidden="true" />
-                  Served market
-                </span>
-              </div>
-            </div>
-
-            <div className="reveal-on-scroll" data-reveal-delay="120">
-              <div className="presence-panel rounded-3xl border border-foreground/15 bg-carbon/55 p-4 shadow-deep backdrop-blur-md sm:p-6">
-                <div className="flex items-center justify-between gap-4 border-b border-foreground/12 pb-3">
-                  <p className="font-display text-sm font-semibold">Where Modtech works</p>
-                  <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-brand">
-                    {presenceCountries.length} countries
-                  </span>
-                </div>
-                <ul className="mt-4 grid grid-cols-2 gap-2">
-                  {presenceCountries.map((country, index) => (
-                    <li
-                      key={country.code}
-                      className="presence-chip-in"
-                      style={{ animationDelay: `${index * 55}ms` }}
-                    >
-                      <div className="presence-chip flex h-full items-center gap-3 rounded-xl border border-foreground/12 bg-carbon/55 px-3 py-2.5">
-                        <img
-                          src={country.flag}
-                          alt=""
-                          aria-hidden="true"
-                          loading="lazy"
-                          decoding="async"
-                          width="36"
-                          height="24"
-                          className="presence-flag h-4 w-6 shrink-0 rounded-[3px] ring-1 ring-white/25"
-                        />
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-semibold leading-tight">
-                            {country.name}
-                          </span>
-                          <span className="mt-0.5 hidden truncate font-mono text-[8px] uppercase tracking-[0.14em] text-foreground/50 sm:block">
-                            {country.note}
-                          </span>
-                        </span>
-                        <span
-                          className={`presence-dot shrink-0 ${country.kind === "base" ? "presence-dot-base" : ""}`}
-                          aria-hidden="true"
-                        />
-                        <span className="hidden shrink-0 font-mono text-[9px] tracking-[0.14em] text-foreground/40 sm:inline">
-                          {country.code}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <PresenceMarquee className="reveal-on-scroll mt-10" />
         </div>
       </section>
 

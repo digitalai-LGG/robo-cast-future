@@ -149,7 +149,7 @@ function BlogArticle() {
                 to="/blog"
                 className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-brand hover:underline"
               >
-                <ArrowLeft className="h-3.5 w-3.5" /> All blogs
+                <ArrowLeft className="h-3.5 w-3.5" /> All blogs & news
               </Link>
             </nav>
             <div className="mt-5 flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">

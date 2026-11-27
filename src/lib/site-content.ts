@@ -110,8 +110,8 @@ export const SITE_CONTENT_PAGES: SiteContentPage[] = [
   },
   {
     id: "news",
-    label: "Blogs page",
-    description: "Blogs, insights and exhibitions page introduction.",
+    label: "Blogs & News page",
+    description: "Blogs, news, insights and exhibitions page introduction.",
     group: "Main pages",
     previewPath: "/blog",
     fields: [
